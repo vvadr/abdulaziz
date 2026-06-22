@@ -57,17 +57,22 @@ export type HeroSocialLink = {
   icon: HeroSocialIconName;
 };
 
+// Deployment URL — used for metadata, canonical links, and OG previews.
+// Update this to the live domain when it changes.
+export const siteUrl = "https://abdulazizyusupaliev.vercel.app";
+
 export const siteMetadata = {
-  title: "Abdulaziz Yusupaliev | Frontend Developer & AI Engineer",
+  title: "Abdulaziz Yusupaliev | AI Engineer & Frontend Developer",
   description:
-    "Personal portfolio website of Abdulaziz Yusupaliev, a frontend developer from Tashkent focused on modern interfaces and practical AI engineering growth.",
+    "Portfolio of Abdulaziz Yusupaliev — an AI Engineer & Frontend Developer from Tashkent shipping production React and Next.js interfaces while growing into machine learning with Python.",
   keywords: [
     "Abdulaziz Yusupaliev",
+    "AI Engineer",
     "Frontend Developer",
     "React Developer",
     "Next.js",
-    "AI Engineer",
     "Machine Learning",
+    "TypeScript",
     "Tashkent",
     "Uzbekistan",
   ],
@@ -90,14 +95,8 @@ export const greetings = [
   "Hi",
 ];
 
-export const heroHighlights = [
-  "Clean interface systems",
-  "Responsive component architecture",
-  "Practical AI and ML exploration",
-];
-
 export const heroDescription =
-  "I build clean, responsive web interfaces with React, Next.js, TypeScript, and Tailwind CSS while growing into AI engineering, machine learning, and practical Python tooling.";
+  "I'm growing into AI engineering and machine learning with Python — and I ship clean, responsive production interfaces with React, Next.js, and TypeScript. Frontend is where I deliver today; AI is where I'm headed.";
 
 export const heroLocation = "Tashkent, Uzbekistan";
 

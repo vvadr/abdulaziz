@@ -18,7 +18,7 @@ export function HeroWaveBackground() {
       className="pointer-events-none absolute inset-0 overflow-hidden"
       aria-hidden="true"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(212,160,23,0.14),transparent_26%),radial-gradient(circle_at_82%_18%,rgba(255,255,255,0.08),transparent_20%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_26%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(226,50,52,0.16),transparent_26%),radial-gradient(circle_at_82%_18%,rgba(255,255,255,0.06),transparent_20%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_26%)]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent" />
 
       <svg
@@ -31,7 +31,7 @@ export function HeroWaveBackground() {
             key={wave.d}
             d={wave.d}
             fill="none"
-            stroke={index === 0 ? "rgba(212,160,23,0.8)" : "rgba(255,255,255,0.75)"}
+            stroke={index === 0 ? "rgba(226,50,52,0.85)" : "rgba(255,255,255,0.7)"}
             strokeWidth={index === 0 ? 1.4 : 1}
             strokeLinecap="round"
             initial={reduceMotion ? false : { pathLength: 0.82, opacity: wave.opacity }}
@@ -58,8 +58,8 @@ export function HeroWaveBackground() {
         ))}
       </svg>
 
-      <div className="absolute -left-16 top-14 h-52 w-52 rounded-full bg-[#d4a017]/8 blur-3xl" />
-      <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-white/[0.04] blur-3xl" />
+      <div className="absolute -left-16 top-14 h-52 w-52 rounded-full bg-[#e23234]/10 blur-3xl" />
+      <div className="absolute bottom-0 right-0 h-64 w-64 rounded-full bg-white/[0.03] blur-3xl" />
     </div>
   );
 }

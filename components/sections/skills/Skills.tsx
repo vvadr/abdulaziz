@@ -10,115 +10,95 @@ function findSkillIcon(name: string) {
 }
 
 function getIconColor(icon: SimpleIcon) {
+  // Pure-black brand marks would vanish on the dark bg — lift them to white.
   return icon.hex.toLowerCase() === "000000" ? "#ffffff" : `#${icon.hex}`;
 }
 
-function BrandSkillTile({ skill }: { skill: PortfolioSkill }) {
+function SkillTile({ skill }: { skill: PortfolioSkill }) {
   const icon = findSkillIcon(skill.name);
-  const shouldShowLabel = Boolean(skill.showLabel);
+  const label = skill.shortName ?? skill.name;
 
+  let glyph;
   if (skill.assetSrc) {
-    return (
-      <div
-        className="group flex min-h-[5.5rem] flex-col items-center justify-start text-center"
-        title={skill.name}
-        aria-label={skill.name}
-      >
-        <div className="flex h-20 w-full items-center justify-center transition duration-300 group-hover:-translate-y-1 group-hover:scale-105 sm:h-24">
-          <Image
-            src={skill.assetSrc}
-            alt={`${skill.name} logo`}
-            width={skill.assetWidth ?? 96}
-            height={skill.assetHeight ?? 96}
-            className="h-auto max-h-16 w-auto max-w-full object-contain sm:max-h-20"
-            unoptimized
-          />
-        </div>
-        {shouldShowLabel ? (
-          <span className="mt-3 text-sm font-medium leading-none text-white/72 sm:text-base">
-            {skill.shortName ?? skill.name}
-          </span>
-        ) : null}
-      </div>
+    glyph = (
+      <Image
+        src={skill.assetSrc}
+        alt=""
+        width={skill.assetWidth ?? 96}
+        height={skill.assetHeight ?? 96}
+        className="h-9 w-auto max-w-full object-contain sm:h-11"
+        unoptimized
+      />
     );
-  }
-
-  if (!icon) {
-    return (
-      <div
-        className="group flex min-h-[5.5rem] flex-col items-center justify-start text-center"
-        title={skill.name}
-        aria-label={skill.name}
+  } else if (icon) {
+    glyph = (
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        className="h-9 w-9 fill-current drop-shadow-[0_8px_18px_rgba(0,0,0,0.5)] sm:h-11 sm:w-11"
+        style={{ color: getIconColor(icon) }}
       >
-        <div
-          className="flex h-20 w-20 items-center justify-center rounded-2xl border border-white/12 bg-white/[0.04] font-display text-2xl font-bold text-white shadow-[0_14px_22px_rgba(0,0,0,0.42)] transition duration-300 group-hover:-translate-y-1 group-hover:scale-105 sm:h-24 sm:w-24 sm:text-3xl"
-          style={{ color: skill.fallbackColor ?? "#ffffff" }}
-        >
-          {skill.fallbackLabel ?? skill.name.slice(0, 2)}
-        </div>
-        {shouldShowLabel ? (
-          <span className="mt-3 text-sm font-medium leading-none text-white/72 sm:text-base">
-            {skill.shortName ?? skill.name}
-          </span>
-        ) : null}
-      </div>
+        <path d={icon.path} />
+      </svg>
+    );
+  } else {
+    glyph = (
+      <span
+        className="font-display text-xl font-bold sm:text-2xl"
+        style={{ color: skill.fallbackColor ?? "#ffffff" }}
+      >
+        {skill.fallbackLabel ?? skill.name.slice(0, 2)}
+      </span>
     );
   }
 
   return (
     <div
-      className="group flex min-h-[5.5rem] flex-col items-center justify-start text-center"
+      className="group flex flex-col items-center gap-2.5 text-center"
       title={skill.name}
-      aria-label={skill.name}
     >
-      <div className="flex h-20 w-20 items-center justify-center transition duration-300 group-hover:-translate-y-1 group-hover:scale-105 sm:h-24 sm:w-24">
-        <svg
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          className="h-16 w-16 fill-current drop-shadow-[0_14px_22px_rgba(0,0,0,0.42)] sm:h-20 sm:w-20"
-          style={{ color: getIconColor(icon) }}
-        >
-          <path d={icon.path} />
-        </svg>
+      <div className="flex h-12 items-center justify-center transition duration-300 group-hover:-translate-y-1 group-hover:scale-110 sm:h-14">
+        {glyph}
       </div>
-      {shouldShowLabel ? (
-        <span className="mt-3 text-sm font-medium leading-none text-white/72 sm:text-base">
-          {skill.shortName ?? skill.name}
-        </span>
-      ) : null}
+      <span className="text-xs font-medium leading-none text-muted sm:text-sm">
+        {label}
+      </span>
     </div>
   );
 }
 
 export function Skills() {
   return (
-    <section id="skills" className="border-t border-white/10 bg-[#161616] px-4 py-20 sm:px-6">
-      <SectionReveal className="mx-auto w-full max-w-7xl">
-        <div className="text-center">
-          <h2 className="font-display text-4xl font-bold tracking-[-0.04em] text-white sm:text-5xl">
-            Skills &amp; Tools
-          </h2>
-        </div>
+    <section id="skills" className="px-4 py-20 sm:px-6 sm:py-28">
+      <div className="mx-auto w-full max-w-6xl">
+        <SectionReveal>
+          <h2 className="section-title">Skills &amp; Tools</h2>
+          <p className="section-lead">
+            The stack I build with day to day — and the Python data tools I&apos;m
+            learning AI and machine learning on.
+          </p>
+        </SectionReveal>
 
-        <div className="mt-14 grid gap-x-10 gap-y-14 sm:grid-cols-2 xl:grid-cols-4">
-          {skillGroups.map((group) => (
-            <section key={group.title} aria-labelledby={`${group.title}-skills`}>
-              <h3
-                id={`${group.title}-skills`}
-                className="font-display text-2xl text-center font-bold tracking-[-0.03em] text-white sm:text-3xl"
-              >
+        <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 xl:grid-cols-4">
+          {skillGroups.map((group, groupIndex) => (
+            <SectionReveal
+              key={group.title}
+              as="section"
+              delay={groupIndex * 0.07}
+            >
+              <h3 className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground">
                 {group.title}
               </h3>
-
-              <div className="mt-7 grid grid-cols-2 gap-x-7 gap-y-9">
+              <div className="saber-rule mt-3" />
+              <div className="mt-7 grid grid-cols-3 gap-x-4 gap-y-8">
                 {group.skills.map((skill) => (
-                  <BrandSkillTile key={skill.name} skill={skill} />
+                  <SkillTile key={skill.name} skill={skill} />
                 ))}
               </div>
-            </section>
+            </SectionReveal>
           ))}
         </div>
-      </SectionReveal>
+      </div>
     </section>
   );
 }

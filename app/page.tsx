@@ -10,10 +10,17 @@ import { Skills } from "@/components/sections/skills/Skills";
 
 export default function Home() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#161616] text-white">
+    <div className="relative min-h-screen overflow-x-clip">
+      <a
+        href="#content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-intro)] focus:rounded-full focus:bg-[var(--accent-solid)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--accent-ink)]"
+      >
+        Skip to content
+      </a>
+
       <WelcomeIntro />
       <Navbar />
-      <main>
+      <main id="content">
         <Hero />
         <Skills />
         <Experience />

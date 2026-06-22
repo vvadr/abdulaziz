@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { Download, MapPin } from "lucide-react";
 import {
   greetings,
@@ -9,100 +9,119 @@ import {
   heroLocation,
   heroSocialLinks,
 } from "@/data/site";
-import { HeroTechCloud } from "./HeroTechCloud";
+import { HeroSkills3D } from "./HeroSkills3D";
 import { HeroSocialIcon } from "./HeroSocialIcon";
 import { HeroWaveBackground } from "./HeroWaveBackground";
-import TextType from "./TextType";
+
+const container: Variants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.09, delayChildren: 0.08 },
+  },
+};
+
+const item: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
 
 export function Hero() {
+  const reduceMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    if (reduceMotion) return;
     const intervalId = window.setInterval(() => {
       setIndex((current) => (current + 1) % greetings.length);
-    }, 1850);
-
+    }, 1900);
     return () => window.clearInterval(intervalId);
-  }, []);
+  }, [reduceMotion]);
 
   return (
     <section
       id="home"
-      className="relative overflow-hidden px-4 pb-24 pt-24 sm:px-6 sm:pb-28 sm:pt-32 lg:pb-32"
+      className="relative flex min-h-[100svh] items-center overflow-hidden px-4 pb-20 pt-28 sm:px-6 sm:pt-32"
     >
       <HeroWaveBackground />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.25),transparent_22%,transparent_72%,rgba(0,0,0,0.4))]" />
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.12),transparent_24%,transparent_76%,rgba(0,0,0,0.18))]" />
+      <motion.div
+        variants={container}
+        initial={reduceMotion ? false : "hidden"}
+        animate="show"
+        className="relative mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16"
+      >
+        <div className="max-w-2xl">
+          {/* Decorative rotating multilingual greeting; the H1 below carries identity for a11y/SEO */}
+          <motion.div
+            variants={item}
+            aria-hidden="true"
+            className="flex h-7 items-center gap-1 font-mono text-sm uppercase tracking-[0.28em] text-accent-strong"
+          >
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={greetings[index]}
+                initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
+                transition={{ duration: 0.28, ease: "easeOut" }}
+                dir="ltr"
+              >
+                {greetings[index]}
+              </motion.span>
+            </AnimatePresence>
+            <span>— I&apos;m</span>
+          </motion.div>
 
-      <div className="relative mx-auto grid w-full max-w-6xl gap-14 lg:grid-cols-[minmax(0,1.02fr)_minmax(320px,0.98fr)] lg:items-center">
-        <div className="space-y-9">
-          <div className="space-y-5">
-            <div className="min-h-9 text-sm font-medium uppercase tracking-[0.32em] text-white/55 sm:text-base">
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={greetings[index]}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.28, ease: "easeOut" }}
-                  className="inline-block"
-                  dir="ltr"
-                >
-                  {greetings[index]}
-                </motion.span>
-              </AnimatePresence>
-              {/* <span className="blink-cursor" aria-hidden="true">
-                |
-              </span> */}
-            </div>
+          <motion.h1
+            variants={item}
+            className="font-display mt-4 text-[clamp(2.75rem,1.6rem+5.2vw,5.5rem)] font-extrabold leading-[0.96] tracking-[-0.04em] text-foreground"
+          >
+            Abdulaziz
+            <br />
+            Yusupaliev
+            <span className="blink-cursor align-baseline" aria-hidden="true">
+              _
+            </span>
+          </motion.h1>
 
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/70 backdrop-blur-sm">
-                <MapPin className="h-4 w-4 text-[#d4a017]" />
-                <span>{heroLocation}</span>
-              </div>
+          <motion.p
+            variants={item}
+            className="font-display mt-5 text-[clamp(1.35rem,1rem+1.6vw,2rem)] font-semibold leading-tight"
+          >
+            <span className="text-accent-strong">AI Engineer</span>
+            <span className="text-muted"> &amp; </span>
+            <span className="text-accent-strong">Frontend Developer</span>
+          </motion.p>
 
-              <h1 className="font-display max-w-4xl text-6xl">
-                <TextType
-                  text={["Abdulaziz", "Yusupaliev"]}
-                  typingSpeed={75}
-                  pauseDuration={1500}
-                  showCursor
-                  cursorCharacter="|"
-                  deletingSpeed={50}
-                  cursorBlinkDuration={0.5}
-                />
-              </h1>
+          <motion.div
+            variants={item}
+            className="mt-5 inline-flex items-center gap-2 rounded-full border border-border bg-white/[0.03] px-3.5 py-1.5 text-sm text-muted"
+          >
+            <MapPin className="h-4 w-4 text-accent" aria-hidden="true" />
+            <span>{heroLocation}</span>
+          </motion.div>
 
-              <p className="font-display max-w-3xl text-2xl font-semibold leading-tight text-white sm:text-3xl lg:text-[2.15rem]">
-                <span className="hero-accent">AI Engineer</span>
-                <span className="text-white/68"> &amp; </span>
-                <span className="hero-accent">Frontend Developer</span>
-              </p>
+          <motion.p
+            variants={item}
+            className="mt-6 max-w-[60ch] text-base leading-8 text-muted sm:text-lg"
+          >
+            {heroDescription}
+          </motion.p>
 
-              <p className="max-w-2xl text-base leading-8 text-white/62 sm:text-lg">
-                {heroDescription}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
+          <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-3">
             {heroSocialLinks.map((link) => {
+              const external = link.href.startsWith("http");
               return (
                 <a
                   key={link.label}
                   href={link.href}
-                  target={link.href.startsWith("http") ? "_blank" : undefined}
-                  rel={
-                    link.href.startsWith("http")
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
                   aria-label={link.label}
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] p-0.5 text-white/92 transition hover:border-[#d4a017]/45 hover:bg-white/[0.07] hover:text-white"
-                
+                  className="grid size-12 place-items-center rounded-2xl border border-border bg-white/[0.03] text-foreground transition hover:-translate-y-0.5 hover:border-accent/55 hover:bg-[color-mix(in_oklab,var(--accent)_12%,transparent)] hover:text-accent-strong"
                 >
-                  <HeroSocialIcon name={link.icon} className="h-full w-full" />
+                  <HeroSocialIcon name={link.icon} className="h-5 w-5" />
                 </a>
               );
             })}
@@ -110,19 +129,18 @@ export function Hero() {
             <a
               href="/abdulaziz-yusupaliev-resume.txt"
               download
-              className="ml-0 inline-flex items-center gap-2 rounded-2xl bg-[#d4a017] px-5 py-3 text-sm font-medium text-black transition hover:bg-[#e1b540] sm:ml-2"
+              className="btn-primary ml-1 text-sm"
             >
-              <Download className="h-4 w-4" />
+              <Download className="h-4 w-4" aria-hidden="true" />
               Resume
             </a>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="relative">
-          <div className="pointer-events-none absolute inset-6 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.08),transparent_68%)] blur-3xl" />
-          <HeroTechCloud />
-        </div>
-      </div>
+        <motion.div variants={item} className="mt-2 lg:mt-0">
+          <HeroSkills3D />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

@@ -1,27 +1,45 @@
-import type { Metadata } from "next";
-import { siteMetadata } from "@/data/site";
-import "@fontsource/poppins/400.css";
-import "@fontsource/poppins/500.css";
-import "@fontsource/poppins/600.css";
-import "@fontsource/poppins/700.css";
-import "@fontsource/montserrat/400.css";
-import "@fontsource/montserrat/500.css";
-import "@fontsource/montserrat/600.css";
-import "@fontsource/montserrat/700.css";
-import "@fontsource/montserrat/800.css";
+import type { Metadata, Viewport } from "next";
+import { siteMetadata, siteUrl } from "@/data/site";
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: siteMetadata.title,
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteMetadata.title,
+    template: "%s | Abdulaziz Yusupaliev",
+  },
   description: siteMetadata.description,
   keywords: siteMetadata.keywords,
+  authors: [{ name: "Abdulaziz Yusupaliev", url: siteUrl }],
+  creator: "Abdulaziz Yusupaliev",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,
+    url: siteUrl,
+    siteName: "Abdulaziz Yusupaliev",
     type: "website",
     locale: "en_US",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: siteMetadata.title,
+    description: siteMetadata.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#161616",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -30,11 +48,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={cn("h-full", "antialiased", "font-sans")}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className="font-sans">
+      <body>{children}</body>
     </html>
   );
 }

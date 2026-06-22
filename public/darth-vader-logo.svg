@@ -1,61 +1,75 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Front-facing Darth Vader helmet">
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dark-lord helmet mark">
   <defs>
-    <linearGradient id="bg" x1="80" y1="48" x2="432" y2="464" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#111827"/>
-      <stop offset="1" stop-color="#020617"/>
+    <radialGradient id="field" cx="0.5" cy="0.42" r="0.72">
+      <stop offset="0" stop-color="#1c1416"/>
+      <stop offset="0.6" stop-color="#100c0e"/>
+      <stop offset="1" stop-color="#070506"/>
+    </radialGradient>
+    <linearGradient id="shell" x1="256" y1="96" x2="256" y2="430" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3a3034"/>
+      <stop offset="0.3" stop-color="#161113"/>
+      <stop offset="0.72" stop-color="#0a0708"/>
+      <stop offset="1" stop-color="#14080a"/>
     </linearGradient>
-    <linearGradient id="helmet" x1="256" y1="62" x2="256" y2="456" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#31343B"/>
-      <stop offset="0.28" stop-color="#090A0D"/>
-      <stop offset="0.74" stop-color="#020203"/>
-      <stop offset="1" stop-color="#15171C"/>
+    <linearGradient id="plate" x1="256" y1="150" x2="256" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#221a1c"/>
+      <stop offset="1" stop-color="#060405"/>
     </linearGradient>
-    <linearGradient id="center" x1="256" y1="84" x2="256" y2="424" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#4B5563"/>
-      <stop offset="0.34" stop-color="#151820"/>
-      <stop offset="1" stop-color="#030304"/>
-    </linearGradient>
-    <linearGradient id="eyeGlass" x1="185" y1="206" x2="327" y2="206" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#020203"/>
-      <stop offset="0.5" stop-color="#22252C"/>
-      <stop offset="1" stop-color="#020203"/>
-    </linearGradient>
+    <radialGradient id="visor" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ff6466"/>
+      <stop offset="0.55" stop-color="#e23234"/>
+      <stop offset="1" stop-color="#7c1518"/>
+    </radialGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
 
-  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
-  <circle cx="256" cy="256" r="225" fill="#050506"/>
-  <circle cx="256" cy="256" r="224" stroke="#FFFFFF" stroke-opacity="0.07" stroke-width="2"/>
+  <!-- field -->
+  <circle cx="256" cy="256" r="246" fill="url(#field)"/>
+  <circle cx="256" cy="256" r="245" stroke="#e23234" stroke-opacity="0.22" stroke-width="2"/>
+  <circle cx="256" cy="256" r="232" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1.5"/>
 
-  <path d="M151 143C174 90 216 62 256 62C296 62 338 90 361 143C379 185 386 227 386 265C386 344 336 424 256 447C176 424 126 344 126 265C126 227 133 185 151 143Z" fill="url(#helmet)"/>
-  <path d="M178 148C195 108 223 88 256 88C289 88 317 108 334 148C347 178 351 209 347 238C342 274 321 300 290 314C277 320 266 324 256 325C246 324 235 320 222 314C191 300 170 274 165 238C161 209 165 178 178 148Z" fill="#030304"/>
+  <!-- ambient crimson glow behind the helmet -->
+  <circle cx="256" cy="250" r="120" fill="#e23234" opacity="0.12" filter="url(#glow)"/>
 
-  <path d="M213 119C226 99 240 89 256 89C272 89 286 99 299 119L286 197H226L213 119Z" fill="url(#center)"/>
-  <path d="M238 97L256 82L274 97L265 184H247L238 97Z" fill="#191C23"/>
-  <path d="M249 111H263L268 185H244L249 111Z" fill="#050506"/>
+  <!-- helmet shell -->
+  <path d="M256 96C210 96 172 120 150 166C134 200 128 240 134 282C140 326 160 368 196 398C216 415 236 424 256 428C276 424 296 415 316 398C352 368 372 326 378 282C384 240 378 200 362 166C340 120 302 96 256 96Z" fill="url(#shell)"/>
 
-  <path d="M181 183C203 160 228 148 256 148C284 148 309 160 331 183L317 221C305 244 284 258 256 262C228 258 207 244 195 221L181 183Z" fill="#111318"/>
-  <path d="M193 192L236 204L224 235L185 222L193 192Z" fill="#060607"/>
-  <path d="M319 192L276 204L288 235L327 222L319 192Z" fill="#060607"/>
-  <path d="M195 197L235 207L221 220L187 214L195 197Z" fill="url(#eyeGlass)"/>
-  <path d="M317 197L277 207L291 220L325 214L317 197Z" fill="url(#eyeGlass)"/>
-  <path d="M201 198L229 205" stroke="#5C6472" stroke-width="4" stroke-linecap="round" opacity="0.42"/>
-  <path d="M311 198L283 205" stroke="#5C6472" stroke-width="4" stroke-linecap="round" opacity="0.42"/>
+  <!-- inner face plate -->
+  <path d="M256 138C220 138 190 158 172 196C158 226 154 258 160 292C166 330 184 364 214 388C228 399 242 406 256 409C270 406 284 399 298 388C328 364 346 330 352 292C358 258 354 226 340 196C322 158 292 138 256 138Z" fill="url(#plate)"/>
 
-  <path d="M232 236L256 220L280 236L269 270L256 282L243 270L232 236Z" fill="#12141A"/>
-  <path d="M249 233H263L268 270L256 282L244 270L249 233Z" fill="#050506"/>
-  <path d="M232 284C241 291 249 295 256 296C263 295 271 291 280 284L294 310C285 329 272 339 256 342C240 339 227 329 218 310L232 284Z" fill="#151820"/>
-  <path d="M229 297H283" stroke="#040405" stroke-width="8" stroke-linecap="round"/>
-  <path d="M236 317H276" stroke="#040405" stroke-width="7" stroke-linecap="round"/>
-  <path d="M246 336H266" stroke="#040405" stroke-width="6" stroke-linecap="round"/>
+  <!-- brow / dome highlight -->
+  <path d="M163 175C185 130 216 108 256 108C296 108 327 130 349 175" stroke="#5a4a4e" stroke-opacity="0.5" stroke-width="7" stroke-linecap="round"/>
+  <path d="M256 110V404" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2"/>
 
-  <path d="M157 314C176 367 210 397 256 405C302 397 336 367 355 314L372 375C353 419 313 449 256 457C199 449 159 419 140 375L157 314Z" fill="#060607"/>
-  <path d="M172 343C193 384 221 408 256 415C291 408 319 384 340 343L348 378C326 415 296 437 256 444C216 437 186 415 164 378L172 343Z" fill="#111318"/>
-  <path d="M218 396L256 444L294 396C282 406 270 412 256 414C242 412 230 406 218 396Z" fill="#030304"/>
+  <!-- center ridge -->
+  <path d="M242 150H270L276 214H236L242 150Z" fill="#2a2024"/>
+  <path d="M250 150H262L266 214H246L250 150Z" fill="#0a0708"/>
 
-  <path d="M169 151C188 112 214 90 247 82" stroke="#535A66" stroke-width="9" stroke-linecap="round" opacity="0.45"/>
-  <path d="M343 151C324 112 298 90 265 82" stroke="#535A66" stroke-width="9" stroke-linecap="round" opacity="0.45"/>
-  <path d="M142 250C142 206 153 166 174 132" stroke="#20242C" stroke-width="10" stroke-linecap="round"/>
-  <path d="M370 250C370 206 359 166 338 132" stroke="#20242C" stroke-width="10" stroke-linecap="round"/>
-  <path d="M256 63V446" stroke="#FFFFFF" stroke-width="2" opacity="0.08"/>
-  <path d="M157 143C175 93 216 63 256 63C296 63 337 93 355 143" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.11"/>
+  <!-- crimson visor / eyes -->
+  <g filter="url(#glow)">
+    <path d="M168 210L232 230L226 260L166 244Z" fill="url(#visor)"/>
+    <path d="M344 210L280 230L286 260L346 244Z" fill="url(#visor)"/>
+  </g>
+  <path d="M178 218L224 232L221 250L177 238Z" fill="#ffd9d9" opacity="0.65"/>
+  <path d="M334 218L288 232L291 250L335 238Z" fill="#ffd9d9" opacity="0.65"/>
+
+  <!-- nose bridge -->
+  <path d="M244 250H268L274 300L256 312L238 300L244 250Z" fill="#17080a"/>
+  <path d="M250 256H262L266 298L256 306L246 298L250 256Z" fill="#060405"/>
+
+  <!-- mouth grille (triangular vent) -->
+  <path d="M214 312H298L284 360L256 378L228 360L214 312Z" fill="#1a1416"/>
+  <path d="M226 322H286" stroke="#050304" stroke-width="8" stroke-linecap="round"/>
+  <path d="M232 340H280" stroke="#050304" stroke-width="7" stroke-linecap="round"/>
+  <path d="M242 356H270" stroke="#050304" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- side vents -->
+  <path d="M150 250C150 212 159 178 178 150" stroke="#241a1c" stroke-width="9" stroke-linecap="round"/>
+  <path d="M362 250C362 212 353 178 334 150" stroke="#241a1c" stroke-width="9" stroke-linecap="round"/>
 </svg>

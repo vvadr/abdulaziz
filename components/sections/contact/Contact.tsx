@@ -5,81 +5,69 @@ import { SectionReveal } from "../../shared/SectionReveal";
 
 const contactDetails: Record<
   HeroSocialIconName,
-  {
-    value: string;
-    label: string;
-  }
+  { value: string; label: string }
 > = {
-  github: {
-    value: "abdulazizyusupaliev",
-    label: "GitHub",
-  },
-  linkedin: {
-    value: "Abdulaziz Yusupaliev",
-    label: "LinkedIn",
-  },
-  email: {
-    value: "abdulazizyusupaliev009@gmail.com",
-    label: "Email",
-  },
-  telegram: {
-    value: "d_vaderrr",
-    label: "Telegram",
-  },
+  email: { value: "abdulazizyusupaliev009@gmail.com", label: "Email" },
+  telegram: { value: "@d_vaderrr", label: "Telegram" },
+  github: { value: "abdulazizyusupaliev", label: "GitHub" },
+  linkedin: { value: "Abdulaziz Yusupaliev", label: "LinkedIn" },
 };
+
+// Email and Telegram first — the fastest ways to reach me.
+const orderedLinks = [...heroSocialLinks].sort(
+  (a, b) =>
+    ["email", "telegram", "github", "linkedin"].indexOf(a.icon) -
+    ["email", "telegram", "github", "linkedin"].indexOf(b.icon),
+);
 
 export function Contact() {
   return (
-    <section id="contact" className="border-t border-white/10 px-4 py-20 sm:px-6">
-      <SectionReveal className="mx-auto w-full max-w-6xl">
-        <div className="section-heading">
-          <h2 className="section-kicker">Contact</h2>
-          <p className="mx-auto mt-5 max-w-2xl text-center text-sm leading-7 text-white/58 sm:text-base">
-            You can reach me here.
+    <section id="contact" className="px-4 py-20 sm:px-6 sm:py-28">
+      <div className="mx-auto w-full max-w-5xl">
+        <SectionReveal>
+          <h2 className="section-title">Let&apos;s talk</h2>
+          <p className="section-lead">
+            Open to internships, freelance work, and collaboration. Email or
+            Telegram reach me fastest — I usually reply within a day.
           </p>
-        </div>
+        </SectionReveal>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-2">
-          {heroSocialLinks.map((link, index) => {
+        <div className="mt-12 grid gap-4 sm:grid-cols-2">
+          {orderedLinks.map((link, index) => {
             const detail = contactDetails[link.icon];
+            const external = link.href.startsWith("http");
 
             return (
-              <SectionReveal key={link.label} delay={index * 0.08}>
+              <SectionReveal key={link.label} delay={(index % 2) * 0.08}>
                 <a
                   href={link.href}
-                  target={link.href.startsWith("http") ? "_blank" : undefined}
-                  rel={
-                    link.href.startsWith("http")
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
-                  className="group card-surface flex h-full items-center justify-between gap-4 p-5 transition duration-300 hover:-translate-y-1 hover:border-[var(--hero-accent)]/40"
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                  className="card-surface card-interactive group flex h-full items-center justify-between gap-4 p-5"
                 >
                   <div className="flex min-w-0 items-center gap-4">
-                    <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] p-2 text-white/90 transition group-hover:border-[var(--hero-accent)]/45 group-hover:bg-[var(--hero-accent)]/10">
-                      <HeroSocialIcon
-                        name={link.icon}
-                        className="h-full w-full"
-                      />
+                    <span className="grid size-12 shrink-0 place-items-center rounded-2xl border border-border bg-white/[0.03] text-foreground transition group-hover:border-accent/50 group-hover:bg-[color-mix(in_oklab,var(--accent)_12%,transparent)] group-hover:text-accent-strong">
+                      <HeroSocialIcon name={link.icon} className="h-5 w-5" />
                     </span>
-
                     <div className="min-w-0">
-                      <p className="text-xs uppercase tracking-[0.22em] text-white/42">
+                      <p className="font-mono text-xs uppercase tracking-[0.16em] text-faint">
                         {detail.label}
                       </p>
-                      <p className="mt-2 break-words text-base font-medium text-white sm:text-lg">
+                      <p className="mt-1.5 truncate text-base font-medium text-foreground">
                         {detail.value}
                       </p>
                     </div>
                   </div>
-
-                  <ArrowUpRight className="h-5 w-5 shrink-0 text-white/35 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--hero-accent)]" />
+                  <ArrowUpRight
+                    className="h-5 w-5 shrink-0 text-faint transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-strong"
+                    aria-hidden="true"
+                  />
                 </a>
               </SectionReveal>
             );
           })}
         </div>
-      </SectionReveal>
+      </div>
     </section>
   );
 }

@@ -4,91 +4,99 @@ import { SectionReveal } from "../../shared/SectionReveal";
 
 export function Experience() {
   return (
-    <section
-      id="experience"
-      className="border-t border-white/10 px-4 py-20 sm:px-6"
-    >
-      <SectionReveal className="mx-auto w-full max-w-4xl">
-        <div className="section-heading">
-          <h2 className="section-kicker">Experience</h2>
-        </div>
+    <section id="experience" className="px-4 py-20 sm:px-6 sm:py-28">
+      <div className="mx-auto w-full max-w-5xl">
+        <SectionReveal>
+          <h2 className="section-title">Experience</h2>
+          <p className="section-lead">
+            Where I&apos;ve shipped real frontend work in production teams.
+          </p>
+        </SectionReveal>
 
-        <div className="mt-12 space-y-12">
+        <div className="mt-14 space-y-14">
           {experienceItems.map((item, index) => (
             <SectionReveal
               key={`${item.title}-${item.type}-${index}`}
-              delay={index * 0.08}
-              className="border-l border-white/12 pl-5 sm:pl-7"
+              as="article"
+              delay={index * 0.06}
             >
-              <article className="text-white/72">
-                <p className="text-xs uppercase tracking-[0.24em] text-[var(--hero-accent)]">
-                  {item.type}
-                </p>
+              <div className="grid gap-5 sm:grid-cols-[11rem_1fr] sm:gap-10">
+                <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-2">
+                  <span
+                    aria-hidden="true"
+                    className="size-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent)_22%,transparent)]"
+                  />
+                  <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-strong">
+                    {item.period}
+                  </p>
+                </div>
 
-                <h3 className="mt-3 font-display text-2xl font-semibold text-white sm:text-3xl">
-                  {item.title}
-                </h3>
+                <div className="border-t border-border pt-6 sm:pt-1">
+                  <p className="text-sm text-faint">
+                    {item.companyUrl ? (
+                      <a
+                        href={item.companyUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="transition hover:text-accent-strong"
+                      >
+                        {item.type}
+                      </a>
+                    ) : (
+                      item.type
+                    )}
+                  </p>
 
-                <p className="mt-2 text-sm text-white/48 sm:text-base">
-                  {item.companyUrl ? (
-                    <a
-                      href={item.companyUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="transition hover:text-white"
-                    >
-                      {item.type}
-                    </a>
-                  ) : (
-                    item.type
-                  )}
-                  {item.period ? ` | ${item.period}` : null}
-                </p>
+                  <h3 className="mt-2 font-display text-2xl font-semibold tracking-[-0.02em] text-foreground sm:text-[1.75rem]">
+                    {item.title}
+                  </h3>
 
-                <p className="mt-5 text-sm leading-8 sm:text-base">
-                  {item.description}
-                </p>
+                  <p className="mt-4 max-w-[68ch] leading-7 text-muted">
+                    {item.description}
+                  </p>
 
-                {item.companyUrl ? (
-                  <div className="mt-6">
-                    <a
-                      href={item.companyUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-[var(--hero-accent)] px-5 py-3 text-sm font-medium text-black transition hover:brightness-105"
-                    >
-                      Visit the website
-                      <ArrowUpRight size={16} />
-                    </a>
-                  </div>
-                ) : null}
-
-                <div className="mt-6">
-                  <h4 className="font-display text-base font-semibold text-white">
-                    Key contributions
-                  </h4>
-
-                  <ul className="mt-3 space-y-3 text-sm leading-7 sm:text-base">
+                  <ul className="mt-5 space-y-2.5">
                     {item.details.map((responsibility) => (
                       <li
                         key={responsibility}
-                        className="before:mr-3 before:text-[var(--hero-accent)] before:content-['-']"
+                        className="flex gap-3 leading-7 text-muted"
                       >
-                        {responsibility}
+                        <span
+                          aria-hidden="true"
+                          className="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent/70"
+                        />
+                        <span className="max-w-[66ch]">{responsibility}</span>
                       </li>
                     ))}
                   </ul>
-                </div>
 
-                <p className="mt-6 text-sm leading-7 text-white/62 sm:text-base">
-                  <span className="font-medium text-white">Technologies:</span>{" "}
-                  {item.tech.join(", ")}
-                </p>
-              </article>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {item.tech.map((tech) => (
+                      <span key={tech} className="tag">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  {item.companyUrl ? (
+                    <div className="mt-6">
+                      <a
+                        href={item.companyUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-ghost text-sm"
+                      >
+                        Visit {item.type}
+                        <ArrowUpRight size={16} aria-hidden="true" />
+                      </a>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
             </SectionReveal>
           ))}
         </div>
-      </SectionReveal>
+      </div>
     </section>
   );
 }

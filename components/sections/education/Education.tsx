@@ -3,69 +3,61 @@ import { SectionReveal } from "../../shared/SectionReveal";
 
 export function Education() {
   return (
-    <section
-      id="education"
-      className="border-t border-white/10 px-4 py-20 sm:px-6"
-    >
-      <SectionReveal className="mx-auto w-full max-w-4xl">
-        <div className="section-heading">
-          <h2 className="section-kicker">Education</h2>
-          <p className="mx-auto mt-5 max-w-2xl text-center text-sm leading-7 text-white/58 sm:text-base">
-            My learning path started with web fundamentals, moved into modern
-            frontend development, and now continues into AI and machine
-            learning.
+    <section id="education" className="px-4 py-20 sm:px-6 sm:py-28">
+      <div className="mx-auto w-full max-w-5xl">
+        <SectionReveal>
+          <h2 className="section-title">Education</h2>
+          <p className="section-lead">
+            My path started with web fundamentals, moved into the modern frontend
+            stack, and now continues into AI and machine learning.
           </p>
-        </div>
+        </SectionReveal>
 
         <div className="mt-14 space-y-14">
           {educationItems.map((item, index) => (
             <SectionReveal
               key={`${item.provider}-${item.period}-${index}`}
-              delay={index * 0.08}
+              as="article"
+              delay={index * 0.06}
             >
-              <article className="grid gap-6 text-white/72 sm:grid-cols-[9rem_1fr] sm:gap-10">
-                <div>
-                  <p className="font-display text-4xl font-semibold text-white/12 sm:text-5xl">
-                    0{index + 1}
-                  </p>
-                  <p className="mt-3 text-xs uppercase tracking-[0.24em] text-[var(--hero-accent)]">
+              <div className="grid gap-5 sm:grid-cols-[11rem_1fr] sm:gap-10">
+                <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:gap-2">
+                  <span
+                    aria-hidden="true"
+                    className="size-2.5 shrink-0 rounded-full bg-accent shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent)_22%,transparent)]"
+                  />
+                  <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-strong">
                     {item.period}
                   </p>
                 </div>
 
-                <div className="border-t border-white/10 pt-6">
-                  <div className="flex flex-wrap items-end justify-between gap-3">
-                    <div>
-                      <p className="text-sm uppercase tracking-[0.22em] text-white/42">
-                        {item.provider}
-                      </p>
-                      <h3 className="mt-3 font-display text-2xl font-semibold text-white sm:text-3xl">
-                        {item.title}
-                      </h3>
-                    </div>
-
-                    <p className="text-sm text-white/48">{item.location}</p>
+                <div className="border-t border-border pt-6 sm:pt-1">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <p className="text-sm text-faint">{item.provider}</p>
+                    <p className="text-sm text-faint">{item.location}</p>
                   </div>
 
-                  <p className="mt-6 text-sm leading-8 sm:text-base">
+                  <h3 className="mt-2 font-display text-2xl font-semibold tracking-[-0.02em] text-foreground sm:text-[1.75rem]">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-4 max-w-[68ch] leading-7 text-muted">
                     {item.description}
                   </p>
 
-                  <p className="mt-5 text-sm leading-7 text-white/68 sm:text-base">
-                    <span className="font-medium text-white">Focus:</span>{" "}
-                    {item.focus}
-                  </p>
-
-                  <p className="mt-5 text-sm leading-7 text-white/58 sm:text-base">
-                    <span className="font-medium text-white">Tools studied:</span>{" "}
-                    {item.subjects.join(", ")}
-                  </p>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {item.subjects.map((subject) => (
+                      <span key={subject} className="tag">
+                        {subject}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </article>
+              </div>
             </SectionReveal>
           ))}
         </div>
-      </SectionReveal>
+      </div>
     </section>
   );
 }

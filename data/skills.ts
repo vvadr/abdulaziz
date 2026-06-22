@@ -91,29 +91,32 @@ export const skillGroups: SkillGroup[] = [
     title: "Frontend",
     skills: [
       { name: "React", showLabel: true },
-      { name: "Next.js", shortName: "NextJS", showLabel: true },
+      { name: "Next.js", showLabel: true },
+      { name: "Tailwind CSS", shortName: "Tailwind", showLabel: true },
       { name: "HTML5", shortName: "HTML", showLabel: true },
       { name: "CSS3", shortName: "CSS", showLabel: true },
-      { name: "Tailwind CSS", shortName: "Tailwind", showLabel: true },
+      { name: "Bootstrap", showLabel: true },
+      { name: "Pug", showLabel: true },
     ],
   },
   {
     title: "Tools",
     skills: [
       { name: "Git", showLabel: true },
-      { name: "GitHub", shortName: "Github", showLabel: true },
+      { name: "GitHub", showLabel: true },
       { name: "GitLab", showLabel: true },
-      { name: "Bootstrap", showLabel: true },
-      { name: "Pug", showLabel: true },
       { name: "npm", showLabel: true },
+      { name: "Vercel", showLabel: true },
+      { name: "VS Code", showLabel: true },
     ],
   },
   {
     title: "AI & ML",
     skills: [
+      { name: "Python", showLabel: true },
       { name: "Pandas", showLabel: true },
       { name: "NumPy", showLabel: true },
-      { name: "Scikit-learn", showLabel: true },
+      { name: "Scikit-learn", shortName: "Scikit", showLabel: true },
       {
         name: "Matplotlib",
         assetSrc: "/matplotlib-logo.svg",
@@ -128,7 +131,6 @@ export const skillGroups: SkillGroup[] = [
         assetHeight: 44,
         showLabel: true,
       },
-      { name: "Python", showLabel: true },
     ],
   },
 ];

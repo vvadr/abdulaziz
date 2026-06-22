@@ -2,9 +2,9 @@
 
 import {
   useEffect,
+  useRef,
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
-  type ReactNode,
 } from "react";
 import { ArrowUpRight, FolderGit2, Globe, X } from "lucide-react";
 import { projectItems, type ProjectItem } from "@/data/site";
@@ -12,6 +12,7 @@ import { SectionReveal } from "../../shared/SectionReveal";
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!selectedProject) {
@@ -35,128 +36,98 @@ export function Projects() {
     };
   }, [selectedProject]);
 
-  const openProject = (project: ProjectItem) => setSelectedProject(project);
+  const openProject = (project: ProjectItem, trigger: HTMLElement) => {
+    triggerRef.current = trigger;
+    setSelectedProject(project);
+  };
+
+  const closeProject = () => {
+    setSelectedProject(null);
+    // Return focus to the card that opened the drawer.
+    triggerRef.current?.focus();
+  };
 
   const handleCardKeyDown =
     (project: ProjectItem) => (event: ReactKeyboardEvent<HTMLElement>) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        openProject(project);
+        openProject(project, event.currentTarget);
       }
     };
 
   return (
-    <section id="projects" className="border-t border-white/10 px-4 py-20 sm:px-6">
-      <SectionReveal className="mx-auto w-full max-w-6xl">
-        <div className="section-heading">
-          <h2 className="section-kicker">Projects</h2>
-        </div>
+    <section id="projects" className="px-4 py-20 sm:px-6 sm:py-28">
+      <div className="mx-auto w-full max-w-6xl">
+        <SectionReveal>
+          <h2 className="section-title">Projects</h2>
+          <p className="section-lead">
+            Shipped frontends, a machine-learning notebook, and a few things I
+            built to learn. Open any card for the full story.
+          </p>
+        </SectionReveal>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-2">
+        <div className="mt-14 grid gap-5 lg:grid-cols-2">
           {projectItems.map((project, index) => (
-            <SectionReveal
-              key={project.title}
-              delay={index * 0.08}
-              className="h-full"
-            >
+            <SectionReveal key={project.title} delay={(index % 2) * 0.08} className="h-full">
               <article
                 role="button"
                 tabIndex={0}
-                onClick={() => openProject(project)}
+                onClick={(event) => openProject(project, event.currentTarget)}
                 onKeyDown={handleCardKeyDown(project)}
-                className="card-surface flex h-full cursor-pointer flex-col p-6 text-left transition duration-300 hover:-translate-y-1 hover:border-[var(--hero-accent)]/40 hover:shadow-[0_18px_45px_rgba(0,0,0,0.28)]"
-                aria-label={`Open details for ${project.title}`}
+                aria-label={`View details for ${project.title}`}
+                className="card-surface card-interactive flex h-full cursor-pointer flex-col p-6"
               >
-                <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-sm uppercase tracking-[0.2em] text-white/42">
+                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-faint">
                       {project.category}
                     </p>
-                    <h3 className="mt-3 text-2xl font-semibold text-white">
+                    <h3 className="mt-2.5 font-display text-xl font-semibold tracking-[-0.02em] text-foreground sm:text-2xl">
                       {project.title}
                     </h3>
                   </div>
-                  <span className="rounded-full border border-[var(--hero-accent)]/25 bg-[var(--hero-accent)]/10 px-3 py-2 text-xs uppercase tracking-[0.22em] text-[var(--hero-accent)]">
+                  <span className="tag tag-accent shrink-0 uppercase tracking-[0.12em]">
                     {project.status}
                   </span>
                 </div>
 
-                <p className="mt-6 text-base leading-8 text-white/66">
-                  {project.description}
-                </p>
+                <p className="mt-4 leading-7 text-muted">{project.description}</p>
 
-                <div className="mt-6 flex flex-wrap gap-2">
+                <div className="mt-5 flex flex-wrap gap-2">
                   {project.stack.slice(0, 5).map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-full border border-white/10 px-3 py-2 text-sm text-white/78"
-                    >
+                    <span key={item} className="tag">
                       {item}
                     </span>
                   ))}
                   {project.stack.length > 5 ? (
-                    <span className="rounded-full border border-white/10 px-3 py-2 text-sm text-white/52">
-                      +{project.stack.length - 5} more
-                    </span>
+                    <span className="tag text-faint">+{project.stack.length - 5}</span>
                   ) : null}
                 </div>
 
-                <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex flex-wrap gap-3">
-                    <ProjectLink
-                      href={project.repoUrl}
-                      icon={<FolderGit2 size={16} />}
-                      label="Repository"
-                    />
+                <div className="mt-auto flex items-center justify-between gap-3 pt-7 text-sm">
+                  <div className="flex items-center gap-3 text-faint">
+                    <span className="inline-flex items-center gap-1.5">
+                      <FolderGit2 size={15} aria-hidden="true" /> Repo
+                    </span>
                     {project.liveUrl ? (
-                      <ProjectLink
-                        href={project.liveUrl}
-                        icon={<Globe size={16} />}
-                        label="Website"
-                      />
+                      <span className="inline-flex items-center gap-1.5">
+                        <Globe size={15} aria-hidden="true" /> Live
+                      </span>
                     ) : null}
                   </div>
-
-                  <span className="inline-flex items-center gap-2 text-sm font-medium text-white/56">
+                  <span className="inline-flex items-center gap-1.5 font-medium text-accent-strong">
                     View details
-                    <ArrowUpRight size={16} />
+                    <ArrowUpRight size={15} aria-hidden="true" />
                   </span>
                 </div>
               </article>
             </SectionReveal>
           ))}
         </div>
-      </SectionReveal>
+      </div>
 
-      <ProjectDrawer
-        item={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      <ProjectDrawer item={selectedProject} onClose={closeProject} />
     </section>
-  );
-}
-
-function ProjectLink({
-  href,
-  icon,
-  label,
-}: {
-  href: string;
-  icon: ReactNode;
-  label: string;
-}) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      onClick={(event) => event.stopPropagation()}
-      className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-white/78 transition hover:border-[var(--hero-accent)]/50 hover:text-white"
-      aria-label={label}
-    >
-      {icon}
-      <span>{label}</span>
-    </a>
   );
 }
 
@@ -167,24 +138,35 @@ function ProjectDrawer({
   item: ProjectItem | null;
   onClose: () => void;
 }) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (item) {
+      // Move focus into the drawer for keyboard + screen-reader users.
+      const id = window.setTimeout(() => closeRef.current?.focus(), 80);
+      return () => window.clearTimeout(id);
+    }
+  }, [item]);
+
   return (
     <div
-      className={`fixed inset-0 z-50 transition ${
+      className={`fixed inset-0 z-[var(--z-overlay)] transition ${
         item ? "pointer-events-auto" : "pointer-events-none"
       }`}
       aria-hidden={!item}
     >
       <button
         type="button"
+        tabIndex={item ? 0 : -1}
         onClick={onClose}
-        className={`absolute inset-0 z-0 cursor-default bg-black/55 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`absolute inset-0 cursor-default bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
           item ? "opacity-100" : "opacity-0"
         }`}
         aria-label="Close project details"
       />
 
       <aside
-        className={`absolute bottom-0 right-0 top-0 z-10 flex h-full w-full max-w-xl flex-col overflow-y-auto overscroll-contain border-l border-white/10 bg-[#171717] p-6 shadow-[-28px_0_70px_rgba(0,0,0,0.45)] transition-transform duration-300 touch-pan-y sm:p-8 ${
+        className={`absolute inset-y-0 right-0 flex h-full w-full max-w-xl flex-col overflow-y-auto overscroll-contain border-l border-border bg-surface p-6 shadow-[-28px_0_80px_rgba(0,0,0,0.6)] transition-transform duration-300 sm:p-8 ${
           item ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"
@@ -195,57 +177,51 @@ function ProjectDrawer({
           <>
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.24em] text-[var(--hero-accent)]">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent-strong">
                   {item.category}
                 </p>
-                <h3 className="mt-3 font-display text-3xl font-semibold text-white">
+                <h3 className="mt-3 font-display text-2xl font-semibold tracking-[-0.02em] text-foreground sm:text-3xl">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-sm uppercase tracking-[0.18em] text-white/48">
-                  {item.status}
-                </p>
+                <p className="mt-2 text-sm text-faint">{item.status}</p>
               </div>
 
               <button
+                ref={closeRef}
                 type="button"
                 onClick={onClose}
-                className="grid size-10 shrink-0 place-items-center rounded-full border border-white/10 text-white/70 transition hover:border-[var(--hero-accent)]/50 hover:text-white"
+                className="grid size-10 shrink-0 place-items-center rounded-full border border-border text-muted transition hover:border-accent/50 hover:text-accent-strong"
                 aria-label="Close project details"
               >
-                <X size={18} />
+                <X size={18} aria-hidden="true" />
               </button>
             </div>
 
-            <p className="mt-8 text-base leading-8 text-white/68">
-              {item.description}
-            </p>
+            <p className="mt-7 leading-8 text-muted">{item.description}</p>
 
             <div className="mt-8">
-              <h4 className="font-display text-lg font-semibold text-white">
-                What&apos;s In It
+              <h4 className="font-display text-lg font-semibold text-foreground">
+                What&apos;s in it
               </h4>
-              <div className="mt-4 grid gap-3">
+              <ul className="mt-4 space-y-3">
                 {item.details.map((detail) => (
-                  <p
+                  <li
                     key={detail}
-                    className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-7 text-white/68"
+                    className="rounded-2xl border border-border bg-white/[0.02] p-4 leading-7 text-muted"
                   >
                     {detail}
-                  </p>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
 
             <div className="mt-8">
-              <h4 className="font-display text-lg font-semibold text-white">
-                Tech Stack
+              <h4 className="font-display text-lg font-semibold text-foreground">
+                Tech stack
               </h4>
               <div className="mt-4 flex flex-wrap gap-2">
                 {item.stack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-full border border-[var(--hero-accent)]/25 bg-[var(--hero-accent)]/10 px-3 py-2 text-sm text-white/82"
-                  >
+                  <span key={tech} className="tag tag-accent">
                     {tech}
                   </span>
                 ))}
@@ -257,9 +233,9 @@ function ProjectDrawer({
                 href={item.repoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm font-medium text-white/78 transition hover:border-[var(--hero-accent)]/50 hover:text-white"
+                className="btn-ghost text-sm"
               >
-                <FolderGit2 size={16} />
+                <FolderGit2 size={16} aria-hidden="true" />
                 Repository
               </a>
 
@@ -268,10 +244,10 @@ function ProjectDrawer({
                   href={item.liveUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--hero-accent)] px-5 py-3 text-sm font-medium text-black transition hover:brightness-105"
+                  className="btn-primary text-sm"
                 >
-                  <Globe size={16} />
-                  Website
+                  <Globe size={16} aria-hidden="true" />
+                  Visit live site
                 </a>
               ) : null}
             </div>
