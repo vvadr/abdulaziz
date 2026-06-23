@@ -2,36 +2,52 @@
 
 /*
   Abdulaziz Yusupaliev — portfolio design system.
-  Crimson-on-black "dark-side" identity. One saber-red accent, deep neutral
-  restraint. All tokens OKLCH; every text/surface pair verified WCAG AA
-  (see scripts/contrast-check.mjs).
+  "Twilight teal": a calm deep blue-slate world lit by a single soft aqua
+  accent — the light-side blade to the old Sith red. Open, relaxing, still
+  cinematic. All tokens OKLCH; every text/surface pair verified for WCAG AA.
+  v1 — twilight-teal
 */
 
 :root {
-  /* Surfaces — near-black with a faint crimson tint (chroma toward brand hue) */
-  --bg: oklch(0.165 0.006 25);
-  --surface: oklch(0.205 0.008 25);
-  --surface-2: oklch(0.245 0.01 25);
-  --border: oklch(0.34 0.012 25);
+  /* Surfaces — deep twilight blue-slate, lifted off pure black so it breathes.
+     Faint cool-blue tint (chroma toward the brand hue, not warm-by-default). */
+  --bg: oklch(0.211 0.022 248);
+  --surface: oklch(0.252 0.024 248);
+  --surface-2: oklch(0.295 0.026 247);
+  --border: oklch(0.4 0.028 246);
+  --border-soft: oklch(0.33 0.024 247);
 
-  /* Ink — primary 17.7:1, muted 9.6:1, faint 6.2:1 on --bg */
-  --ink: oklch(0.97 0.004 60);
-  --ink-muted: oklch(0.78 0.01 40);
-  --ink-faint: oklch(0.66 0.012 35);
+  /* Ink — primary ≈15.5:1, muted ≈7.3:1, faint ≈4.3:1 on --bg */
+  --ink: oklch(0.972 0.005 230);
+  --ink-muted: oklch(0.805 0.018 226);
+  --ink-faint: oklch(0.672 0.022 232);
 
-  /* Saber red — the only saturated color on the page */
-  --accent: oklch(0.6 0.214 26);
-  --accent-strong: oklch(0.66 0.21 27);
-  --accent-solid: oklch(0.53 0.2 26);
-  --accent-ink: oklch(0.99 0 0);
-  --accent-rgb: 226 50 52; /* ≈ --accent, for rgba() glows */
+  /* Soft aqua/teal — the one calm accent. */
+  --accent: oklch(0.82 0.114 193);
+  --accent-strong: oklch(0.882 0.12 191);
+  --accent-soft: oklch(0.72 0.092 200);
+  --accent-solid: oklch(0.805 0.115 193);
+  --accent-ink: oklch(0.2 0.03 244); /* dark slate on the teal fill */
+  --accent-rgb: 92 219 210; /* ≈ --accent, for rgb()/glows */
+
+  /* A cooler companion (depth in gradients only — not a second accent) */
+  --twilight: oklch(0.62 0.1 256);
+  --twilight-rgb: 120 156 224;
 
   /* Type */
   --font-sans: "Geist Variable", "Segoe UI", system-ui, sans-serif;
   --font-display: "Bricolage Grotesque Variable", "Geist Variable", sans-serif;
   --font-mono: "Geist Mono Variable", ui-monospace, "Cascadia Code", monospace;
 
-  --radius: 0.875rem;
+  --radius: 1rem;
+
+  /* Motion — smooth, exponential ease-outs; no bounce, no elastic. */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 0.25s;
+  --dur: 0.45s;
+  --dur-slow: 0.7s;
 
   /* Semantic z-index scale (never arbitrary 999s) */
   --z-base: 0;
@@ -47,22 +63,27 @@
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
   --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
   --color-muted: var(--ink-muted);
   --color-faint: var(--ink-faint);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
   --color-accent-solid: var(--accent-solid);
   --color-accent-ink: var(--accent-ink);
+  --color-twilight: var(--twilight);
 
   --font-sans: var(--font-sans);
   --font-display: var(--font-display);
   --font-mono: var(--font-mono);
 
-  --radius-sm: calc(var(--radius) * 0.55);
-  --radius-md: calc(var(--radius) * 0.8);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.6);
-  --radius-2xl: calc(var(--radius) * 2.2);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+
+  --ease-fluid: var(--ease-out-expo);
 }
 
 @layer base {
@@ -74,7 +95,7 @@
   html {
     scroll-behavior: smooth;
     /* offset anchor jumps for the fixed nav */
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 6.5rem;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -88,6 +109,27 @@
     text-rendering: optimizeLegibility;
     /* light type on dark needs more leading */
     line-height: 1.65;
+  }
+
+  /* A faint twilight wash at the top of the page — the "open sky" that lifts
+     the whole site off flat black. Fixed, decorative, pointer-transparent. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        90rem 48rem at 50% -16rem,
+        color-mix(in oklab, var(--accent) 12%, transparent),
+        transparent 62%
+      ),
+      radial-gradient(
+        60rem 40rem at 88% 0%,
+        color-mix(in oklab, var(--twilight) 14%, transparent),
+        transparent 55%
+      );
   }
 
   h1, h2, h3, h4 {
@@ -106,164 +148,216 @@
   }
 
   ::selection {
-    background: rgba(var(--accent-rgb) / 0.35);
+    background: color-mix(in oklab, var(--accent) 32%, transparent);
     color: var(--ink);
   }
 
   :focus-visible {
     outline: 2px solid var(--accent-strong);
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 5px;
   }
 
   ::placeholder {
     color: var(--ink-faint);
   }
+
+  /* Calmer, themed scrollbar */
+  * {
+    scrollbar-color: var(--surface-2) transparent;
+  }
 }
 
-/* ---- Components / utilities ---- */
+/* ---- Layout helpers ---- */
 
-.font-display {
-  font-family: var(--font-display);
-}
-.font-mono {
-  font-family: var(--font-mono);
+.shell {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 0.6rem + 2.4vw, 2.5rem);
 }
 
-/* One consistent section title across every section (no repeated eyebrows) */
+/* Vary section rhythm — generous, breathable, fluid. */
+.section {
+  padding-block: clamp(4.5rem, 3rem + 7vw, 8.5rem);
+}
+
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+
+/* ---- Section header (one consistent treatment everywhere:
+   display title + lead, no repeated eyebrow) ---- */
+
 .section-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2rem, 1.2rem + 3.4vw, 3.5rem);
-  line-height: 1.02;
+  font-size: clamp(2.1rem, 1.3rem + 3.2vw, 3.4rem);
+  line-height: 1.04;
   letter-spacing: -0.035em;
   color: var(--ink);
 }
 
 .section-lead {
-  margin-top: 1.1rem;
-  max-width: 42rem;
-  font-size: clamp(0.98rem, 0.93rem + 0.25vw, 1.12rem);
+  margin-top: 1.15rem;
+  max-width: 44rem;
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.14rem);
   line-height: 1.7;
   color: var(--ink-muted);
 }
 
-/* Card surface (no nested cards, no side-stripe borders) */
+/* ---- Surfaces / cards (no nested cards, no side-stripe borders) ---- */
+
 .card-surface {
-  border: 1px solid var(--border);
+  position: relative;
+  border: 1px solid var(--border-soft);
   border-radius: var(--radius-xl);
   background: var(--surface);
   transition:
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.3s ease,
-    box-shadow 0.4s ease;
+    transform var(--dur) var(--ease-out-expo),
+    border-color var(--dur-fast) var(--ease-soft),
+    box-shadow var(--dur) var(--ease-soft);
 }
 
 .card-interactive:hover {
-  transform: translateY(-4px);
-  border-color: color-mix(in oklab, var(--accent) 45%, var(--border));
+  transform: translateY(-5px);
+  border-color: color-mix(in oklab, var(--accent) 50%, var(--border));
   box-shadow:
-    0 24px 60px -28px rgba(0, 0, 0, 0.8),
+    0 26px 60px -30px rgb(0 0 0 / 0.75),
     0 0 0 1px color-mix(in oklab, var(--accent) 22%, transparent),
-    0 18px 60px -30px rgba(var(--accent-rgb) / 0.45);
+    0 22px 70px -34px color-mix(in oklab, var(--accent) 50%, transparent);
 }
 
-/* Saber-glowing primary button */
+/* ---- Buttons ---- */
+
 .btn-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   border-radius: 9999px;
   background: var(--accent-solid);
   color: var(--accent-ink);
   font-weight: 600;
-  padding: 0.7rem 1.25rem;
-  box-shadow: 0 10px 34px -14px rgba(var(--accent-rgb) / 0.7);
+  padding: 0.72rem 1.3rem;
+  box-shadow: 0 12px 36px -16px color-mix(in oklab, var(--accent) 80%, transparent);
   transition:
-    background 0.25s ease,
-    box-shadow 0.3s ease,
-    transform 0.2s ease;
+    background var(--dur-fast) var(--ease-soft),
+    box-shadow var(--dur) var(--ease-soft),
+    transform var(--dur-fast) var(--ease-out-quart);
 }
 .btn-primary:hover {
   background: var(--accent-strong);
+  transform: translateY(-2px);
   box-shadow:
-    0 14px 40px -12px rgba(var(--accent-rgb) / 0.85),
-    0 0 22px -4px rgba(var(--accent-rgb) / 0.6);
+    0 18px 44px -16px color-mix(in oklab, var(--accent) 90%, transparent),
+    0 0 26px -6px color-mix(in oklab, var(--accent) 70%, transparent);
 }
-.btn-primary:active {
-  transform: translateY(1px);
-}
+.btn-primary:active { transform: translateY(0); }
 
 .btn-ghost {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   border-radius: 9999px;
   border: 1px solid var(--border);
   color: var(--ink);
   font-weight: 500;
-  padding: 0.7rem 1.25rem;
+  padding: 0.72rem 1.3rem;
   transition:
-    border-color 0.25s ease,
-    background 0.25s ease,
-    color 0.25s ease;
+    border-color var(--dur-fast) var(--ease-soft),
+    background var(--dur-fast) var(--ease-soft),
+    color var(--dur-fast) var(--ease-soft),
+    transform var(--dur-fast) var(--ease-out-quart);
 }
 .btn-ghost:hover {
   border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
-  background: color-mix(in oklab, var(--accent) 9%, transparent);
+  background: color-mix(in oklab, var(--accent) 10%, transparent);
+  transform: translateY(-2px);
 }
+.btn-ghost:active { transform: translateY(0); }
 
-/* Mono tag / chip */
+/* ---- Mono tag / chip ---- */
+
 .tag {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: -0.01em;
   border-radius: 9999px;
-  border: 1px solid var(--border);
-  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border-soft);
+  padding: 0.32rem 0.72rem;
   color: var(--ink-muted);
   white-space: nowrap;
+  transition:
+    border-color var(--dur-fast) var(--ease-soft),
+    color var(--dur-fast) var(--ease-soft),
+    background var(--dur-fast) var(--ease-soft);
 }
 .tag-accent {
-  border-color: color-mix(in oklab, var(--accent) 35%, transparent);
+  border-color: color-mix(in oklab, var(--accent) 38%, transparent);
   background: color-mix(in oklab, var(--accent) 12%, transparent);
   color: var(--accent-strong);
 }
 
-/* Decorative grid + blinking cursor */
-.hero-grid {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 26px 26px;
+/* ---- Decorative ---- */
+
+.dot-grid {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--ink) 9%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
 }
 
 .blink-cursor {
   display: inline-block;
-  width: 0.6ch;
+  width: 0.58ch;
   color: var(--accent-strong);
-  animation: blink-cursor 1.05s steps(1, end) infinite;
+  animation: blink-cursor 1.1s steps(1, end) infinite;
 }
 @keyframes blink-cursor {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }
 }
 
-/* Thin saber rule used as a section divider accent */
-.saber-rule {
+/* Thin teal rule used as a divider accent */
+.beam-rule {
   height: 1px;
+  border: 0;
   background: linear-gradient(
     90deg,
     transparent,
-    color-mix(in oklab, var(--accent) 70%, transparent) 50%,
+    color-mix(in oklab, var(--accent) 75%, transparent) 50%,
     transparent
   );
 }
 
+/* Soft pulsing "available" dot */
+.pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: var(--accent-strong);
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--accent-strong);
+  animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
+}
+@keyframes pulse-ring {
+  0% { opacity: 0.55; transform: scale(1); }
+  70%, 100% { opacity: 0; transform: scale(3); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
   *,
   *::before,
   *::after {

@@ -1,26 +1,26 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dark-lord helmet mark">
   <defs>
-    <radialGradient id="field" cx="0.5" cy="0.42" r="0.72">
-      <stop offset="0" stop-color="#1c1416"/>
-      <stop offset="0.6" stop-color="#100c0e"/>
-      <stop offset="1" stop-color="#070506"/>
+    <radialGradient id="field" cx="0.5" cy="0.4" r="0.75">
+      <stop offset="0" stop-color="#19222e"/>
+      <stop offset="0.6" stop-color="#10161f"/>
+      <stop offset="1" stop-color="#0a0e15"/>
     </radialGradient>
-    <linearGradient id="shell" x1="256" y1="96" x2="256" y2="430" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#3a3034"/>
-      <stop offset="0.3" stop-color="#161113"/>
-      <stop offset="0.72" stop-color="#0a0708"/>
-      <stop offset="1" stop-color="#14080a"/>
+    <linearGradient id="shell" x1="256" y1="92" x2="256" y2="434" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#39434f"/>
+      <stop offset="0.34" stop-color="#1b232e"/>
+      <stop offset="0.74" stop-color="#0d121a"/>
+      <stop offset="1" stop-color="#0a1417"/>
     </linearGradient>
-    <linearGradient id="plate" x1="256" y1="150" x2="256" y2="420" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#221a1c"/>
-      <stop offset="1" stop-color="#060405"/>
+    <linearGradient id="plate" x1="256" y1="146" x2="256" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#202935"/>
+      <stop offset="1" stop-color="#080c12"/>
     </linearGradient>
-    <radialGradient id="visor" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#ff6466"/>
-      <stop offset="0.55" stop-color="#e23234"/>
-      <stop offset="1" stop-color="#7c1518"/>
+    <radialGradient id="visor" cx="0.5" cy="0.45" r="0.62">
+      <stop offset="0" stop-color="#b8fff5"/>
+      <stop offset="0.45" stop-color="#4fe0d2"/>
+      <stop offset="1" stop-color="#0f7d76"/>
     </radialGradient>
-    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+    <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
       <feGaussianBlur stdDeviation="9" result="b"/>
       <feMerge>
         <feMergeNode in="b"/>
@@ -31,45 +31,45 @@
 
   <!-- field -->
   <circle cx="256" cy="256" r="246" fill="url(#field)"/>
-  <circle cx="256" cy="256" r="245" stroke="#e23234" stroke-opacity="0.22" stroke-width="2"/>
+  <circle cx="256" cy="256" r="245" stroke="#46e0d0" stroke-opacity="0.22" stroke-width="2"/>
   <circle cx="256" cy="256" r="232" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1.5"/>
 
-  <!-- ambient crimson glow behind the helmet -->
-  <circle cx="256" cy="250" r="120" fill="#e23234" opacity="0.12" filter="url(#glow)"/>
+  <!-- ambient teal glow behind the helmet -->
+  <circle cx="256" cy="250" r="122" fill="#34d0c0" opacity="0.12" filter="url(#glow)"/>
 
   <!-- helmet shell -->
-  <path d="M256 96C210 96 172 120 150 166C134 200 128 240 134 282C140 326 160 368 196 398C216 415 236 424 256 428C276 424 296 415 316 398C352 368 372 326 378 282C384 240 378 200 362 166C340 120 302 96 256 96Z" fill="url(#shell)"/>
+  <path d="M256 92C209 92 170 117 148 165C131 200 125 241 131 284C137 329 158 372 195 402C216 419 236 428 256 432C276 428 296 419 317 402C354 372 375 329 381 284C387 241 381 200 364 165C342 117 303 92 256 92Z" fill="url(#shell)"/>
 
   <!-- inner face plate -->
-  <path d="M256 138C220 138 190 158 172 196C158 226 154 258 160 292C166 330 184 364 214 388C228 399 242 406 256 409C270 406 284 399 298 388C328 364 346 330 352 292C358 258 354 226 340 196C322 158 292 138 256 138Z" fill="url(#plate)"/>
+  <path d="M256 136C219 136 188 157 170 196C155 227 151 260 157 295C163 334 182 369 213 393C227 404 242 411 256 414C270 411 285 404 299 393C330 369 349 334 355 295C361 260 357 227 342 196C324 157 293 136 256 136Z" fill="url(#plate)"/>
 
   <!-- brow / dome highlight -->
-  <path d="M163 175C185 130 216 108 256 108C296 108 327 130 349 175" stroke="#5a4a4e" stroke-opacity="0.5" stroke-width="7" stroke-linecap="round"/>
-  <path d="M256 110V404" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2"/>
+  <path d="M160 174C183 128 215 105 256 105C297 105 329 128 352 174" stroke="#5c6b78" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+  <path d="M256 108V408" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2"/>
 
   <!-- center ridge -->
-  <path d="M242 150H270L276 214H236L242 150Z" fill="#2a2024"/>
-  <path d="M250 150H262L266 214H246L250 150Z" fill="#0a0708"/>
+  <path d="M241 148H271L277 214H235L241 148Z" fill="#27313d"/>
+  <path d="M249 148H263L267 214H245L249 148Z" fill="#0b1016"/>
 
-  <!-- crimson visor / eyes -->
+  <!-- teal visor / eyes -->
   <g filter="url(#glow)">
-    <path d="M168 210L232 230L226 260L166 244Z" fill="url(#visor)"/>
-    <path d="M344 210L280 230L286 260L346 244Z" fill="url(#visor)"/>
+    <path d="M165 208L233 229L226 261L162 244Z" fill="url(#visor)"/>
+    <path d="M347 208L279 229L286 261L350 244Z" fill="url(#visor)"/>
   </g>
-  <path d="M178 218L224 232L221 250L177 238Z" fill="#ffd9d9" opacity="0.65"/>
-  <path d="M334 218L288 232L291 250L335 238Z" fill="#ffd9d9" opacity="0.65"/>
+  <path d="M176 217L224 232L221 251L175 239Z" fill="#e6fffb" opacity="0.7"/>
+  <path d="M336 217L288 232L291 251L337 239Z" fill="#e6fffb" opacity="0.7"/>
 
   <!-- nose bridge -->
-  <path d="M244 250H268L274 300L256 312L238 300L244 250Z" fill="#17080a"/>
-  <path d="M250 256H262L266 298L256 306L246 298L250 256Z" fill="#060405"/>
+  <path d="M243 250H269L275 301L256 313L237 301L243 250Z" fill="#0e1820"/>
+  <path d="M249 256H263L267 299L256 307L245 299L249 256Z" fill="#070b11"/>
 
   <!-- mouth grille (triangular vent) -->
-  <path d="M214 312H298L284 360L256 378L228 360L214 312Z" fill="#1a1416"/>
-  <path d="M226 322H286" stroke="#050304" stroke-width="8" stroke-linecap="round"/>
-  <path d="M232 340H280" stroke="#050304" stroke-width="7" stroke-linecap="round"/>
-  <path d="M242 356H270" stroke="#050304" stroke-width="6" stroke-linecap="round"/>
+  <path d="M212 314H300L285 363L256 381L227 363L212 314Z" fill="#161e27"/>
+  <path d="M224 324H288" stroke="#060a0f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M231 342H281" stroke="#060a0f" stroke-width="7" stroke-linecap="round"/>
+  <path d="M241 359H271" stroke="#060a0f" stroke-width="6" stroke-linecap="round"/>
 
   <!-- side vents -->
-  <path d="M150 250C150 212 159 178 178 150" stroke="#241a1c" stroke-width="9" stroke-linecap="round"/>
-  <path d="M362 250C362 212 353 178 334 150" stroke="#241a1c" stroke-width="9" stroke-linecap="round"/>
+  <path d="M148 250C148 211 157 177 177 148" stroke="#222b36" stroke-width="9" stroke-linecap="round"/>
+  <path d="M364 250C364 211 355 177 335 148" stroke="#222b36" stroke-width="9" stroke-linecap="round"/>
 </svg>

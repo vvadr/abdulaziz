@@ -24,7 +24,7 @@ export function SectionReveal({
   children,
   className,
   delay = 0,
-  y = 24,
+  y = 22,
   as = "div",
 }: SectionRevealProps) {
   const reduceMotion = useReducedMotion();
@@ -66,7 +66,7 @@ export function SectionReveal({
     ? {}
     : {
         transition:
-          "opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1)",
+          "opacity 0.75s var(--ease-out-expo), transform 0.75s var(--ease-out-expo)",
       };
 
   const Tag = as;

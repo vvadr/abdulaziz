@@ -56,8 +56,8 @@ export function Projects() {
     };
 
   return (
-    <section id="projects" className="px-4 py-20 sm:px-6 sm:py-28">
-      <div className="mx-auto w-full max-w-6xl">
+    <section id="projects" className="section">
+      <div className="shell">
         <SectionReveal>
           <h2 className="section-title">Projects</h2>
           <p className="section-lead">
@@ -67,62 +67,96 @@ export function Projects() {
         </SectionReveal>
 
         <div className="mt-14 grid gap-5 lg:grid-cols-2">
-          {projectItems.map((project, index) => (
-            <SectionReveal key={project.title} delay={(index % 2) * 0.08} className="h-full">
-              <article
-                role="button"
-                tabIndex={0}
-                onClick={(event) => openProject(project, event.currentTarget)}
-                onKeyDown={handleCardKeyDown(project)}
-                aria-label={`View details for ${project.title}`}
-                className="card-surface card-interactive flex h-full cursor-pointer flex-col p-6"
+          {projectItems.map((project, index) => {
+            const featured = index === 0;
+            return (
+              <SectionReveal
+                key={project.title}
+                delay={(index % 2) * 0.07}
+                className={featured ? "lg:col-span-2" : "h-full"}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-faint">
-                      {project.category}
-                    </p>
-                    <h3 className="mt-2.5 font-display text-xl font-semibold tracking-[-0.02em] text-foreground sm:text-2xl">
-                      {project.title}
-                    </h3>
-                  </div>
-                  <span className="tag tag-accent shrink-0 uppercase tracking-[0.12em]">
-                    {project.status}
-                  </span>
-                </div>
-
-                <p className="mt-4 leading-7 text-muted">{project.description}</p>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {project.stack.slice(0, 5).map((item) => (
-                    <span key={item} className="tag">
-                      {item}
-                    </span>
-                  ))}
-                  {project.stack.length > 5 ? (
-                    <span className="tag text-faint">+{project.stack.length - 5}</span>
-                  ) : null}
-                </div>
-
-                <div className="mt-auto flex items-center justify-between gap-3 pt-7 text-sm">
-                  <div className="flex items-center gap-3 text-faint">
-                    <span className="inline-flex items-center gap-1.5">
-                      <FolderGit2 size={15} aria-hidden="true" /> Repo
-                    </span>
-                    {project.liveUrl ? (
-                      <span className="inline-flex items-center gap-1.5">
-                        <Globe size={15} aria-hidden="true" /> Live
+                <article
+                  role="button"
+                  tabIndex={0}
+                  onClick={(event) => openProject(project, event.currentTarget)}
+                  onKeyDown={handleCardKeyDown(project)}
+                  aria-label={`View details for ${project.title}`}
+                  className={`card-surface card-interactive flex h-full cursor-pointer flex-col p-6 sm:p-7 ${
+                    featured ? "lg:flex-row lg:gap-10" : ""
+                  }`}
+                >
+                  <div className={`flex flex-col ${featured ? "lg:flex-1" : "h-full"}`}>
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="font-mono text-xs uppercase tracking-[0.16em] text-faint">
+                          {featured ? "Featured · " : ""}
+                          {project.category}
+                        </p>
+                        <h3 className="mt-2.5 font-display font-semibold tracking-[-0.02em] text-foreground text-xl sm:text-2xl">
+                          {project.title}
+                        </h3>
+                      </div>
+                      <span className="tag tag-accent shrink-0 uppercase tracking-[0.12em]">
+                        {project.status}
                       </span>
-                    ) : null}
+                    </div>
+
+                    <p className="mt-4 leading-7 text-muted">{project.description}</p>
+
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {project.stack.slice(0, featured ? 8 : 5).map((item) => (
+                        <span key={item} className="tag">
+                          {item}
+                        </span>
+                      ))}
+                      {project.stack.length > (featured ? 8 : 5) ? (
+                        <span className="tag text-faint">
+                          +{project.stack.length - (featured ? 8 : 5)}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <div className="mt-auto flex items-center justify-between gap-3 pt-7 text-sm">
+                      <div className="flex items-center gap-3 text-faint">
+                        <span className="inline-flex items-center gap-1.5">
+                          <FolderGit2 size={15} aria-hidden="true" /> Repo
+                        </span>
+                        {project.liveUrl ? (
+                          <span className="inline-flex items-center gap-1.5">
+                            <Globe size={15} aria-hidden="true" /> Live
+                          </span>
+                        ) : null}
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 font-medium text-accent-strong">
+                        View details
+                        <ArrowUpRight size={15} aria-hidden="true" />
+                      </span>
+                    </div>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 font-medium text-accent-strong">
-                    View details
-                    <ArrowUpRight size={15} aria-hidden="true" />
-                  </span>
-                </div>
-              </article>
-            </SectionReveal>
-          ))}
+
+                  {/* featured highlights teaser */}
+                  {featured ? (
+                    <div className="mt-7 rounded-2xl border border-border-soft bg-white/[0.02] p-5 lg:mt-0 lg:w-80 lg:shrink-0">
+                      <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-strong">
+                        Highlights
+                      </p>
+                      <ul className="mt-4 grid gap-3">
+                        {project.details.slice(0, 3).map((detail) => (
+                          <li key={detail} className="flex gap-2.5 text-sm leading-6 text-muted">
+                            <span
+                              aria-hidden="true"
+                              className="mt-2 size-1.5 shrink-0 rounded-full bg-[color-mix(in_oklab,var(--accent)_70%,transparent)]"
+                            />
+                            <span>{detail}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </article>
+              </SectionReveal>
+            );
+          })}
         </div>
       </div>
 
@@ -159,14 +193,14 @@ function ProjectDrawer({
         type="button"
         tabIndex={item ? 0 : -1}
         onClick={onClose}
-        className={`absolute inset-0 cursor-default bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`absolute inset-0 cursor-default bg-[color-mix(in_oklab,var(--bg)_65%,transparent)] backdrop-blur-sm transition-opacity duration-300 ${
           item ? "opacity-100" : "opacity-0"
         }`}
         aria-label="Close project details"
       />
 
       <aside
-        className={`absolute inset-y-0 right-0 flex h-full w-full max-w-xl flex-col overflow-y-auto overscroll-contain border-l border-border bg-surface p-6 shadow-[-28px_0_80px_rgba(0,0,0,0.6)] transition-transform duration-300 sm:p-8 ${
+        className={`absolute inset-y-0 right-0 flex h-full w-full max-w-xl flex-col overflow-y-auto overscroll-contain border-l border-border bg-surface p-6 shadow-[-28px_0_80px_rgba(0,0,0,0.55)] transition-transform duration-[400ms] [transition-timing-function:var(--ease-out-expo)] sm:p-8 ${
           item ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"
@@ -190,7 +224,7 @@ function ProjectDrawer({
                 ref={closeRef}
                 type="button"
                 onClick={onClose}
-                className="grid size-10 shrink-0 place-items-center rounded-full border border-border text-muted transition hover:border-accent/50 hover:text-accent-strong"
+                className="grid size-10 shrink-0 place-items-center rounded-full border border-border text-muted transition hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] hover:text-accent-strong"
                 aria-label="Close project details"
               >
                 <X size={18} aria-hidden="true" />
@@ -207,7 +241,7 @@ function ProjectDrawer({
                 {item.details.map((detail) => (
                   <li
                     key={detail}
-                    className="rounded-2xl border border-border bg-white/[0.02] p-4 leading-7 text-muted"
+                    className="rounded-2xl border border-border-soft bg-white/[0.02] p-4 leading-7 text-muted"
                   >
                     {detail}
                   </li>

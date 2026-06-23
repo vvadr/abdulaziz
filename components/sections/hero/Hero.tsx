@@ -9,20 +9,20 @@ import {
   heroLocation,
   heroSocialLinks,
 } from "@/data/site";
+import { HeroBackdrop } from "./HeroBackdrop";
 import { HeroSkills3D } from "./HeroSkills3D";
 import { HeroSocialIcon } from "./HeroSocialIcon";
-import { HeroWaveBackground } from "./HeroWaveBackground";
 
 const container: Variants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.08 },
+    transition: { staggerChildren: 0.085, delayChildren: 0.1 },
   },
 };
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 18 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
 };
 
 export function Hero() {
@@ -33,17 +33,16 @@ export function Hero() {
     if (reduceMotion) return;
     const intervalId = window.setInterval(() => {
       setIndex((current) => (current + 1) % greetings.length);
-    }, 1900);
+    }, 2000);
     return () => window.clearInterval(intervalId);
   }, [reduceMotion]);
 
   return (
     <section
       id="home"
-      className="relative flex min-h-[100svh] items-center overflow-hidden px-4 pb-20 pt-28 sm:px-6 sm:pt-32"
+      className="relative flex min-h-[100svh] items-center overflow-hidden px-4 pb-24 pt-32 sm:px-6 sm:pt-36"
     >
-      <HeroWaveBackground />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.25),transparent_22%,transparent_72%,rgba(0,0,0,0.4))]" />
+      <HeroBackdrop />
 
       <motion.div
         variants={container}
@@ -56,21 +55,21 @@ export function Hero() {
           <motion.div
             variants={item}
             aria-hidden="true"
-            className="flex h-7 items-center gap-1 font-mono text-sm uppercase tracking-[0.28em] text-accent-strong"
+            className="flex h-7 items-center gap-1.5 font-mono text-sm tracking-[0.04em] text-accent-strong"
           >
             <AnimatePresence mode="wait">
               <motion.span
                 key={greetings[index]}
-                initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
-                transition={{ duration: 0.28, ease: "easeOut" }}
+                initial={reduceMotion ? false : { opacity: 0, y: 8, filter: "blur(4px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: -8, filter: "blur(4px)" }}
+                transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                 dir="ltr"
               >
                 {greetings[index]}
               </motion.span>
             </AnimatePresence>
-            <span>— I&apos;m</span>
+            <span className="text-muted">— I&apos;m</span>
           </motion.div>
 
           <motion.h1
@@ -94,12 +93,15 @@ export function Hero() {
             <span className="text-accent-strong">Frontend Developer</span>
           </motion.p>
 
-          <motion.div
-            variants={item}
-            className="mt-5 inline-flex items-center gap-2 rounded-full border border-border bg-white/[0.03] px-3.5 py-1.5 text-sm text-muted"
-          >
-            <MapPin className="h-4 w-4 text-accent" aria-hidden="true" />
-            <span>{heroLocation}</span>
+          <motion.div variants={item} className="mt-5 flex flex-wrap items-center gap-2.5">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border-soft bg-white/[0.03] px-3.5 py-1.5 text-sm text-muted">
+              <MapPin className="h-4 w-4 text-accent" aria-hidden="true" />
+              {heroLocation}
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_oklab,var(--accent)_30%,transparent)] bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] px-3.5 py-1.5 text-sm text-accent-strong">
+              <span className="pulse-dot" aria-hidden="true" />
+              Open to internships &amp; freelance
+            </span>
           </motion.div>
 
           <motion.p
@@ -119,7 +121,7 @@ export function Hero() {
                   target={external ? "_blank" : undefined}
                   rel={external ? "noopener noreferrer" : undefined}
                   aria-label={link.label}
-                  className="grid size-12 place-items-center rounded-2xl border border-border bg-white/[0.03] text-foreground transition hover:-translate-y-0.5 hover:border-accent/55 hover:bg-[color-mix(in_oklab,var(--accent)_12%,transparent)] hover:text-accent-strong"
+                  className="grid size-12 place-items-center rounded-2xl border border-border-soft bg-white/[0.03] text-foreground transition duration-200 hover:-translate-y-1 hover:border-[color-mix(in_oklab,var(--accent)_55%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_12%,transparent)] hover:text-accent-strong"
                 >
                   <HeroSocialIcon name={link.icon} className="h-5 w-5" />
                 </a>
@@ -141,6 +143,25 @@ export function Hero() {
           <HeroSkills3D />
         </motion.div>
       </motion.div>
+
+      {/* scroll cue */}
+      <motion.a
+        href="#skills"
+        aria-label="Scroll to skills"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 0.8 }}
+        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-faint transition-colors hover:text-accent-strong sm:flex"
+      >
+        <span className="font-mono text-[0.7rem] uppercase tracking-[0.3em]">Scroll</span>
+        <span className="relative flex h-9 w-5 justify-center rounded-full border border-border">
+          <motion.span
+            className="mt-1.5 h-1.5 w-1 rounded-full bg-accent"
+            animate={reduceMotion ? undefined : { y: [0, 9, 0], opacity: [1, 0.3, 1] }}
+            transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+          />
+        </span>
+      </motion.a>
     </section>
   );
 }

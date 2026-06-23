@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { SimpleIcon } from "simple-icons";
 import { type PortfolioSkill, skillGroups, skillIcons } from "@/data/skills";
 import { SectionReveal } from "../../shared/SectionReveal";
@@ -14,20 +13,18 @@ function getIconColor(icon: SimpleIcon) {
   return icon.hex.toLowerCase() === "000000" ? "#ffffff" : `#${icon.hex}`;
 }
 
-function SkillTile({ skill }: { skill: PortfolioSkill }) {
+function SkillChip({ skill }: { skill: PortfolioSkill }) {
   const icon = findSkillIcon(skill.name);
   const label = skill.shortName ?? skill.name;
 
   let glyph;
   if (skill.assetSrc) {
     glyph = (
-      <Image
+      // eslint-disable-next-line @next/next/no-img-element -- tiny local brand SVG; next/image adds an aspect-ratio warning here
+      <img
         src={skill.assetSrc}
         alt=""
-        width={skill.assetWidth ?? 96}
-        height={skill.assetHeight ?? 96}
-        className="h-9 w-auto max-w-full object-contain sm:h-11"
-        unoptimized
+        className="h-5 w-auto max-w-[1.75rem] object-contain"
       />
     );
   } else if (icon) {
@@ -35,8 +32,9 @@ function SkillTile({ skill }: { skill: PortfolioSkill }) {
       <svg
         viewBox="0 0 24 24"
         aria-hidden="true"
-        className="h-9 w-9 fill-current drop-shadow-[0_8px_18px_rgba(0,0,0,0.5)] sm:h-11 sm:w-11"
+        className="h-5 w-5 shrink-0"
         style={{ color: getIconColor(icon) }}
+        fill="currentColor"
       >
         <path d={icon.path} />
       </svg>
@@ -44,7 +42,7 @@ function SkillTile({ skill }: { skill: PortfolioSkill }) {
   } else {
     glyph = (
       <span
-        className="font-display text-xl font-bold sm:text-2xl"
+        className="font-mono text-xs font-bold"
         style={{ color: skill.fallbackColor ?? "#ffffff" }}
       >
         {skill.fallbackLabel ?? skill.name.slice(0, 2)}
@@ -53,24 +51,22 @@ function SkillTile({ skill }: { skill: PortfolioSkill }) {
   }
 
   return (
-    <div
-      className="group flex flex-col items-center gap-2.5 text-center"
+    <span
       title={skill.name}
+      className="group inline-flex items-center gap-2.5 rounded-xl border border-border-soft bg-white/[0.02] px-3.5 py-2.5 text-sm font-medium text-muted transition duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_8%,transparent)] hover:text-foreground"
     >
-      <div className="flex h-12 items-center justify-center transition duration-300 group-hover:-translate-y-1 group-hover:scale-110 sm:h-14">
+      <span className="grid place-items-center transition-transform duration-200 group-hover:scale-110">
         {glyph}
-      </div>
-      <span className="text-xs font-medium leading-none text-muted sm:text-sm">
-        {label}
       </span>
-    </div>
+      {label}
+    </span>
   );
 }
 
 export function Skills() {
   return (
-    <section id="skills" className="px-4 py-20 sm:px-6 sm:py-28">
-      <div className="mx-auto w-full max-w-6xl">
+    <section id="skills" className="section">
+      <div className="shell">
         <SectionReveal>
           <h2 className="section-title">Skills &amp; Tools</h2>
           <p className="section-lead">
@@ -79,21 +75,32 @@ export function Skills() {
           </p>
         </SectionReveal>
 
-        <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-12 sm:mt-16">
           {skillGroups.map((group, groupIndex) => (
             <SectionReveal
               key={group.title}
               as="section"
-              delay={groupIndex * 0.07}
+              delay={groupIndex * 0.05}
             >
-              <h3 className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground">
-                {group.title}
-              </h3>
-              <div className="saber-rule mt-3" />
-              <div className="mt-7 grid grid-cols-3 gap-x-4 gap-y-8">
-                {group.skills.map((skill) => (
-                  <SkillTile key={skill.name} skill={skill} />
-                ))}
+              <div
+                className={`grid gap-x-10 gap-y-5 py-8 sm:grid-cols-[12rem_1fr] sm:py-9 ${
+                  groupIndex > 0 ? "border-t border-border-soft" : ""
+                }`}
+              >
+                <div className="flex items-baseline gap-3 sm:flex-col sm:gap-2">
+                  <h3 className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground">
+                    {group.title}
+                  </h3>
+                  <span className="font-mono text-xs text-faint">
+                    {String(group.skills.length).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-2.5">
+                  {group.skills.map((skill) => (
+                    <SkillChip key={skill.name} skill={skill} />
+                  ))}
+                </div>
               </div>
             </SectionReveal>
           ))}

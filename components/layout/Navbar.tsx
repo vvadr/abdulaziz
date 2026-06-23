@@ -44,7 +44,7 @@ export function Navbar() {
     return () => observer.disconnect();
   }, []);
 
-  // Scroll progress saber + frosted-after-scroll state.
+  // Scroll progress beam + frosted-after-scroll state.
   useEffect(() => {
     const onScroll = () => {
       const top = window.scrollY;
@@ -95,11 +95,11 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-[var(--z-nav)]">
-      {/* scroll-progress saber */}
+      {/* scroll-progress beam */}
       <div className="absolute inset-x-0 top-0 h-[2px] bg-white/5">
         <div
           ref={progressRef}
-          className="h-full w-full origin-left scale-x-0 bg-[linear-gradient(90deg,#7c1518,#e23234_60%,#ff6466)] shadow-[0_0_12px_rgba(226,50,52,0.7)]"
+          className="h-full w-full origin-left scale-x-0 bg-[linear-gradient(90deg,var(--accent-soft),var(--accent)_55%,var(--accent-strong))] shadow-[0_0_12px_color-mix(in_oklab,var(--accent)_70%,transparent)]"
         />
       </div>
 
@@ -107,7 +107,7 @@ export function Navbar() {
         <div
           className={`mx-auto flex w-full max-w-6xl items-center justify-between rounded-full px-3 py-2.5 transition-all duration-300 md:px-4 ${
             scrolled
-              ? "border border-white/10 bg-surface/70 shadow-[0_18px_60px_-20px_rgba(0,0,0,0.7)] backdrop-blur-xl"
+              ? "border border-white/10 bg-[color-mix(in_oklab,var(--surface)_72%,transparent)] shadow-[0_18px_60px_-22px_rgba(0,0,0,0.7)] backdrop-blur-xl"
               : "border border-white/[0.04] bg-white/[0.02] backdrop-blur-sm"
           }`}
         >
@@ -117,7 +117,7 @@ export function Navbar() {
             aria-label="Abdulaziz Yusupaliev — home"
             className="group flex items-center gap-3"
           >
-            <span className="inline-flex size-10 items-center justify-center overflow-hidden rounded-full ring-1 ring-white/10 transition group-hover:ring-accent/50 group-hover:shadow-[0_0_18px_-3px_rgba(226,50,52,0.7)]">
+            <span className="inline-flex size-10 items-center justify-center overflow-hidden rounded-full ring-1 ring-white/10 transition duration-300 group-hover:ring-[color-mix(in_oklab,var(--accent)_55%,transparent)] group-hover:shadow-[0_0_18px_-3px_color-mix(in_oklab,var(--accent)_70%,transparent)]">
               <Image
                 src="/darth-vader-logo.svg"
                 alt=""
@@ -143,18 +143,18 @@ export function Navbar() {
                   key={item.id}
                   href={`#${item.id}`}
                   aria-current={active ? "page" : undefined}
-                  className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
+                  className={`relative rounded-full px-4 py-2 text-sm transition-colors duration-200 ${
                     active ? "text-accent-strong" : "text-muted hover:text-foreground"
                   }`}
                 >
                   {active ? (
                     <motion.span
                       layoutId="nav-active"
-                      className="absolute inset-0 rounded-full bg-[color-mix(in_oklab,var(--accent)_16%,transparent)] shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
+                      className="absolute inset-0 rounded-full bg-[color-mix(in_oklab,var(--accent)_15%,transparent)] shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
                       transition={
                         reduceMotion
                           ? { duration: 0 }
-                          : { type: "spring", stiffness: 380, damping: 32 }
+                          : { type: "spring", stiffness: 360, damping: 34 }
                       }
                     />
                   ) : null}
@@ -176,7 +176,7 @@ export function Navbar() {
               aria-expanded={isMenuOpen}
               aria-controls={menuId}
               onClick={() => setIsMenuOpen((current) => !current)}
-              className="group relative grid size-11 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-foreground transition hover:border-accent/45 hover:bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] md:hidden"
+              className="group relative grid size-11 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-foreground transition duration-200 hover:border-[color-mix(in_oklab,var(--accent)_45%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] md:hidden"
             >
               <span className="relative h-4 w-5">
                 <span
@@ -218,8 +218,8 @@ const overlayVariants: Variants = {
 };
 
 const linkVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
   exit: { opacity: 0 },
 };
 
@@ -254,7 +254,7 @@ function MobileMenu({
           initial={reduceMotion ? { opacity: 1 } : "hidden"}
           animate={reduceMotion ? { opacity: 1 } : "visible"}
           exit={reduceMotion ? { opacity: 0 } : "exit"}
-          className="fixed inset-0 z-[var(--z-overlay)] flex flex-col bg-background/95 px-6 pb-10 pt-6 backdrop-blur-xl md:hidden"
+          className="fixed inset-0 z-[var(--z-overlay)] flex flex-col bg-[color-mix(in_oklab,var(--bg)_94%,transparent)] px-6 pb-10 pt-6 backdrop-blur-xl md:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
@@ -268,7 +268,7 @@ function MobileMenu({
               type="button"
               onClick={onClose}
               aria-label="Close navigation menu"
-              className="grid size-11 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-foreground transition hover:border-accent/45 hover:text-accent-strong"
+              className="grid size-11 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-foreground transition hover:border-[color-mix(in_oklab,var(--accent)_45%,transparent)] hover:text-accent-strong"
             >
               <span className="relative h-4 w-5">
                 <span className="absolute left-0 top-[7px] h-px w-5 -translate-y-px rotate-45 bg-current" />
@@ -315,7 +315,7 @@ function MobileMenu({
                     rel={external ? "noopener noreferrer" : undefined}
                     aria-label={link.label}
                     onClick={onClose}
-                    className="grid size-11 place-items-center rounded-xl border border-border text-muted transition hover:border-accent/50 hover:text-accent-strong"
+                    className="grid size-11 place-items-center rounded-xl border border-border text-muted transition hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] hover:text-accent-strong"
                   >
                     <HeroSocialIcon name={link.icon} className="h-5 w-5" />
                   </a>

@@ -54,9 +54,20 @@ function project(p: Vec, radius: number, ay: number, ax: number) {
     dx: x1 * radius,
     dy: y2 * radius,
     scale: 0.5 + depth * 0.75,
-    opacity: 0.28 + depth * 0.72,
+    opacity: 0.3 + depth * 0.7,
     blur: (1 - depth) * 1.4,
     zIndex: Math.round(depth * 100),
+  };
+}
+
+// Deterministic initial transform string (identical on server + client → no
+// hydration mismatch). The rAF loop takes over on mount.
+function initialStyle(p: Vec) {
+  const pr = project(p, 150, 0.6, 0.18);
+  return {
+    transform: `translate(-50%, -50%) translate(${pr.dx.toFixed(2)}px, ${pr.dy.toFixed(2)}px) scale(${pr.scale.toFixed(3)})`,
+    opacity: Number(pr.opacity.toFixed(3)),
+    zIndex: pr.zIndex,
   };
 }
 
@@ -103,8 +114,8 @@ export function HeroSkills3D() {
     let raf = 0;
     const loop = () => {
       const targetAx = pointer.current.active ? 0.18 + pointer.current.y * 0.5 : 0.18;
-      ax += (targetAx - ax) * 0.05;
-      const speed = 0.0035 + (pointer.current.active ? pointer.current.x * 0.004 : 0);
+      ax += (targetAx - ax) * 0.045;
+      const speed = 0.0026 + (pointer.current.active ? pointer.current.x * 0.0034 : 0);
       ay += speed;
       apply(radius(), ay, ax);
       raf = requestAnimationFrame(loop);
@@ -131,8 +142,9 @@ export function HeroSkills3D() {
       aria-hidden="true"
       className="relative mx-auto aspect-square w-full max-w-[24rem] sm:max-w-[30rem]"
     >
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-2/5 w-2/5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(226,50,52,0.38),transparent_70%)] blur-2xl" />
-      <div className="pointer-events-none absolute -inset-8 -z-10 rounded-full bg-[radial-gradient(circle,rgba(226,50,52,0.1),transparent_72%)] blur-3xl" />
+      {/* soft teal core + halo */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-2/5 w-2/5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--accent)_40%,transparent),transparent_70%)] blur-2xl" />
+      <div className="pointer-events-none absolute -inset-8 -z-10 rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--accent)_12%,transparent),transparent_72%)] blur-3xl" />
 
       <div
         ref={containerRef}
@@ -142,23 +154,20 @@ export function HeroSkills3D() {
         style={{ perspective: "1000px" }}
       >
         {tools.map((tool, i) => {
-          const pr = project(base[i], 150, 0.6, 0.18);
+          const init = initialStyle(base[i]);
           return (
             <div
               key={tool.name}
               ref={(el) => {
                 itemsRef.current[i] = el;
               }}
+              suppressHydrationWarning
               className="absolute left-1/2 top-1/2 flex h-12 w-12 items-center justify-center"
-              style={{
-                transform: `translate(-50%, -50%) translate(${pr.dx}px, ${pr.dy}px) scale(${pr.scale})`,
-                opacity: pr.opacity,
-                zIndex: pr.zIndex,
-              }}
+              style={init}
             >
               <svg
                 viewBox="0 0 24 24"
-                className="h-9 w-9 fill-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.7)]"
+                className="h-9 w-9 fill-[color-mix(in_oklab,var(--ink)_92%,var(--accent))] drop-shadow-[0_4px_14px_rgba(0,0,0,0.55)]"
               >
                 <path d={tool.icon?.path} />
               </svg>
