@@ -2,7 +2,6 @@ import { Contact } from "@/components/sections/contact/Contact";
 import { Education } from "@/components/sections/education/Education";
 import { Experience } from "@/components/sections/experience/Experience";
 import { Hero } from "@/components/sections/hero/Hero";
-import { WelcomeIntro } from "@/components/sections/hero/WelcomeIntro";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { Projects } from "@/components/sections/projects/Projects";
@@ -18,7 +17,6 @@ export default function Home() {
         Skip to content
       </a>
 
-      <WelcomeIntro />
       <Navbar />
       <main id="content">
         <Hero />

@@ -9,6 +9,8 @@ import {
 export type NavItem = {
   id: string;
   label: string;
+  /** Filename shown on the editor-style nav tab. */
+  file: string;
 };
 
 export type ExperienceItem = {
@@ -19,17 +21,6 @@ export type ExperienceItem = {
   description: string;
   details: string[];
   tech: string[];
-};
-
-export type ProjectItem = {
-  title: string;
-  category: string;
-  status: string;
-  description: string;
-  stack: string[];
-  repoUrl: string;
-  liveUrl?: string;
-  details: string[];
 };
 
 export type EducationItem = {
@@ -57,17 +48,28 @@ export type HeroSocialLink = {
   icon: HeroSocialIconName;
 };
 
+export type ResumeLink = {
+  label: string;
+  href: string;
+};
+
+// Two CVs, framed for the two roles the hero markets: frontend and AI/ML.
+export const resumeLinks: ResumeLink[] = [
+  { label: "Frontend CV", href: "/abdulaziz-yusupaliev-cv-frontend.pdf" },
+  { label: "AI/ML CV", href: "/abdulaziz-yusupaliev-cv-ai-ml.pdf" },
+];
+
 // Deployment URL — used for metadata, canonical links, and OG previews.
 // Update this to the live domain when it changes.
 export const siteUrl = "https://abdulazizyusupaliev.vercel.app";
 
 export const siteMetadata = {
-  title: "Abdulaziz Yusupaliev | AI Engineer & Frontend Developer",
+  title: "Abdulaziz Yusupaliev | Frontend Developer & AI/ML Engineer",
   description:
-    "Portfolio of Abdulaziz Yusupaliev — an AI Engineer & Frontend Developer from Tashkent shipping production React and Next.js interfaces while growing into machine learning with Python.",
+    "Portfolio of Abdulaziz Yusupaliev — a frontend developer from Tashkent shipping React and Next.js interfaces while building practical AI/ML workflows with Python.",
   keywords: [
     "Abdulaziz Yusupaliev",
-    "AI Engineer",
+    "AI/ML Engineer",
     "Frontend Developer",
     "React Developer",
     "Next.js",
@@ -79,12 +81,12 @@ export const siteMetadata = {
 };
 
 export const navItems: NavItem[] = [
-  { id: "home", label: "Home" },
-  { id: "skills", label: "Skills" },
-  { id: "experience", label: "Experience" },
-  { id: "projects", label: "Projects" },
-  { id: "education", label: "Education" },
-  { id: "contact", label: "Contact" },
+  { id: "home", label: "Home", file: "index.tsx" },
+  { id: "skills", label: "Skills", file: "skills.json" },
+  { id: "experience", label: "Experience", file: "experience.log" },
+  { id: "projects", label: "Projects", file: "projects/" },
+  { id: "education", label: "Education", file: "education.md" },
+  { id: "contact", label: "Contact", file: "contact.sh" },
 ];
 
 export const greetings = [
@@ -103,7 +105,7 @@ export const heroLocation = "Tashkent, Uzbekistan";
 export const heroSocialLinks = [
   {
     label: "GitHub",
-    href: "https://github.com/abdulazizyusupaliev",
+    href: "https://github.com/vvadr",
     icon: "github",
   },
   {
@@ -156,112 +158,6 @@ export const experienceItems: ExperienceItem[] = [
   },
 ];
 
-export const projectItems: ProjectItem[] = [
-  {
-    title: "GradeFlow Frontend",
-    category: "EdTech Platform",
-    status: "Live",
-    description:
-      "Frontend for an online platform focused on student management plus test and exam automation, built as a modern multi-route web app.",
-    stack: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "React Hook Form",
-      "i18next",
-      "Zod",
-      "Three.js",
-      "shadcn/ui",
-    ],
-    repoUrl: "https://github.com/DwelveOrg/frontend",
-    liveUrl: "https://gradefloworg.vercel.app",
-    details: [
-      "Repository description positions the product as an online platform for managing students and automating tests and exams.",
-      "The app structure includes landing pages, authentication flows, dashboard pages, groups, school views, notifications, profile, and settings areas.",
-      "Assignment routes already exist for exams and homework, with animated filtering and card-based UI built into the current frontend.",
-      "The codebase uses a modern Next.js App Router stack with localization, form validation, motion, and reusable component patterns.",
-    ],
-  },
-  {
-    title: "Flower ML Model",
-    category: "AI / Machine Learning",
-    status: "Notebook",
-    description:
-      "A compact machine learning notebook that walks through a full supervised learning workflow using the Iris dataset from loading to evaluation.",
-    stack: ["Python", "Pandas", "Matplotlib", "Scikit-learn", "Jupyter Notebook"],
-    repoUrl: "https://github.com/abdulazizyusupaliev/Flower_ML_model",
-    details: [
-      "The notebook is framed as a quick-win AI/ML exercise meant to show the full workflow before going deep into theory.",
-      "It loads and inspects the Iris dataset, builds a DataFrame, performs a train and test split, trains a RandomForestClassifier, and checks prediction accuracy.",
-      "The stored notebook output reports 100% accuracy on the included test split, which fits the simple Iris classification setup used here.",
-      "The notebook also visualizes class separation with a flower-feature scatter plot to make the model behavior easier to understand.",
-    ],
-  },
-  {
-    title: "udevs-app",
-    category: "Social / Community App",
-    status: "Prototype",
-    description:
-      "A Twitter-like web app for udevs with content sections, profiles, saved items, and a GraphQL-powered frontend architecture.",
-    stack: [
-      "React",
-      "JavaScript",
-      "Apollo Client",
-      "GraphQL",
-      "Material UI",
-      "Sass",
-      "Axios",
-      "React Router",
-    ],
-    repoUrl: "https://github.com/abdulazizyusupaliev/udevs-app",
-    details: [
-      "The repository description calls it a Twitter-like web app for udevs, and the source structure includes pages for users, profiles, blogs, saved content, and topic-specific sections.",
-      "Apollo Client is wired to a GraphQL endpoint, showing an API-driven frontend rather than a static demo.",
-      "The UI stack combines Material UI, Emotion, Sass styling, React Router, and popup state helpers for interface behavior.",
-      "A CNAME file exists in the repo, but it currently contains a typo, so there is no reliable live website link to surface yet.",
-    ],
-  },
-  {
-    title: "weather-app-react",
-    category: "Weather / API Frontend",
-    status: "Live",
-    description:
-      "A React weather app frontend that requests weather API data and presents it in a clean, responsive interface.",
-    stack: [
-      "React",
-      "JavaScript",
-      "Axios",
-      "React Router",
-      "React Calendar",
-      "React Toastify",
-      "Create React App",
-    ],
-    repoUrl: "https://github.com/abdulazizyusupaliev/weather-app-react",
-    liveUrl: "https://abdulazizyusupaliev.github.io/weather-app-react/",
-    details: [
-      "Built as a weather-focused frontend that makes API requests and renders the returned data in the UI.",
-      "Uses React, Axios, and React Router to organize the interface and handle data-driven views.",
-      "Keeps the layout responsive and simple so the weather information is easy to read on desktop and mobile.",
-      "Includes a live GitHub Pages deployment for the portfolio card.",
-    ],
-  },
-  {
-    title: "Geometry Dash",
-    category: "Browser Game",
-    status: "Playable Prototype",
-    description:
-      "A frontend-only Geometry Dash inspired browser project with canvas gameplay, local best-score tracking, and collectible power-ups.",
-    stack: ["HTML", "CSS", "JavaScript", "Canvas API", "localStorage"],
-    repoUrl: "https://github.com/abdulazizyusupaliev/geometry-dash",
-    details: [
-      "The game is built with plain HTML, CSS, and JavaScript, with a neon arcade presentation and no frontend framework required.",
-      "The README and source code confirm jump, pause, and restart controls along with persistent best-score tracking in localStorage.",
-      "Three power-ups are implemented in the current version: Shield Core, Time Warp, and Jump Surge, each changing the run in a different way.",
-      "The project includes a landing section, gameplay HUD, overlay states, procedural obstacles, and canvas-based runner logic.",
-    ],
-  },
-];
-
 export const educationItems: EducationItem[] = [
   {
     title: "Frontend Development Program",
@@ -311,8 +207,8 @@ export const contactLinks: ContactLink[] = [
   },
   {
     label: "GitHub",
-    value: "abdulazizyusupaliev",
-    href: "https://github.com/abdulazizyusupaliev",
+    value: "vvadr",
+    href: "https://github.com/vvadr",
     icon: FolderGit2,
   },
   {

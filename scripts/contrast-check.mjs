@@ -22,16 +22,16 @@ const ratio = (fg, bg) => {
   return (Math.max(a, b) / Math.min(a, b));
 };
 const T = {
-  bg: [0.165, 0.006, 25],
-  surface: [0.205, 0.008, 25],
-  surface2: [0.245, 0.01, 25],
-  ink: [0.97, 0.004, 60],
-  inkMuted: [0.78, 0.01, 40],
-  inkFaint: [0.66, 0.012, 35],
-  accent: [0.6, 0.214, 26],
-  accentStrong: [0.66, 0.21, 27],
-  accentSolid: [0.53, 0.2, 26],
-  white: [0.99, 0, 0],
+  bg: [0.15, 0.004, 240],
+  surface: [0.19, 0.005, 240],
+  surface2: [0.235, 0.006, 240],
+  ink: [0.955, 0.003, 240],
+  inkMuted: [0.76, 0.006, 240],
+  inkFaint: [0.585, 0.007, 240],
+  accent: [0.78, 0.155, 152],
+  accentStrong: [0.86, 0.175, 152],
+  accentSolid: [0.72, 0.175, 152],
+  accentInk: [0.15, 0.03, 152],
 };
 const checks = [
   ["ink / bg", "ink", "bg", 4.5],
@@ -43,9 +43,9 @@ const checks = [
   ["ink-faint / surface (large ≥3)", "inkFaint", "surface", 3],
   ["accent / bg (large/icon ≥3)", "accent", "bg", 3],
   ["accent / surface (large ≥3)", "accent", "surface", 3],
-  ["accentStrong / bg (large ≥3)", "accentStrong", "bg", 3],
-  ["white / accentSolid (btn ≥4.5)", "white", "accentSolid", 4.5],
-  ["ink / accentSolid (btn ≥4.5)", "ink", "accentSolid", 4.5],
+  ["accentStrong / bg (body-ish ≥4.5)", "accentStrong", "bg", 4.5],
+  ["accentStrong / surface (body-ish ≥4.5)", "accentStrong", "surface", 4.5],
+  ["accentInk / accentSolid (btn ≥4.5)", "accentInk", "accentSolid", 4.5],
 ];
 let allPass = true;
 for (const [label, fg, bg, min] of checks) {

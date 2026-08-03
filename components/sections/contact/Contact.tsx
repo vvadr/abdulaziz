@@ -5,12 +5,12 @@ import { SectionReveal } from "../../shared/SectionReveal";
 
 const contactDetails: Record<
   HeroSocialIconName,
-  { value: string; label: string }
+  { value: string; command: string }
 > = {
-  email: { value: "abdulazizyusupaliev009@gmail.com", label: "Email" },
-  telegram: { value: "@d_vaderrr", label: "Telegram" },
-  github: { value: "abdulazizyusupaliev", label: "GitHub" },
-  linkedin: { value: "Abdulaziz Yusupaliev", label: "LinkedIn" },
+  email: { value: "abdulazizyusupaliev009@gmail.com", command: "./email" },
+  telegram: { value: "@d_vaderrr", command: "./telegram" },
+  github: { value: "vvadr", command: "./github" },
+  linkedin: { value: "Abdulaziz Yusupaliev", command: "./linkedin" },
 };
 
 // Email and Telegram first — the fastest ways to reach me.
@@ -26,7 +26,8 @@ export function Contact() {
       <div className="shell max-w-5xl">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <SectionReveal>
-            <h2 className="section-title">Let&apos;s talk</h2>
+            <p className="section-kicker">{"// contact.sh"}</p>
+            <h2 className="section-title mt-2">Let&apos;s talk</h2>
             <p className="section-lead">
               Open to internships, freelance work, and collaboration. Email or
               Telegram reach me fastest — I usually reply within a day.
@@ -40,7 +41,7 @@ export function Contact() {
             <div className="mt-7">
               <a href="mailto:abdulazizyusupaliev009@gmail.com" className="btn-primary text-sm">
                 <Mail className="h-4 w-4" aria-hidden="true" />
-                Email me
+                ./email --send
               </a>
             </div>
           </SectionReveal>
@@ -59,7 +60,7 @@ export function Contact() {
                     className="card-surface card-interactive group flex h-full flex-col justify-between gap-6 p-5"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="grid size-12 place-items-center rounded-2xl border border-border-soft bg-white/[0.03] text-foreground transition group-hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] group-hover:bg-[color-mix(in_oklab,var(--accent)_12%,transparent)] group-hover:text-accent-strong">
+                      <span className="grid size-12 place-items-center rounded-md border border-border-soft bg-white/[0.03] text-foreground transition group-hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] group-hover:bg-[color-mix(in_oklab,var(--accent)_12%,transparent)] group-hover:text-accent-strong">
                         <HeroSocialIcon name={link.icon} className="h-5 w-5" />
                       </span>
                       <ArrowUpRight
@@ -68,8 +69,8 @@ export function Contact() {
                       />
                     </div>
                     <div className="min-w-0">
-                      <p className="font-mono text-xs uppercase tracking-[0.16em] text-faint">
-                        {detail.label}
+                      <p className="font-mono text-xs text-accent-strong">
+                        $ {detail.command}
                       </p>
                       <p className="mt-1.5 truncate text-base font-medium text-foreground">
                         {detail.value}

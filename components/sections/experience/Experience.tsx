@@ -2,23 +2,31 @@ import { experienceItems } from "@/data/site";
 import { ArrowUpRight } from "lucide-react";
 import { SectionReveal } from "../../shared/SectionReveal";
 
+// Deterministic, stable across server/client renders (no Math.random/Date.now).
+function commitHash(input: string) {
+  let hash = 0;
+  for (let i = 0; i < input.length; i += 1) {
+    hash = (hash << 5) - hash + input.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(16).padStart(7, "0").slice(0, 7);
+}
+
 export function Experience() {
   return (
     <section id="experience" className="section">
       <div className="shell max-w-5xl">
         <SectionReveal>
-          <h2 className="section-title">Experience</h2>
+          <p className="section-kicker">{"// experience.log"}</p>
+          <h2 className="section-title mt-2">Experience</h2>
           <p className="section-lead">
-            Where I&apos;ve shipped real frontend work in production teams.
+            Where I&apos;ve shipped real frontend work in production teams —
+            read like a commit history.
           </p>
         </SectionReveal>
 
         <ol className="relative mt-14">
-          {/* connecting rail */}
-          <span
-            aria-hidden="true"
-            className="absolute bottom-3 left-[7px] top-2 w-px bg-gradient-to-b from-[color-mix(in_oklab,var(--accent)_55%,transparent)] via-border to-transparent"
-          />
+          <span className="commit-rail" aria-hidden="true" />
 
           {experienceItems.map((item, index) => (
             <SectionReveal
@@ -27,48 +35,42 @@ export function Experience() {
               delay={index * 0.06}
               className="relative pb-14 pl-10 last:pb-0"
             >
-              {/* node */}
-              <span
-                aria-hidden="true"
-                className="absolute left-0 top-1.5 grid size-4 place-items-center rounded-full bg-background"
-              >
-                <span className="size-2.5 rounded-full bg-accent shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent)_20%,transparent),0_0_14px_color-mix(in_oklab,var(--accent)_70%,transparent)]" />
+              <span className="commit-node" aria-hidden="true">
+                <span className="commit-node-dot" />
               </span>
 
-              <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent-strong">
-                {item.period}
-              </p>
-
-              <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h3 className="font-display text-2xl font-semibold tracking-[-0.02em] text-foreground sm:text-[1.75rem]">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span className="commit-hash font-mono text-sm">{commitHash(item.title + item.type)}</span>
+                <h3 className="font-mono text-xl font-semibold text-foreground sm:text-2xl">
                   {item.title}
                 </h3>
-                <span className="text-faint">·</span>
+              </div>
+
+              <p className="mt-2 flex flex-wrap items-center gap-x-2 font-mono text-xs text-faint">
                 {item.companyUrl ? (
                   <a
                     href={item.companyUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm font-medium text-muted underline-offset-4 transition hover:text-accent-strong hover:underline"
+                    className="text-muted underline-offset-4 transition hover:text-accent-strong hover:underline"
                   >
                     {item.type}
                   </a>
                 ) : (
-                  <span className="text-sm font-medium text-muted">{item.type}</span>
+                  <span className="text-muted">{item.type}</span>
                 )}
-              </div>
+                <span aria-hidden="true">·</span>
+                <span>{item.period}</span>
+              </p>
 
               <p className="mt-4 max-w-[68ch] leading-7 text-muted">
                 {item.description}
               </p>
 
-              <ul className="mt-5 grid gap-2.5">
+              <ul className="mt-5 grid gap-2">
                 {item.details.map((responsibility) => (
-                  <li key={responsibility} className="flex gap-3 leading-7 text-muted">
-                    <span
-                      aria-hidden="true"
-                      className="mt-3 size-1.5 shrink-0 rounded-full bg-[color-mix(in_oklab,var(--accent)_70%,transparent)]"
-                    />
+                  <li key={responsibility} className="flex gap-3 font-mono leading-7 text-muted">
+                    <span className="shrink-0 text-accent-strong" aria-hidden="true">+</span>
                     <span className="max-w-[66ch]">{responsibility}</span>
                   </li>
                 ))}

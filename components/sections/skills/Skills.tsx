@@ -1,8 +1,13 @@
-"use client";
-
 import type { SimpleIcon } from "simple-icons";
 import { type PortfolioSkill, skillGroups, skillIcons } from "@/data/skills";
 import { SectionReveal } from "../../shared/SectionReveal";
+
+function slugKey(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
 
 function findSkillIcon(name: string) {
   return skillIcons.find((skill) => skill.name === name)?.icon;
@@ -53,7 +58,7 @@ function SkillChip({ skill }: { skill: PortfolioSkill }) {
   return (
     <span
       title={skill.name}
-      className="group inline-flex items-center gap-2.5 rounded-xl border border-border-soft bg-white/[0.02] px-3.5 py-2.5 text-sm font-medium text-muted transition duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_8%,transparent)] hover:text-foreground"
+      className="group inline-flex items-center gap-2.5 rounded-md border border-border-soft bg-white/[0.02] px-3 py-2 text-sm font-medium text-muted transition duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_8%,transparent)] hover:text-foreground"
     >
       <span className="grid place-items-center transition-transform duration-200 group-hover:scale-110">
         {glyph}
@@ -68,43 +73,57 @@ export function Skills() {
     <section id="skills" className="section">
       <div className="shell">
         <SectionReveal>
-          <h2 className="section-title">Skills &amp; Tools</h2>
+          <p className="section-kicker">{"// skills.json"}</p>
+          <h2 className="section-title mt-2">Skills &amp; Tools</h2>
           <p className="section-lead">
             The stack I build with day to day — and the Python data tools I&apos;m
             learning AI and machine learning on.
           </p>
         </SectionReveal>
 
-        <div className="mt-12 sm:mt-16">
-          {skillGroups.map((group, groupIndex) => (
-            <SectionReveal
-              key={group.title}
-              as="section"
-              delay={groupIndex * 0.05}
-            >
-              <div
-                className={`grid gap-x-10 gap-y-5 py-8 sm:grid-cols-[12rem_1fr] sm:py-9 ${
-                  groupIndex > 0 ? "border-t border-border-soft" : ""
-                }`}
-              >
-                <div className="flex items-baseline gap-3 sm:flex-col sm:gap-2">
-                  <h3 className="font-display text-xl font-semibold tracking-[-0.02em] text-foreground">
-                    {group.title}
-                  </h3>
-                  <span className="font-mono text-xs text-faint">
-                    {String(group.skills.length).padStart(2, "0")}
-                  </span>
-                </div>
+        <SectionReveal delay={0.05} className="mt-12 sm:mt-14">
+          <div className="term-window">
+            <div className="term-titlebar">
+              <span className="window-dots" aria-hidden="true">
+                <span className="window-dot" />
+                <span className="window-dot" />
+                <span className="window-dot" />
+              </span>
+              <span className="term-titlebar-label">skills.json</span>
+            </div>
 
-                <div className="flex flex-wrap gap-2.5">
-                  {group.skills.map((skill) => (
-                    <SkillChip key={skill.name} skill={skill} />
-                  ))}
-                </div>
+            <div className="term-body text-sm">
+              <div className="line-row">
+                <span className="line-no">1</span>
+                <span className="text-faint">{"{"}</span>
               </div>
-            </SectionReveal>
-          ))}
-        </div>
+
+              {skillGroups.map((group, groupIndex) => {
+                const isLast = groupIndex === skillGroups.length - 1;
+                return (
+                  <div key={group.title} className="line-row items-start py-1.5">
+                    <span className="line-no pt-0.5">{groupIndex + 2}</span>
+                    <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-2">
+                      <span className="text-accent-strong">&quot;{slugKey(group.title)}&quot;</span>
+                      <span className="text-faint">:[</span>
+                      <div className="flex flex-1 flex-wrap gap-2 py-1">
+                        {group.skills.map((skill) => (
+                          <SkillChip key={skill.name} skill={skill} />
+                        ))}
+                      </div>
+                      <span className="text-faint">]{isLast ? "" : ","}</span>
+                    </div>
+                  </div>
+                );
+              })}
+
+              <div className="line-row">
+                <span className="line-no">{skillGroups.length + 2}</span>
+                <span className="text-faint">{"}"}</span>
+              </div>
+            </div>
+          </div>
+        </SectionReveal>
       </div>
     </section>
   );

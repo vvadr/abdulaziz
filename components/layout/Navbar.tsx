@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import {
   AnimatePresence,
@@ -8,13 +9,14 @@ import {
   useReducedMotion,
   type Variants,
 } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Folder } from "lucide-react";
 import { heroSocialLinks, navItems } from "@/data/site";
 import { HeroSocialIcon } from "../sections/hero/HeroSocialIcon";
 
 const DESKTOP_QUERY = "(min-width: 768px)";
 
 export function Navbar() {
+  const pathname = usePathname();
   const menuId = useId();
   const reduceMotion = useReducedMotion();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,6 +24,8 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const progressRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const isProjectRoute = pathname.startsWith("/projects/");
+  const sectionHref = (id: string) => (isProjectRoute ? `/#${id}` : `#${id}`);
 
   // Active-section spy.
   useEffect(() => {
@@ -96,77 +100,86 @@ export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-[var(--z-nav)]">
       {/* scroll-progress beam */}
-      <div className="absolute inset-x-0 top-0 h-[2px] bg-white/5">
+      <div className="h-[2px] bg-white/5">
         <div
           ref={progressRef}
           className="h-full w-full origin-left scale-x-0 bg-[linear-gradient(90deg,var(--accent-soft),var(--accent)_55%,var(--accent-strong))] shadow-[0_0_12px_color-mix(in_oklab,var(--accent)_70%,transparent)]"
         />
       </div>
 
-      <div className="px-4 pt-4 sm:px-6">
-        <div
-          className={`mx-auto flex w-full max-w-6xl items-center justify-between rounded-full px-3 py-2.5 transition-all duration-300 md:px-4 ${
-            scrolled
-              ? "border border-white/10 bg-[color-mix(in_oklab,var(--surface)_72%,transparent)] shadow-[0_18px_60px_-22px_rgba(0,0,0,0.7)] backdrop-blur-xl"
-              : "border border-white/[0.04] bg-white/[0.02] backdrop-blur-sm"
-          }`}
-        >
+      <div
+        className={`border-b transition-colors duration-300 ${
+          scrolled
+            ? "border-border-soft bg-[color-mix(in_oklab,var(--surface)_88%,transparent)] backdrop-blur-xl"
+            : "border-white/[0.04] bg-[color-mix(in_oklab,var(--surface)_55%,transparent)] backdrop-blur-sm"
+        }`}
+      >
+        <div className="shell flex h-14 items-center justify-between gap-2">
           <a
-            href="#home"
+            href={isProjectRoute ? "/" : "#home"}
             onClick={closeMenu}
             aria-label="Abdulaziz Yusupaliev — home"
-            className="group flex items-center gap-3"
+            className="group flex shrink-0 items-center gap-2.5"
           >
-            <span className="inline-flex size-10 items-center justify-center overflow-hidden rounded-full ring-1 ring-white/10 transition duration-300 group-hover:ring-[color-mix(in_oklab,var(--accent)_55%,transparent)] group-hover:shadow-[0_0_18px_-3px_color-mix(in_oklab,var(--accent)_70%,transparent)]">
+            <span className="window-dots" aria-hidden="true">
+              <span className="window-dot" />
+              <span className="window-dot" />
+              <span className="window-dot" />
+            </span>
+            <span className="inline-flex size-6 items-center justify-center overflow-hidden rounded-full ring-1 ring-white/10 transition duration-300 group-hover:ring-[color-mix(in_oklab,var(--accent)_55%,transparent)]">
               <Image
-                src="/darth-vader-logo.svg"
+                src="/images/abdulaziz-profile.jpg"
                 alt=""
-                width={40}
-                height={40}
+                width={24}
+                height={24}
                 className="h-full w-full object-cover"
                 priority
               />
             </span>
-            <span className="font-display text-sm font-semibold tracking-[-0.01em] text-foreground">
-              Abdulaziz
+            <span className="font-mono text-sm text-foreground">
+              ~/<span className="font-semibold">abdulaziz</span>
             </span>
           </a>
 
           <nav
-            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex"
+            className="nav-tabs-scroll hidden min-w-0 items-center overflow-x-auto md:flex"
             aria-label="Main navigation"
           >
             {navItems.map((item) => {
-              const active = item.id === activeId;
+              const active = !isProjectRoute && item.id === activeId;
               return (
                 <a
                   key={item.id}
-                  href={`#${item.id}`}
-                  aria-current={active ? "page" : undefined}
-                  className={`relative rounded-full px-4 py-2 text-sm transition-colors duration-200 ${
-                    active ? "text-accent-strong" : "text-muted hover:text-foreground"
-                  }`}
+                  href={sectionHref(item.id)}
+                  title={item.label}
+                  aria-current={!isProjectRoute && active ? "page" : undefined}
+                  className={`nav-tab ${active ? "nav-tab-active" : ""}`}
                 >
+                  <span
+                    className="nav-tab-dot"
+                    style={{ opacity: active ? 0.9 : 0 }}
+                    aria-hidden="true"
+                  />
+                  {item.file}
                   {active ? (
                     <motion.span
-                      layoutId="nav-active"
-                      className="absolute inset-0 rounded-full bg-[color-mix(in_oklab,var(--accent)_15%,transparent)] shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--accent)_40%,transparent)]"
+                      layoutId="nav-active-tab"
+                      className="absolute inset-x-2 bottom-0 h-[2px] rounded-full bg-accent-strong shadow-[0_0_10px_color-mix(in_oklab,var(--accent)_75%,transparent)]"
                       transition={
                         reduceMotion
                           ? { duration: 0 }
-                          : { type: "spring", stiffness: 360, damping: 34 }
+                          : { type: "spring", stiffness: 380, damping: 34 }
                       }
                     />
                   ) : null}
-                  <span className="relative z-10">{item.label}</span>
                 </a>
               );
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
-            <a href="#contact" className="btn-primary hidden text-sm md:inline-flex">
-              Let&apos;s talk
+          <div className="flex shrink-0 items-center gap-2">
+            <a href={sectionHref("contact")} className="btn-primary nav-contact text-xs">
+              ./contact.sh
             </a>
 
             <button
@@ -176,7 +189,7 @@ export function Navbar() {
               aria-expanded={isMenuOpen}
               aria-controls={menuId}
               onClick={() => setIsMenuOpen((current) => !current)}
-              className="group relative grid size-11 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-foreground transition duration-200 hover:border-[color-mix(in_oklab,var(--accent)_45%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] md:hidden"
+              className="group relative grid size-10 place-items-center rounded-md border border-border text-foreground transition duration-200 hover:border-[color-mix(in_oklab,var(--accent)_45%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] md:hidden"
             >
               <span className="relative h-4 w-5">
                 <span
@@ -204,6 +217,7 @@ export function Navbar() {
         id={menuId}
         isOpen={isMenuOpen}
         activeId={activeId}
+        isProjectRoute={isProjectRoute}
         reduceMotion={Boolean(reduceMotion)}
         onClose={closeMenu}
       />
@@ -218,7 +232,7 @@ const overlayVariants: Variants = {
 };
 
 const linkVariants: Variants = {
-  hidden: { opacity: 0, y: 22 },
+  hidden: { opacity: 0, y: 18 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
   exit: { opacity: 0 },
 };
@@ -227,12 +241,14 @@ function MobileMenu({
   id,
   isOpen,
   activeId,
+  isProjectRoute,
   reduceMotion,
   onClose,
 }: {
   id: string;
   isOpen: boolean;
   activeId: string;
+  isProjectRoute: boolean;
   reduceMotion: boolean;
   onClose: () => void;
 }) {
@@ -254,21 +270,22 @@ function MobileMenu({
           initial={reduceMotion ? { opacity: 1 } : "hidden"}
           animate={reduceMotion ? { opacity: 1 } : "visible"}
           exit={reduceMotion ? { opacity: 0 } : "exit"}
-          className="fixed inset-0 z-[var(--z-overlay)] flex flex-col bg-[color-mix(in_oklab,var(--bg)_94%,transparent)] px-6 pb-10 pt-6 backdrop-blur-xl md:hidden"
+          className="fixed inset-0 z-[var(--z-overlay)] flex flex-col bg-[color-mix(in_oklab,var(--bg)_95%,transparent)] px-6 pb-10 pt-6 backdrop-blur-xl md:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
         >
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs uppercase tracking-[0.28em] text-faint">
-              Menu
+            <span className="flex items-center gap-2 font-mono text-xs text-faint">
+              <Folder size={14} aria-hidden="true" />
+              ~/abdulaziz
             </span>
             <button
               ref={closeRef}
               type="button"
               onClick={onClose}
               aria-label="Close navigation menu"
-              className="grid size-11 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-foreground transition hover:border-[color-mix(in_oklab,var(--accent)_45%,transparent)] hover:text-accent-strong"
+              className="grid size-10 place-items-center rounded-md border border-border text-foreground transition hover:border-[color-mix(in_oklab,var(--accent)_45%,transparent)] hover:text-accent-strong"
             >
               <span className="relative h-4 w-5">
                 <span className="absolute left-0 top-[7px] h-px w-5 -translate-y-px rotate-45 bg-current" />
@@ -278,23 +295,26 @@ function MobileMenu({
           </div>
 
           <nav className="mt-10 flex flex-1 flex-col justify-center gap-1" aria-label="Mobile navigation">
-            {navItems.map((item, index) => {
-              const active = item.id === activeId;
+            {navItems.map((item) => {
+              const active = !isProjectRoute && item.id === activeId;
               return (
                 <motion.a
                   key={item.id}
-                  href={`#${item.id}`}
+                  href={isProjectRoute ? `/#${item.id}` : `#${item.id}`}
                   onClick={onClose}
                   variants={reduceMotion ? undefined : linkVariants}
                   aria-current={active ? "page" : undefined}
-                  className={`font-display text-4xl font-bold tracking-[-0.03em] transition-colors ${
+                  className={`flex items-baseline gap-3 border-b border-border-soft py-3.5 font-mono text-2xl font-bold transition-colors ${
                     active ? "text-accent-strong" : "text-foreground hover:text-accent-strong"
                   }`}
                 >
-                  <span className="mr-3 font-mono text-sm text-faint">
-                    0{index + 1}
-                  </span>
-                  {item.label}
+                  <span
+                    className="size-1.5 shrink-0 rounded-full bg-current"
+                    style={{ opacity: active ? 0.9 : 0.25 }}
+                    aria-hidden="true"
+                  />
+                  {item.file}
+                  <span className="ml-auto text-xs font-normal text-faint">{item.label}</span>
                 </motion.a>
               );
             })}
@@ -315,15 +335,15 @@ function MobileMenu({
                     rel={external ? "noopener noreferrer" : undefined}
                     aria-label={link.label}
                     onClick={onClose}
-                    className="grid size-11 place-items-center rounded-xl border border-border text-muted transition hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] hover:text-accent-strong"
+                    className="grid size-11 place-items-center rounded-md border border-border text-muted transition hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] hover:text-accent-strong"
                   >
                     <HeroSocialIcon name={link.icon} className="h-5 w-5" />
                   </a>
                 );
               })}
             </div>
-            <a href="#contact" onClick={onClose} className="btn-primary text-sm">
-              Let&apos;s talk
+            <a href={isProjectRoute ? "/#contact" : "#contact"} onClick={onClose} className="btn-primary text-sm">
+              ./contact.sh
               <ArrowUpRight size={16} aria-hidden="true" />
             </a>
           </motion.div>
