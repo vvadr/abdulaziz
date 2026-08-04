@@ -28,10 +28,14 @@ const item: Variants = {
 export function Hero() {
   const reduceMotion = useReducedMotion();
   const [index, setIndex] = useState(0);
+  // The first greeting must paint immediately — animating it in from opacity 0
+  // would leave the line blank under SSR, no-JS, and headless renders.
+  const [hasRotated, setHasRotated] = useState(false);
 
   useEffect(() => {
     if (reduceMotion) return;
     const intervalId = window.setInterval(() => {
+      setHasRotated(true);
       setIndex((current) => (current + 1) % greetings.length);
     }, 2000);
     return () => window.clearInterval(intervalId);
@@ -48,7 +52,7 @@ export function Hero() {
         variants={container}
         initial={false}
         animate="show"
-        className="relative mx-auto grid w-full max-w-6xl items-start gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10"
+        className="relative mx-auto grid w-full max-w-6xl grid-cols-1 items-stretch gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10"
       >
         <motion.div variants={item} className="term-window">
           <div className="term-titlebar">
@@ -104,11 +108,14 @@ export function Hero() {
             </div>
             <div className="line-row items-center">
               <span className="line-no">8</span>
-              <div aria-hidden="true" className="flex h-6 items-center gap-2 text-muted">
+              <div
+                aria-hidden="true"
+                className="flex min-h-6 flex-wrap items-center gap-x-2 gap-y-1 text-muted"
+              >
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={greetings[index]}
-                    initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                    initial={reduceMotion || !hasRotated ? false : { opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={reduceMotion ? undefined : { opacity: 0, y: -6 }}
                     transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
@@ -205,7 +212,7 @@ export function Hero() {
           </div>
         </motion.div>
 
-        <motion.div variants={item}>
+        <motion.div variants={item} className="h-full">
           <HeroSystemInfo />
         </motion.div>
       </motion.div>

@@ -9,6 +9,8 @@ export type PortfolioProject = {
   highlights: string[];
   repoUrl?: string;
   liveUrl?: string;
+  /** Set to false when the deployment sends X-Frame-Options/CSP headers that block iframe embedding. */
+  embeddable?: boolean;
 };
 
 // Projects are verified from the connected vvadr GitHub account. Private
@@ -39,6 +41,9 @@ export const portfolioProjects: PortfolioProject[] = [
       "Typed, schema-validated forms (react-hook-form + zod) across authentication, test creation, and submission flows.",
     ],
     liveUrl: "https://dwelve.vercel.app",
+    // Dwelve sends X-Frame-Options: DENY in production (it guards authenticated
+    // dashboards), so browsers refuse to render it inside our preview iframe.
+    embeddable: false,
   },
   {
     slug: "multi-agent-ai-analyst",

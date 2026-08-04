@@ -15,7 +15,7 @@ function commitHash(input: string) {
 export function Experience() {
   return (
     <section id="experience" className="section">
-      <div className="shell max-w-5xl">
+      <div className="shell">
         <SectionReveal>
           <p className="section-kicker">{"// experience.log"}</p>
           <h2 className="section-title mt-2">Experience</h2>
@@ -63,7 +63,7 @@ export function Experience() {
                 <span>{item.period}</span>
               </p>
 
-              <p className="mt-4 max-w-[68ch] leading-7 text-muted">
+              <p className="mt-4 max-w-[78ch] leading-7 text-muted">
                 {item.description}
               </p>
 
@@ -71,7 +71,7 @@ export function Experience() {
                 {item.details.map((responsibility) => (
                   <li key={responsibility} className="flex gap-3 font-mono leading-7 text-muted">
                     <span className="shrink-0 text-accent-strong" aria-hidden="true">+</span>
-                    <span className="max-w-[66ch]">{responsibility}</span>
+                    <span className="max-w-[80ch]">{responsibility}</span>
                   </li>
                 ))}
               </ul>

@@ -338,6 +338,14 @@
 .line-row {
   display: flex;
   gap: 1rem;
+  min-width: 0;
+}
+
+/* Flex items default to min-width:auto, which lets long terminal output push
+   the whole window wider than the viewport. Allow every row child to shrink so
+   output wraps instead. */
+.line-row > * {
+  min-width: 0;
 }
 
 .line-no {
@@ -712,6 +720,18 @@
   background: #fff;
 }
 
+.project-frame-blocked {
+  display: flex;
+  height: min(70svh, 48rem);
+  min-height: 34rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  background: color-mix(in oklab, var(--surface) 60%, var(--bg));
+}
+
 .icon-button {
   display: grid;
   width: 2.6rem;
@@ -776,7 +796,8 @@
 }
 
 @media (max-width: 40rem) {
-  .project-frame-wrap {
+  .project-frame-wrap,
+  .project-frame-blocked {
     height: 65svh;
     min-height: 30rem;
   }

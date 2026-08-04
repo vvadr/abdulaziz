@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ExternalLink, FolderGit2, RefreshCw } from "lucide-react";
+import { ExternalLink, FolderGit2, RefreshCw, ShieldAlert } from "lucide-react";
 import type { PortfolioProject } from "@/data/projects";
 
 export function ProjectTrial({ project }: { project: PortfolioProject }) {
@@ -34,6 +34,7 @@ export function ProjectTrial({ project }: { project: PortfolioProject }) {
   }
 
   const displayUrl = project.liveUrl.replace(/^https?:\/\//, "");
+  const embeddable = project.embeddable !== false;
 
   return (
     <section className="project-trial" aria-labelledby="live-trial-title">
@@ -48,15 +49,17 @@ export function ProjectTrial({ project }: { project: PortfolioProject }) {
         </span>
         <span className="address-bar">{displayUrl}</span>
         <div className="flex shrink-0 items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setRefreshKey((key) => key + 1)}
-            className="icon-button"
-            aria-label="Reload live preview"
-            title="Reload live preview"
-          >
-            <RefreshCw size={16} aria-hidden="true" />
-          </button>
+          {embeddable ? (
+            <button
+              type="button"
+              onClick={() => setRefreshKey((key) => key + 1)}
+              className="icon-button"
+              aria-label="Reload live preview"
+              title="Reload live preview"
+            >
+              <RefreshCw size={16} aria-hidden="true" />
+            </button>
+          ) : null}
           <a
             href={project.liveUrl}
             target="_blank"
@@ -68,16 +71,27 @@ export function ProjectTrial({ project }: { project: PortfolioProject }) {
           </a>
         </div>
       </div>
-      <div className="project-frame-wrap">
-        <iframe
-          key={refreshKey}
-          src={project.liveUrl}
-          title={`${project.title} live preview`}
-          className="project-frame"
-          loading="lazy"
-          referrerPolicy="no-referrer"
-        />
-      </div>
+      {embeddable ? (
+        <div className="project-frame-wrap">
+          <iframe
+            key={refreshKey}
+            src={project.liveUrl}
+            title={`${project.title} live preview`}
+            className="project-frame"
+            loading="lazy"
+            referrerPolicy="no-referrer"
+          />
+        </div>
+      ) : (
+        <div className="project-frame-blocked">
+          <ShieldAlert size={28} className="text-accent-strong" aria-hidden="true" />
+          <p className="mt-4 max-w-md leading-7 text-muted">
+            {project.title} sends security headers that block embedded previews —
+            the same protection that keeps its authenticated dashboards safe from
+            clickjacking. Open the live site directly to try it.
+          </p>
+        </div>
+      )}
     </section>
   );
 }
