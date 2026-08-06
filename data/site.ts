@@ -127,6 +127,20 @@ export const heroSocialLinks = [
 
 export const experienceItems: ExperienceItem[] = [
   {
+    title: "AI/ML Intern",
+    type: "IT Park",
+    period: "April 2026 - Present",
+    description:
+      "Supporting practical machine-learning workflows in Python, from dataset preparation through model training and evaluation.",
+    details: [
+      "Prepared datasets in Python by handling missing values, data types, categorical features, encoding, and scaling.",
+      "Built supervised ML notebooks with train/test splits, preprocessing pipelines, model training, and evaluation.",
+      "Evaluated regression and classification models with MSE, MAE, R² score, accuracy, and confusion matrices.",
+      "Kept project notebooks, code, and experiment notes organized in GitHub.",
+    ],
+    tech: ["Python", "Pandas", "NumPy", "Scikit-learn", "Jupyter Notebook", "GitHub"],
+  },
+  {
     title: "Frontend Engineer",
     type: "Hiwelcome.uz",
     companyUrl: "https://hiwelcome.uz",
