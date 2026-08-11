@@ -13,9 +13,45 @@ export type PortfolioProject = {
   embeddable?: boolean;
 };
 
-// Projects are verified from the connected vvadr GitHub account. Private
-// client work is intentionally left out of this public list.
+// Projects are curated against the public vvadr GitHub account. Profile,
+// portfolio, fork, practice, and support-only repositories are intentionally
+// omitted as standalone case studies.
 export const portfolioProjects: PortfolioProject[] = [
+  {
+    slug: "loansource-ai",
+    title: "LoanSource AI",
+    category: "AI engineering",
+    state: "Source available",
+    summary:
+      "A source-bounded loan-terms assistant with QLoRA training, hybrid retrieval, and page-level citations.",
+    description:
+      "LoanSource AI fine-tunes Qwen 2.5 with QLoRA and pairs the adapter with source-filtered TF-IDF retrieval across five public loan-term documents. The Gradio interface keeps every question scoped to a selected document, cites retrieved pages, and refuses personal financial or legal advice.",
+    stack: ["Python", "Qwen 2.5", "QLoRA", "Transformers", "PEFT", "Gradio", "TF-IDF"],
+    highlights: [
+      "Includes a Colab-ready QLoRA training workflow designed for a free T4 GPU runtime.",
+      "Validates JSONL structure, approved source files, page references, and conflicting duplicate questions before training.",
+      "Ships retrieval, policy, and service tests alongside a held-out evaluation workflow and documented release checks.",
+    ],
+    repoUrl: "https://github.com/vvadr/LoanSource-AI",
+  },
+  {
+    slug: "loan-terms-assistant",
+    title: "Loan Terms Assistant",
+    category: "AI product",
+    state: "Live",
+    summary:
+      "A deployed, single-document RAG assistant that answers loan-term questions with grounded page citations.",
+    description:
+      "This full-stack assistant retrieves clauses from one configured loan document, generates an answer with Gemini, and runs a second grounding check before returning it. A FastAPI service keeps model credentials and retrieval logic away from the browser while a Next.js client provides the public interface.",
+    stack: ["Python", "FastAPI", "Next.js", "TypeScript", "Gemini", "Qdrant", "Docker"],
+    highlights: [
+      "Scopes each deployment to one bank and product so retrieved clauses cannot be mixed across loan documents.",
+      "Blocks unsupported answers and financial advice while requiring page citations for in-scope factual responses.",
+      "Documents a production path across Vercel, Render, and Qdrant with secrets kept on the backend.",
+    ],
+    repoUrl: "https://github.com/vvadr/loan-terms-assistant",
+    liveUrl: "https://loan-terms-assistant-black.vercel.app",
+  },
   {
     slug: "dwelve",
     title: "Dwelve",
@@ -49,7 +85,7 @@ export const portfolioProjects: PortfolioProject[] = [
     slug: "multi-agent-ai-analyst",
     title: "Multi-Agent AI Analyst",
     category: "AI product",
-    state: "Source available",
+    state: "Live",
     summary:
       "A document-analysis product with a FastAPI service, durable background work, and a Next.js client.",
     description:
@@ -61,6 +97,8 @@ export const portfolioProjects: PortfolioProject[] = [
       "Separates development, test, and production configuration and documents the complete deployment path.",
     ],
     repoUrl: "https://github.com/vvadr/Multi-Agent-AI-Analyst",
+    liveUrl: "https://multi-agent-ai-analyst-psi.vercel.app",
+    embeddable: false,
   },
   {
     slug: "yelp-restaurant-rating-prep",
@@ -78,6 +116,23 @@ export const portfolioProjects: PortfolioProject[] = [
       "Captures data cleaning, feature engineering, feature selection, and end-to-end pipeline work in notebooks.",
     ],
     repoUrl: "https://github.com/vvadr/yelp-restaurant-rating-prep",
+  },
+  {
+    slug: "sport-team-odds",
+    title: "Sport Team Odds",
+    category: "Data analysis",
+    state: "Source available",
+    summary:
+      "An exploratory notebook comparing European soccer teams through historical match and bookmaker odds data.",
+    description:
+      "The notebook downloads the European Soccer Database from Kaggle, queries match data from SQLite, and analyzes Bet365 home, draw, and away odds. It then groups total odds by home team and visualizes the teams with the highest and lowest averages.",
+    stack: ["Python", "Pandas", "Matplotlib", "SQLite", "Kaggle", "Jupyter"],
+    highlights: [
+      "Selects match, score, team, and bookmaker fields from the source database for a focused analysis table.",
+      "Calculates combined odds and identifies both match-level and team-level extremes.",
+      "Uses an annotated scatter plot to make the highest- and lowest-average teams easy to compare.",
+    ],
+    repoUrl: "https://github.com/vvadr/Sport-team-odds",
   },
   {
     slug: "weather-app-react",

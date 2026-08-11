@@ -5,6 +5,7 @@ import { experienceItems, heroLocation } from "@/data/site";
 import { SkillGlyph } from "../../shared/SkillGlyph";
 
 const liveProjectCount = portfolioProjects.filter((project) => project.liveUrl).length;
+const publicRepositoryCount = portfolioProjects.filter((project) => project.repoUrl).length;
 const currentRole = experienceItems[0];
 
 // Every row is derived from real data elsewhere on the page — nothing invented.
@@ -15,7 +16,7 @@ const rows: { label: string; value: string }[] = [
   { label: "current", value: `@ ${currentRole.type}` },
   {
     label: "projects",
-    value: `${portfolioProjects.length} public · ${liveProjectCount} live`,
+    value: `${publicRepositoryCount} repos · ${liveProjectCount} live`,
   },
   { label: "location", value: heroLocation },
   { label: "uptime", value: "coding since 2022" },
