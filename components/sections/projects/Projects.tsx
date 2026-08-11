@@ -14,7 +14,9 @@ import { SectionReveal } from "../../shared/SectionReveal";
 const categoryMeta: Record<string, { ext: string; icon: LucideIcon }> = {
   "Full-stack platform": { ext: "/", icon: Folder },
   "AI product": { ext: ".py", icon: BrainCircuit },
+  "AI engineering": { ext: ".py", icon: BrainCircuit },
   "Data engineering": { ext: ".ipynb", icon: BrainCircuit },
+  "Data analysis": { ext: ".ipynb", icon: BrainCircuit },
   "Machine learning": { ext: ".ipynb", icon: BrainCircuit },
   "Browser game": { ext: ".js", icon: Gamepad2 },
   "Web application": { ext: ".tsx", icon: Globe2 },
@@ -49,8 +51,8 @@ export function Projects() {
           <p className="section-kicker">{"// ~/projects"}</p>
           <h2 className="section-title mt-2">Projects with their own story.</h2>
           <p className="section-lead">
-            Each project has an individual route, verified repository status, and a
-            live preview where a public deployment is available.
+            A curated set of current GitHub work, with individual case studies,
+            source links, and live previews where a public deployment is available.
           </p>
         </SectionReveal>
 
