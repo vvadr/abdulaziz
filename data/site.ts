@@ -9,8 +9,6 @@ import {
 export type NavItem = {
   id: string;
   label: string;
-  /** Filename shown on the editor-style nav tab. */
-  file: string;
 };
 
 export type ExperienceItem = {
@@ -40,12 +38,12 @@ export type ContactLink = {
   icon: LucideIcon;
 };
 
-export type HeroSocialIconName = "github" | "linkedin" | "telegram" | "email";
+export type SocialIconName = "github" | "linkedin" | "telegram" | "email";
 
-export type HeroSocialLink = {
+export type SocialLink = {
   label: string;
   href: string;
-  icon: HeroSocialIconName;
+  icon: SocialIconName;
 };
 
 export type ResumeLink = {
@@ -80,27 +78,33 @@ export const siteMetadata = {
   ],
 };
 
+// Section anchors in page order; the hero is reached via the brand mark.
 export const navItems: NavItem[] = [
-  { id: "home", label: "Home", file: "index.tsx" },
-  { id: "skills", label: "Skills", file: "skills.json" },
-  { id: "experience", label: "Experience", file: "experience.log" },
-  { id: "projects", label: "Projects", file: "projects/" },
-  { id: "education", label: "Education", file: "education.md" },
-  { id: "contact", label: "Contact", file: "contact.sh" },
+  { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
+  { id: "projects", label: "Projects" },
+  { id: "skills", label: "Skills" },
+  { id: "contact", label: "Contact" },
 ];
 
 export const greetings = [
   "Hello",
-  "\u041F\u0440\u0438\u0432\u0435\u0442",
+  "Привет",
   "Salom",
   "Assalomu alaykum",
   "Hi",
 ];
 
-export const heroDescription =
-  "I'm growing into AI engineering and machine learning with Python — and I ship clean, responsive production interfaces with React, Next.js, and TypeScript. Frontend is where I deliver today; AI is where I'm headed.";
+export const heroAvailability = "Open to internships & freelance";
+
+// Rendered after the serif "Frontend developer" opener in the hero.
+export const heroTagline =
+  "shipping clean, responsive interfaces with React, Next.js, and TypeScript — and growing into AI engineering with Python.";
 
 export const heroLocation = "Tashkent, Uzbekistan";
+
+export const aboutSummary =
+  "I started with frontend in 2022 and now build production interfaces at Hiwelcome while studying AI & ML on a full scholarship at Bepro. I care about clean component structure, honest UX, and shipping real things — and I'm steadily moving my Python and machine-learning practice from notebooks toward deployed products.";
 
 export const heroSocialLinks = [
   {
@@ -123,7 +127,7 @@ export const heroSocialLinks = [
     href: "https://t.me/d_vaderrr",
     icon: "telegram",
   },
-] satisfies HeroSocialLink[];
+] satisfies SocialLink[];
 
 export const experienceItems: ExperienceItem[] = [
   {
@@ -211,6 +215,7 @@ export const educationItems: EducationItem[] = [
   },
 ];
 
+// Single source for contact details — consumed by the Contact section.
 export const contactLinks: ContactLink[] = [
   {
     label: "Email",
@@ -237,4 +242,3 @@ export const contactLinks: ContactLink[] = [
     icon: Send,
   },
 ];
-

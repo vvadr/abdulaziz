@@ -78,6 +78,55 @@ export const skillIcons: SkillIcon[] = [
   },
 ];
 
+export type CoreSkill = {
+  name: string;
+  meta: string;
+};
+
+// Headline rows in the Skills section — the honest short version of the stack.
+export const coreStack: CoreSkill[] = [
+  {
+    name: "React / Next.js",
+    meta: "Production interfaces at Hiwelcome and API-driven product pages",
+  },
+  {
+    name: "TypeScript",
+    meta: "Typed, maintainable components across every frontend role",
+  },
+  {
+    name: "Python & ML tooling",
+    meta: "Pandas, NumPy, Scikit-learn — datasets prepared, models trained and evaluated",
+  },
+  {
+    name: "Tailwind CSS",
+    meta: "Responsive, consistent UI systems shipped from design to production",
+  },
+  {
+    name: "Git & GitHub",
+    meta: "Organized repos, reviews, and experiment notes across 10 public projects",
+  },
+];
+
+// Names looped in the Skills marquee rows.
+export const marqueeItems = [
+  "React",
+  "Next.js",
+  "TypeScript",
+  "JavaScript",
+  "Python",
+  "Tailwind CSS",
+  "Pandas",
+  "NumPy",
+  "Scikit-learn",
+  "Matplotlib",
+  "Seaborn",
+  "Git",
+  "GitHub",
+  "Vercel",
+  "Jupyter",
+  "FastAPI",
+];
+
 export const skillGroups: SkillGroup[] = [
   {
     title: "Languages",

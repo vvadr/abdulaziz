@@ -1,5 +1,5 @@
+import { About } from "@/components/sections/about/About";
 import { Contact } from "@/components/sections/contact/Contact";
-import { Education } from "@/components/sections/education/Education";
 import { Experience } from "@/components/sections/experience/Experience";
 import { Hero } from "@/components/sections/hero/Hero";
 import { Footer } from "@/components/layout/Footer";
@@ -12,7 +12,7 @@ export default function Home() {
     <div className="relative min-h-screen overflow-x-clip">
       <a
         href="#content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-intro)] focus:rounded-full focus:bg-[var(--accent-solid)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--accent-ink)]"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-skip)] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-background"
       >
         Skip to content
       </a>
@@ -20,10 +20,10 @@ export default function Home() {
       <Navbar />
       <main id="content">
         <Hero />
-        <Skills />
+        <About />
         <Experience />
         <Projects />
-        <Education />
+        <Skills />
         <Contact />
       </main>
       <Footer />

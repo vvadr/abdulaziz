@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "codex-grid-background",
+        "value": "*",
+        "files": [
+          "app/globals.css"
+        ],
+        "createdAt": "2026-08-24T16:25:08.909Z",
+        "reason": "Ported .grid-bg from the reference portfolio (github.com/Habibulloh08/portfolio) that the user asked to replicate and said they liked the background of; 6% blue hairlines, radial-masked, sitting behind the hero particle field and providing texture on synthetic project covers"
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "app/globals.css"
+        ],
+        "createdAt": "2026-08-24T16:29:28.522Z",
+        "reason": "Signature typographic treatment of the reference portfolio (github.com/Habibulloh08/portfolio) the user asked to replicate: one serif accent word per section heading. Scoped to the gold family (every stop >=12.5:1, verified by scripts/contrast-check.mjs) after fixing the reference's grey-midpoint washout; metrics moved to solid gold"
+      }
+    ]
+  }
+}

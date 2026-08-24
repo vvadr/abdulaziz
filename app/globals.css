@@ -1,829 +1,510 @@
 @import "tailwindcss";
 
-/* Abdulaziz Yusupaliev portfolio design system: a dark code editor / terminal.
-   One accent — phosphor green — carries the whole identity. Every text/surface
-   pair below is WCAG-AA verified with `node scripts/contrast-check.mjs`. */
-
+/* ------------------------------------------------------------------ */
+/* Design tokens — cinematic noir/gold (see DESIGN.md)                */
+/* ------------------------------------------------------------------ */
 :root {
-  --bg: oklch(0.15 0.004 240);
-  --surface: oklch(0.19 0.005 240);
-  --surface-2: oklch(0.235 0.006 240);
-  --border: oklch(0.34 0.009 240);
-  --border-soft: oklch(0.275 0.007 240);
+  --background: #010108;
+  --foreground: #f8f9fc;
+  --muted: #b8c0d8;
+  --accent: #fbbf24; /* gold */
+  --accent-2: #60a5fa; /* sky blue */
+  --accent-3: #fcd34d; /* light gold */
+  --glass: rgba(4, 4, 14, 0.88);
+  --glass-strong: rgba(4, 4, 14, 0.94);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --grid-line: rgba(59, 130, 246, 0.06);
+  --shadow-deep: rgba(0, 0, 0, 0.85);
 
-  --ink: oklch(0.955 0.003 240);
-  --ink-muted: oklch(0.76 0.006 240);
-  --ink-faint: oklch(0.585 0.007 240);
+  /* Height-aware: on wide-but-short windows a purely vw-based size grows
+     taller than the viewport and pushes the hero under the fixed navbar. */
+  --hero-size: clamp(3.4rem, min(13vw, 18vh), 10.5rem);
+  --section-size: clamp(2.2rem, 4.8vw, 4rem);
 
-  --accent: oklch(0.78 0.155 152);
-  --accent-strong: oklch(0.86 0.175 152);
-  --accent-soft: oklch(0.66 0.13 152);
-  --accent-solid: oklch(0.72 0.175 152);
-  --accent-ink: oklch(0.15 0.03 152);
-  --accent-rgb: 121 224 160;
-
-  /* Decorative window-chrome dots only (traffic lights) — exempt from the
-     one-accent rule since they're a fixed, non-semantic UI convention. */
-  --dot-red: oklch(0.62 0.16 25);
-  --dot-amber: oklch(0.75 0.14 80);
-
-  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", "Cascadia Code", Menlo, monospace;
-
-  --radius: 0.375rem;
-
-  /* Motion — smooth, exponential ease-outs; no bounce, no elastic. */
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
-  --dur-fast: 0.25s;
-  --dur: 0.45s;
-  --dur-slow: 0.7s;
-
-  /* Semantic z-index scale (never arbitrary 999s) */
-  --z-base: 0;
-  --z-raised: 10;
+  /* Layering (bottom → top):
+     scene 0 · content 10 · letterbox 30 · nav 50 · mobile menu 55 ·
+     progress beam 60 · noise 65 · cursor 70 · preloader 80 · skip link 90 */
+  --z-scene: 0;
+  --z-content: 10;
+  --z-letterbox: 30;
   --z-nav: 50;
-  --z-overlay: 100;
+  --z-menu: 55;
+  --z-progress: 60;
+  --z-noise: 65;
+  --z-cursor: 70;
+  --z-preloader: 80;
+  --z-skip: 90;
 }
 
 @theme inline {
-  --color-background: var(--bg);
-  --color-foreground: var(--ink);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-border: var(--border);
-  --color-border-soft: var(--border-soft);
-  --color-muted: var(--ink-muted);
-  --color-faint: var(--ink-faint);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
   --color-accent: var(--accent);
-  --color-accent-strong: var(--accent-strong);
-  --color-accent-soft: var(--accent-soft);
-  --color-accent-solid: var(--accent-solid);
-  --color-accent-ink: var(--accent-ink);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+  --color-glass: var(--glass);
+  --color-glass-border: var(--glass-border);
 
-  --font-sans: var(--font-mono);
-  --font-display: var(--font-mono);
-  --font-mono: var(--font-mono);
-
-  --radius-sm: calc(var(--radius) * 0.5);
-  --radius-md: calc(var(--radius) * 0.75);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.5);
-  --radius-2xl: calc(var(--radius) * 2);
-
-  --ease-fluid: var(--ease-out-expo);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
+    system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
 }
 
-@layer base {
-  * {
-    box-sizing: border-box;
-    border-color: var(--border);
-  }
+/* ------------------------------------------------------------------ */
+/* Base                                                               */
+/* ------------------------------------------------------------------ */
+* {
+  border-color: var(--glass-border);
+}
 
-  html {
-    scroll-behavior: smooth;
-    /* offset anchor jumps for the fixed nav */
-    scroll-padding-top: 6.5rem;
-    -webkit-text-size-adjust: 100%;
-  }
+html {
+  /* Lenis drives smooth scrolling; native smooth would fight it. */
+  scroll-behavior: auto;
+  /* Anchor targets clear the fixed navbar. */
+  scroll-padding-top: 5.5rem;
+}
 
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-mono);
-    font-synthesis-weight: none;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    /* monospace body copy needs extra leading to stay readable */
-    line-height: 1.7;
-  }
+html.lenis,
+html.lenis body {
+  height: auto;
+}
 
-  h1, h2, h3, h4 {
-    font-family: var(--font-mono);
-    text-wrap: balance;
-    margin: 0;
-    letter-spacing: -0.01em;
-  }
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
 
-  p {
-    text-wrap: pretty;
-  }
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  ::selection {
-    background: color-mix(in oklab, var(--accent) 32%, transparent);
-    color: var(--ink);
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--accent-strong);
-    outline-offset: 3px;
-    border-radius: 4px;
-  }
-
-  ::placeholder {
-    color: var(--ink-faint);
-  }
-
-  /* Calmer, themed scrollbar */
-  * {
-    scrollbar-color: var(--surface-2) transparent;
+/* The custom cursor replaces the native one on precise pointers only. */
+@media (pointer: fine) {
+  body.custom-cursor,
+  body.custom-cursor a,
+  body.custom-cursor button {
+    cursor: none;
   }
 }
 
-/* ---- Layout helpers ---- */
-
-.shell {
-  width: 100%;
-  max-width: 72rem;
-  margin-inline: auto;
-  padding-inline: clamp(1.25rem, 0.6rem + 2.4vw, 2.5rem);
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
-/* Vary section rhythm — generous, breathable, fluid. */
-.section {
-  padding-block: clamp(4.5rem, 3rem + 7vw, 8.5rem);
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border-radius: 99px;
 }
 
-.font-display { font-family: var(--font-mono); }
-.font-mono { font-family: var(--font-mono); }
-
-/* ---- Section header ---- */
-
-.section-title {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: clamp(2rem, 1.3rem + 2.9vw, 3.15rem);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-.section-lead {
-  margin-top: 1.15rem;
-  max-width: 44rem;
-  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.1rem);
-  line-height: 1.75;
-  color: var(--ink-muted);
-}
+/* ------------------------------------------------------------------ */
+/* Component classes                                                  */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 72rem;
+    padding-inline: clamp(1.25rem, 4vw, 3rem);
+  }
 
-.section-kicker {
-  margin: 0;
-  color: var(--accent-strong);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
+  /* Low blur radius on purpose — backdrop-filter re-renders every frame
+     over the animated canvas, so cheap blurs keep scrolling smooth. */
+  .glass {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
 
-/* ---- Surfaces / cards ---- */
+  .glass-strong {
+    background: var(--glass-strong);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
 
-.card-surface {
-  position: relative;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  transition:
-    transform var(--dur) var(--ease-out-expo),
-    border-color var(--dur-fast) var(--ease-soft),
-    box-shadow var(--dur) var(--ease-soft);
-}
+  /* Gold family only: interpolating gold → blue passes through a grey
+     midpoint that reads washed out (the reference site's headings did this).
+     Every stop here stays ≥12.5:1 on the page background; blue lives in the
+     decorative gradients (buttons, progress beam, rings) instead. */
+  .gradient-text {
+    background: linear-gradient(
+      100deg,
+      var(--accent-3) 0%,
+      var(--accent) 32%,
+      var(--accent-3) 58%,
+      var(--accent) 82%,
+      var(--accent-3) 100%
+    );
+    background-size: 160% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient-shift 8s ease-in-out infinite;
+    /* Kept light — a heavy shadow bleeds into the thin serif strokes these
+       accent words use and dulls the gold. */
+    filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.8));
+  }
 
-.card-interactive:hover {
-  transform: translateY(-4px);
-  border-color: color-mix(in oklab, var(--accent) 50%, var(--border));
-  box-shadow:
-    0 24px 54px -30px rgb(0 0 0 / 0.8),
-    0 0 0 1px color-mix(in oklab, var(--accent) 20%, transparent),
-    0 20px 60px -32px color-mix(in oklab, var(--accent) 42%, transparent);
-}
+  /* Keeps copy legible over bright particle passages. */
+  .text-shadow {
+    text-shadow:
+      0 2px 20px rgba(0, 0, 0, 0.95),
+      0 0 3px rgba(0, 0, 0, 0.8);
+  }
 
-/* ---- Buttons ---- */
+  /* Fixed radial veil between the 3D scene and the content so text keeps
+     contrast even at the scene's brightest morph stages. */
+  .content-scrim::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 95% 75% at 50% 45%,
+      rgba(1, 1, 8, 0.58) 0%,
+      rgba(1, 1, 8, 0.84) 100%
+    );
+  }
 
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: var(--radius-md);
-  background: var(--accent-solid);
-  color: var(--accent-ink);
-  font-weight: 600;
-  font-family: var(--font-mono);
-  padding: 0.68rem 1.15rem;
-  box-shadow: 0 12px 32px -16px color-mix(in oklab, var(--accent) 75%, transparent);
-  transition:
-    background var(--dur-fast) var(--ease-soft),
-    box-shadow var(--dur) var(--ease-soft),
-    transform var(--dur-fast) var(--ease-out-quart);
-}
-.btn-primary:hover {
-  background: var(--accent-strong);
-  transform: translateY(-2px);
-  box-shadow:
-    0 18px 42px -16px color-mix(in oklab, var(--accent) 85%, transparent),
-    0 0 24px -6px color-mix(in oklab, var(--accent) 65%, transparent);
-}
-.btn-primary:active { transform: translateY(0); }
+  .hero-title {
+    font-size: var(--hero-size);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    text-shadow:
+      0 4px 32px rgba(0, 0, 0, 0.95),
+      0 0 4px rgba(0, 0, 0, 0.85);
+  }
 
-.nav-contact {
-  display: none;
-}
+  .section-title {
+    font-size: var(--section-size);
+    line-height: 1.05;
+    text-shadow:
+      0 3px 24px rgba(0, 0, 0, 0.95),
+      0 0 3px rgba(0, 0, 0, 0.8);
+  }
 
-@media (min-width: 48rem) {
-  .nav-contact {
+  /* The scroll hint appears only when the hero has room to spare for it. */
+  .scroll-cue {
+    display: none;
+
+    @media (min-width: 640px) and (min-height: 820px) {
+      display: flex;
+    }
+  }
+
+  .hero-serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  /* Split characters inside the gold surname need a solid color — the
+     parent's gradient clip would leave the spans transparent. */
+  .hero-surname {
+    text-shadow:
+      0 4px 28px rgba(0, 0, 0, 0.95),
+      0 0 12px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  .hero-surname .char {
+    color: var(--accent);
+  }
+
+  .serif-accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  .section-label {
+    color: var(--accent);
+    letter-spacing: 0.42em;
+  }
+
+  /* Static grid — animating background-position would repaint constantly. */
+  .grid-bg {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(
+      ellipse 75% 65% at 50% 42%,
+      black 25%,
+      transparent 78%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse 75% 65% at 50% 42%,
+      black 25%,
+      transparent 78%
+    );
+  }
+
+  /* Static film-grain tile (SVG turbulence), no animation. */
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: var(--z-noise);
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
+  }
+
+  .marquee-track {
+    animation: marquee var(--marquee-duration, 30s) linear infinite;
+  }
+
+  .marquee-reverse {
+    animation-direction: reverse;
+  }
+
+  .marquee-pause:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Rotating conic border glow for project cards. */
+  .border-spin {
+    position: absolute;
+    inset: -120%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0%,
+      var(--accent) 12%,
+      transparent 26%,
+      transparent 50%,
+      var(--accent-2) 62%,
+      transparent 76%
+    );
+    animation: spin-slow 7s linear infinite;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+
+  .group:hover .border-spin {
+    opacity: 1;
+  }
+
+  .preview-shimmer {
+    background: linear-gradient(
+      105deg,
+      transparent 35%,
+      color-mix(in srgb, var(--foreground) 14%, transparent) 50%,
+      transparent 65%
+    );
+    background-size: 250% 100%;
+  }
+
+  .group:hover .preview-shimmer {
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+  /* Buttons — plain classes, shared by nav / hero / contact. */
+  .btn-primary {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 3rem;
+    padding-inline: 2rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: var(--background);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    transition:
+      box-shadow 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 42px color-mix(in srgb, var(--accent) 45%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 3rem;
+    padding-inline: 2rem;
+    border-radius: 999px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .btn-ghost:hover {
+    border-color: color-mix(in srgb, var(--accent-2) 50%, transparent);
+    background-color: color-mix(in srgb, var(--accent-2) 10%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .btn-sm {
+    height: 2.375rem;
+    padding-inline: 1.25rem;
+    font-size: 0.75rem;
+  }
+
+  .btn-lg {
+    height: 3.5rem;
+    padding-inline: 2.5rem;
+    font-size: 1rem;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border: 1px solid var(--glass-border);
+    background: color-mix(in srgb, var(--accent) 5%, transparent);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  /* Thin themed scrollbar for the Experience fallback track. */
+  .track-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--accent) 45%, transparent)
+      transparent;
+  }
+  .track-scrollbar::-webkit-scrollbar {
+    height: 6px;
+  }
+  .track-scrollbar::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 99px;
   }
 }
 
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  color: var(--ink);
-  font-weight: 500;
-  font-family: var(--font-mono);
-  padding: 0.68rem 1.15rem;
-  transition:
-    border-color var(--dur-fast) var(--ease-soft),
-    background var(--dur-fast) var(--ease-soft),
-    color var(--dur-fast) var(--ease-soft),
-    transform var(--dur-fast) var(--ease-out-quart);
-}
-.btn-ghost:hover {
-  border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
-  background: color-mix(in oklab, var(--accent) 9%, transparent);
-  transform: translateY(-2px);
-}
-.btn-ghost:active { transform: translateY(0); }
-
-/* ---- Mono tag / chip ---- */
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-soft);
-  padding: 0.3rem 0.62rem;
-  color: var(--ink-muted);
-  white-space: nowrap;
-  transition:
-    border-color var(--dur-fast) var(--ease-soft),
-    color var(--dur-fast) var(--ease-soft),
-    background var(--dur-fast) var(--ease-soft);
-}
-.tag-accent {
-  border-color: color-mix(in oklab, var(--accent) 38%, transparent);
-  background: color-mix(in oklab, var(--accent) 12%, transparent);
-  color: var(--accent-strong);
-}
-
-/* ---- Terminal / editor chrome ---- */
-
-.term-window {
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--surface);
-  overflow: hidden;
-  box-shadow: 0 30px 70px -40px rgb(0 0 0 / 0.9);
-}
-
-.term-titlebar {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  border-bottom: 1px solid var(--border-soft);
-  background: color-mix(in oklab, var(--surface-2) 70%, transparent);
-  padding: 0.65rem 0.9rem;
-}
-
-.window-dots {
-  display: inline-flex;
-  gap: 0.42rem;
-  flex: 0 0 auto;
-}
-
-.window-dot {
-  width: 0.62rem;
-  height: 0.62rem;
-  border-radius: 9999px;
-  background: var(--ink-faint);
-  opacity: 0.55;
-}
-.window-dot:nth-child(1) { background: var(--dot-red); opacity: 0.85; }
-.window-dot:nth-child(2) { background: var(--dot-amber); opacity: 0.85; }
-.window-dot:nth-child(3) { background: var(--accent); opacity: 0.85; }
-
-.term-titlebar-label {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--ink-faint);
-}
-
-.term-body {
-  padding: clamp(1.25rem, 1rem + 1.4vw, 2rem);
-  font-family: var(--font-mono);
-}
-
-.line-row {
-  display: flex;
-  gap: 1rem;
-  min-width: 0;
-}
-
-/* Flex items default to min-width:auto, which lets long terminal output push
-   the whole window wider than the viewport. Allow every row child to shrink so
-   output wraps instead. */
-.line-row > * {
-  min-width: 0;
-}
-
-.line-no {
-  flex: 0 0 auto;
-  width: 1.4rem;
-  text-align: right;
-  color: var(--ink-faint);
-  opacity: 0.55;
-  font-variant-numeric: tabular-nums;
-  user-select: none;
-}
-
-.prompt-glyph {
-  color: var(--accent-strong);
-}
-
-.blink-cursor {
-  display: inline-block;
-  width: 0.56ch;
-  background: var(--accent-strong);
-  animation: blink-cursor 1.1s steps(1, end) infinite;
-}
-@keyframes blink-cursor {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-/* Bracket-style label, e.g. [ 01 ] — a recurring editor/CLI motif */
-.bracket-index {
-  color: var(--ink-faint);
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-}
-
-/* ---- Decorative backdrop ---- */
-
-.dot-grid {
-  background-image: radial-gradient(
-    color-mix(in oklab, var(--ink) 9%, transparent) 1px,
-    transparent 1px
-  );
-  background-size: 28px 28px;
-}
-
-.scanlines {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    color-mix(in oklab, var(--ink) 5%, transparent) 0px,
-    transparent 1px,
-    transparent 3px
-  );
-}
-
-/* Thin accent rule used as a divider */
-.beam-rule {
-  height: 1px;
-  border: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in oklab, var(--accent) 75%, transparent) 50%,
-    transparent
-  );
-}
-
-/* Soft pulsing "available" dot */
-.pulse-dot {
-  position: relative;
-  display: inline-block;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 9999px;
-  background: var(--accent-strong);
-}
-.pulse-dot::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--accent-strong);
-  animation: pulse-ring 2.4s var(--ease-out-expo) infinite;
-}
-
-/* ---- Editor tab bar (Navbar) ---- */
-
-.nav-tab {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.32rem;
-  flex: none;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  padding: 0.5rem 0.55rem;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  white-space: nowrap;
-  color: var(--ink-muted);
-  transition: color var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft);
-}
-
-/* Nav scrolls horizontally as a fallback on narrower desktop widths — no
-   visible scrollbar, still wheel/trackpad scrollable. */
-.nav-tabs-scroll {
-  scrollbar-width: none;
-}
-.nav-tabs-scroll::-webkit-scrollbar {
-  display: none;
-}
-.nav-tab:hover {
-  color: var(--ink);
-}
-.nav-tab-active {
-  color: var(--accent-strong);
-  background: color-mix(in oklab, var(--accent) 10%, transparent);
-}
-.nav-tab-dot {
-  width: 0.36rem;
-  height: 0.36rem;
-  border-radius: 9999px;
-  background: currentColor;
-  opacity: 0.7;
-}
-
-/* ---- Status bar (Footer) ---- */
-
-.status-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem 1.4rem;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius);
-  background: var(--surface);
-  padding: 0.65rem 1rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--ink-muted);
-}
-
-.status-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  white-space: nowrap;
-}
-
-/* ---- Git-log style timeline (Experience) ---- */
-
-.commit-rail {
-  position: absolute;
-  left: 7px;
-  top: 0.5rem;
-  bottom: 0.75rem;
-  width: 1px;
-  background: linear-gradient(
-    to bottom,
-    color-mix(in oklab, var(--accent) 55%, transparent),
-    var(--border) 85%,
-    transparent
-  );
-}
-
-.commit-node {
-  position: absolute;
-  left: 0;
-  top: 0.4rem;
-  display: grid;
-  place-items: center;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 9999px;
-  background: var(--bg);
-}
-
-.commit-node-dot {
-  width: 0.62rem;
-  height: 0.62rem;
-  border-radius: 9999px;
-  background: var(--accent);
-  box-shadow:
-    0 0 0 4px color-mix(in oklab, var(--accent) 18%, transparent),
-    0 0 14px color-mix(in oklab, var(--accent) 65%, transparent);
-}
-
-.commit-hash {
-  color: var(--accent-strong);
-}
-
-/* ---- Project index and standalone project routes ---- */
-
-.projects-section {
-  border-block: 1px solid var(--border-soft);
-  background: color-mix(in oklab, var(--surface) 44%, transparent);
-}
-
-.project-card {
-  min-height: 24rem;
-  border-radius: 8px;
-  box-shadow: 0 20px 44px -36px rgb(0 0 0 / 0.85);
-  transition:
-    border-color var(--dur-fast) var(--ease-soft),
-    background var(--dur-fast) var(--ease-soft),
-    box-shadow var(--dur) var(--ease-soft),
-    transform var(--dur-fast) var(--ease-out-quart);
-}
-
-.project-card:hover {
-  border-color: color-mix(in oklab, var(--accent) 60%, var(--border));
-  background: color-mix(in oklab, var(--surface-2) 78%, black);
-  box-shadow: 0 26px 54px -36px rgb(0 0 0 / 0.9);
-  transform: translateY(-4px);
-}
-
-.project-glyph {
-  position: relative;
-  display: grid;
-  width: 4.25rem;
-  height: 4.25rem;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid color-mix(in oklab, var(--accent) 42%, var(--border));
-  border-radius: 7px;
-  color: var(--accent-strong);
-}
-
-.project-glyph > svg {
-  position: relative;
-  z-index: 2;
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
-.project-glyph-grid {
-  position: absolute;
-  inset: 0;
-  opacity: 0.48;
-  background-image:
-    linear-gradient(color-mix(in oklab, var(--accent) 25%, transparent) 1px, transparent 1px),
-    linear-gradient(90deg, color-mix(in oklab, var(--accent) 25%, transparent) 1px, transparent 1px);
-  background-size: 12px 12px;
-}
-
-.project-glyph-code {
-  position: absolute;
-  right: 0.35rem;
-  bottom: 0.22rem;
-  color: color-mix(in oklab, var(--accent) 58%, transparent);
-  font-family: var(--font-mono);
-  font-size: 0.55rem;
-}
-
-.project-state {
-  border: 1px solid color-mix(in oklab, var(--accent) 42%, transparent);
-  border-radius: var(--radius-sm);
-  background: color-mix(in oklab, var(--accent) 9%, transparent);
-  color: var(--accent-strong);
-  font-family: var(--font-mono);
-  font-size: 0.67rem;
-  line-height: 1;
-  padding: 0.42rem 0.52rem;
-}
-
-.project-page {
-  padding-top: clamp(8.5rem, 7rem + 4vw, 11.5rem);
-  padding-bottom: clamp(4rem, 3rem + 6vw, 8rem);
-}
-
-.project-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--ink-muted);
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: color var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-out-quart);
-}
-
-.project-back-link:hover {
-  color: var(--accent-strong);
-  transform: translateX(-3px);
-}
-
-.project-route-hero {
-  border-bottom: 1px solid var(--border-soft);
-  padding-bottom: clamp(3.5rem, 2rem + 5vw, 6rem);
-}
-
-.project-route-status {
-  border-left: 2px solid var(--accent);
-  padding: 0.25rem 0 0.25rem 1.25rem;
-}
-
-.project-overview {
-  display: grid;
-  gap: 2.5rem;
-  border-bottom: 1px solid var(--border-soft);
-  padding-block: clamp(4rem, 2rem + 5vw, 6rem);
-}
-
-.project-highlights {
-  display: grid;
-  gap: 1.1rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.project-highlights li {
-  display: flex;
-  gap: 0.85rem;
-  max-width: 46rem;
-  color: var(--ink-muted);
-  line-height: 1.75;
-}
-
-.project-highlights li svg {
-  flex: 0 0 auto;
-  margin-top: 0.35rem;
-  color: var(--accent-strong);
-}
-
-.project-trial,
-.project-trial-empty {
-  margin-top: clamp(4rem, 2rem + 5vw, 6rem);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-  overflow: hidden;
-}
-
-.project-trial-empty {
-  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-}
-
-.browser-chrome {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem 0.75rem;
-  border-bottom: 1px solid var(--border-soft);
-  background: color-mix(in oklab, var(--surface-2) 70%, transparent);
-  padding: 0.6rem 0.9rem;
-}
-
-.address-bar {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  border-radius: 9999px;
-  border: 1px solid var(--border-soft);
-  background: color-mix(in oklab, var(--bg) 55%, transparent);
-  padding: 0.35rem 0.9rem;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--ink-faint);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.project-frame-wrap {
-  height: min(70svh, 48rem);
-  min-height: 34rem;
-  background: #fff;
-}
-
-.project-frame {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  background: #fff;
-}
-
-.project-frame-blocked {
-  display: flex;
-  height: min(70svh, 48rem);
-  min-height: 34rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
-  background: color-mix(in oklab, var(--surface) 60%, var(--bg));
-}
-
-.icon-button {
-  display: grid;
-  width: 2.6rem;
-  height: 2.6rem;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  color: var(--ink-muted);
-  transition: border-color var(--dur-fast) var(--ease-soft), color var(--dur-fast) var(--ease-soft), background var(--dur-fast) var(--ease-soft);
-}
-
-.icon-button:hover {
-  border-color: color-mix(in oklab, var(--accent) 58%, var(--border));
-  background: color-mix(in oklab, var(--accent) 9%, transparent);
-  color: var(--accent-strong);
-}
-
-.project-navigation {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: clamp(4rem, 2rem + 5vw, 6rem);
-}
-
-.project-navigation-link {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  min-width: 0;
-  color: var(--ink);
-  font-weight: 600;
-  transition: color var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease-out-quart);
-}
-
-.project-navigation-link:hover {
-  color: var(--accent-strong);
-  transform: translateX(-3px);
-}
-
-.project-navigation-next {
-  justify-content: flex-end;
-  text-align: right;
-}
-
-.project-navigation-next:hover {
-  transform: translateX(3px);
-}
-
-.project-navigation-label {
-  display: block;
-  margin-bottom: 0.15rem;
-  color: var(--ink-faint);
-  font-family: var(--font-mono);
-  font-size: 0.67rem;
-}
-
-@media (min-width: 48rem) {
-  .project-overview {
-    grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
-    gap: 4rem;
+/* ------------------------------------------------------------------ */
+/* Keyframes                                                          */
+/* ------------------------------------------------------------------ */
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
 
-@media (max-width: 40rem) {
-  .project-frame-wrap,
-  .project-frame-blocked {
-    height: 65svh;
-    min-height: 30rem;
-  }
-
-  .project-navigation {
-    grid-template-columns: 1fr;
-  }
-
-  .project-navigation-next {
-    justify-content: flex-start;
-    text-align: left;
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
   }
 }
-@keyframes pulse-ring {
-  0% { opacity: 0.55; transform: scale(1); }
-  70%, 100% { opacity: 0; transform: scale(3); }
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: 130% 0;
+  }
+  100% {
+    background-position: -130% 0;
+  }
+}
+
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(13px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Opacity only — scaling blurred layers would re-blur every frame. */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion                                                     */
+/* ------------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

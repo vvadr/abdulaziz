@@ -11,6 +11,8 @@ export type PortfolioProject = {
   liveUrl?: string;
   /** Set to false when the deployment sends X-Frame-Options/CSP headers that block iframe embedding. */
   embeddable?: boolean;
+  /** Screenshot shown on the project card; cards fall back to a styled cover. */
+  cover?: string;
 };
 
 // Projects are curated against the public vvadr GitHub account. Profile,
@@ -51,6 +53,7 @@ export const portfolioProjects: PortfolioProject[] = [
     ],
     repoUrl: "https://github.com/vvadr/loan-terms-assistant",
     liveUrl: "https://loan-terms-assistant-black.vercel.app",
+    cover: "/images/projects/loan-terms-assistant.jpg",
   },
   {
     slug: "dwelve",
@@ -80,6 +83,7 @@ export const portfolioProjects: PortfolioProject[] = [
     // Dwelve sends X-Frame-Options: DENY in production (it guards authenticated
     // dashboards), so browsers refuse to render it inside our preview iframe.
     embeddable: false,
+    cover: "/images/projects/dwelve.jpg",
   },
   {
     slug: "multi-agent-ai-analyst",
@@ -99,6 +103,7 @@ export const portfolioProjects: PortfolioProject[] = [
     repoUrl: "https://github.com/vvadr/Multi-Agent-AI-Analyst",
     liveUrl: "https://multi-agent-ai-analyst-psi.vercel.app",
     embeddable: false,
+    cover: "/images/projects/multi-agent-ai-analyst.jpg",
   },
   {
     slug: "yelp-restaurant-rating-prep",
@@ -151,6 +156,7 @@ export const portfolioProjects: PortfolioProject[] = [
     ],
     repoUrl: "https://github.com/vvadr/weather-app-react",
     liveUrl: "https://vvadr.github.io/weather-app-react/",
+    cover: "/images/projects/weather-app-react.jpg",
   },
   {
     slug: "geometry-dash",
@@ -169,6 +175,7 @@ export const portfolioProjects: PortfolioProject[] = [
     ],
     repoUrl: "https://github.com/vvadr/geometry-dash",
     liveUrl: "https://vvadr.github.io/geometry-dash/",
+    cover: "/images/projects/geometry-dash.jpg",
   },
   {
     slug: "udevs-app",

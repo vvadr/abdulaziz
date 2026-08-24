@@ -1,17 +1,21 @@
 # Abdulaziz Yusupaliev — Portfolio
 
 Personal portfolio for **Abdulaziz Yusupaliev**, a Frontend Developer & AI/ML
-Engineer from Tashkent. A single-page site styled as a dark code editor /
-terminal: hero, skills, experience, projects, education, and contact — plus a
-standalone route per project with a live in-page preview.
+Engineer from Tashkent. A single-page cinematic noir/gold site — a
+scroll-driven 3D particle backdrop behind glass surfaces — with hero, about
+(including education), experience timeline, projects, skills, and contact,
+plus a standalone route per project with a live in-page preview.
 
 ## Tech stack
 
 - **Next.js** (App Router) + **React** + **TypeScript**
-- **Tailwind CSS v4** with a custom OKLCH token system (`app/globals.css`)
-- **Framer Motion** for the hero entrance, nav tab transitions, and scroll reveals
-- **Geist Mono Variable** (self-hosted via Fontsource) — the sole typeface,
-  sitewide, in keeping with the code-editor identity
+- **Tailwind CSS v4** with a hex token system (`app/globals.css`)
+- **three.js / @react-three/fiber / drei / postprocessing** — the morphing
+  particle backdrop (lazy-loaded, client-only, low-power tier for mobile)
+- **GSAP + ScrollTrigger** and **Lenis** — smooth scroll, reveals, the pinned
+  Experience timeline
+- **Framer Motion** — preloader, mobile menu, nav underline, greeting rotator
+- **Space Grotesk / Inter / Instrument Serif** via `next/font/google`
 - Icons: `lucide-react` + `simple-icons`
 
 ## Getting started
@@ -41,20 +45,22 @@ Update `siteUrl` in `data/site.ts` when the deployment domain changes.
 Each project in `data/projects.ts` gets its own route at `/projects/[slug]`.
 Projects with a `liveUrl` get an embedded, refreshable iframe preview on that
 route (`components/sections/projects/ProjectTrial.tsx`); projects with only a
-`repoUrl` link out to source instead.
+`repoUrl` link out to source instead. A project with a `cover` shows that
+screenshot on its card; otherwise the card renders a styled category cover.
 
 ## Project structure
 
 ```
-app/                     # layout, page, globals.css, opengraph-image
+app/                     # layout (scene, FX shell), page, globals.css, OG image
   projects/[slug]/        # per-project route
 components/
-  layout/                 # Navbar (editor tab-bar), Footer (status bar)
-  sections/<section>/     # Hero, Skills, Experience, Projects, Education, Contact
+  layout/                 # Navbar, Footer, ScrollFX, Preloader, cursor, scene/
+  sections/<section>/     # hero, about, experience, projects, skills, contact
     projects/route/        # project-page-only pieces (hero, nav, back link)
-  shared/                 # SectionReveal
+  shared/                 # Magnetic, TiltCard, Marquee, SectionHeading, icons
 data/                     # site.ts, projects.ts, skills.ts
-public/                   # profile photo, skill assets, resume CVs (frontend + AI/ML)
+lib/                      # utils, scroll-state (Lenis/GSAP shared store)
+public/                   # profile photo, skill assets, resume CVs, screenshots
 ```
 
 ## Deploy

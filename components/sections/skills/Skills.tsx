@@ -1,86 +1,122 @@
-import { type PortfolioSkill, skillGroups } from "@/data/skills";
-import { SectionReveal } from "../../shared/SectionReveal";
-import { SkillGlyph } from "../../shared/SkillGlyph";
-
-function slugKey(title: string) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "_")
-    .replace(/^_+|_+$/g, "");
-}
-
-function SkillChip({ skill }: { skill: PortfolioSkill }) {
-  const label = skill.shortName ?? skill.name;
-
-  return (
-    <span
-      title={skill.name}
-      className="group inline-flex items-center gap-2.5 rounded-md border border-border-soft bg-white/[0.02] px-3 py-2 text-sm font-medium text-muted transition duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_8%,transparent)] hover:text-foreground"
-    >
-      <span className="grid place-items-center transition-transform duration-200 group-hover:scale-110">
-        <SkillGlyph skill={skill} className="h-5 w-5 max-w-[1.75rem]" />
-      </span>
-      {label}
-    </span>
-  );
-}
+import { ArrowUpRight } from "lucide-react";
+import { SectionHeading } from "@/components/shared/SectionHeading";
+import { Marquee } from "@/components/shared/Marquee";
+import { SkillGlyph } from "@/components/shared/SkillGlyph";
+import { coreStack, marqueeItems, skillGroups } from "@/data/skills";
 
 export function Skills() {
   return (
-    <section id="skills" className="section">
-      <div className="shell">
-        <SectionReveal>
-          <p className="section-kicker">{"// skills.json"}</p>
-          <h2 className="section-title mt-2">Skills &amp; Tools</h2>
-          <p className="section-lead">
-            The stack I build with day to day — and the Python data tools I&apos;m
-            learning AI and machine learning on.
-          </p>
-        </SectionReveal>
+    <section id="skills" className="relative py-32">
+      <div className="px-5 sm:px-10 lg:px-20">
+        <div className="mx-auto max-w-6xl">
+          <SectionHeading label="04 — Skills">
+            My <span className="serif-accent gradient-text">toolbox</span>
+          </SectionHeading>
 
-        <SectionReveal delay={0.05} className="mt-12 sm:mt-14">
-          <div className="term-window">
-            <div className="term-titlebar">
-              <span className="window-dots" aria-hidden="true">
-                <span className="window-dot" />
-                <span className="window-dot" />
-                <span className="window-dot" />
-              </span>
-              <span className="term-titlebar-label">skills.json</span>
-            </div>
-
-            <div className="term-body text-sm">
-              <div className="line-row">
-                <span className="line-no">1</span>
-                <span className="text-faint">{"{"}</span>
-              </div>
-
-              {skillGroups.map((group, groupIndex) => {
-                const isLast = groupIndex === skillGroups.length - 1;
-                return (
-                  <div key={group.title} className="line-row items-start py-1.5">
-                    <span className="line-no pt-0.5">{groupIndex + 2}</span>
-                    <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-2">
-                      <span className="text-accent-strong">&quot;{slugKey(group.title)}&quot;</span>
-                      <span className="text-faint">:[</span>
-                      <div className="flex flex-1 flex-wrap gap-2 py-1">
-                        {group.skills.map((skill) => (
-                          <SkillChip key={skill.name} skill={skill} />
-                        ))}
-                      </div>
-                      <span className="text-faint">]{isLast ? "" : ","}</span>
-                    </div>
+          {/* Core stack rows */}
+          <div className="mt-12 flex flex-col gap-3">
+            {coreStack.map((skill, i) => (
+              <div
+                key={skill.name}
+                data-reveal
+                data-cursor
+                className="glass group flex items-center justify-between gap-6 rounded-2xl px-5 py-6 transition-colors duration-500 hover:border-accent/40 sm:px-6 sm:py-7"
+              >
+                <div className="flex items-baseline gap-5">
+                  <span
+                    aria-hidden
+                    className="font-display text-xs tabular-nums text-muted transition-colors duration-300 group-hover:text-accent"
+                  >
+                    0{i + 1}
+                  </span>
+                  <div>
+                    <h3 className="text-shadow font-display text-2xl font-bold text-foreground transition-colors duration-300 group-hover:text-accent sm:text-4xl">
+                      {skill.name}
+                    </h3>
+                    <p className="text-shadow mt-1.5 text-sm text-foreground/80 sm:hidden">
+                      {skill.meta}
+                    </p>
                   </div>
-                );
-              })}
-
-              <div className="line-row">
-                <span className="line-no">{skillGroups.length + 2}</span>
-                <span className="text-faint">{"}"}</span>
+                </div>
+                <div className="flex shrink-0 items-center gap-6">
+                  <p className="text-shadow hidden max-w-xs text-right text-sm leading-snug text-foreground/85 sm:block">
+                    {skill.meta}
+                  </p>
+                  <span
+                    aria-hidden
+                    className="glass flex size-10 shrink-0 items-center justify-center rounded-full text-muted transition-all duration-300 group-hover:rotate-45 group-hover:bg-accent group-hover:text-background"
+                  >
+                    <ArrowUpRight className="size-4" />
+                  </span>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-        </SectionReveal>
+
+          {/* Grouped chips with brand glyphs */}
+          <div className="mt-14 grid gap-4 sm:grid-cols-2">
+            {skillGroups.map((group) => (
+              <div
+                key={group.title}
+                data-reveal
+                className="glass rounded-2xl p-6 transition-colors duration-500 hover:border-accent-2/40"
+              >
+                <h3 className="mb-4 font-display text-[0.82rem] font-semibold uppercase tracking-[0.14em] text-accent-2">
+                  {group.title}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {group.skills.map((skill) => (
+                    <span
+                      key={skill.name}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-glass-border px-3 py-1.5 text-xs text-muted transition-colors duration-300 hover:border-accent/50 hover:text-accent"
+                    >
+                      <SkillGlyph skill={skill} className="h-3.5 w-3.5" />
+                      {skill.shortName ?? skill.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Double marquee */}
+      <div className="mt-24 -rotate-1 space-y-4">
+        <Marquee speed={34}>
+          {marqueeItems.map((item) => (
+            <span
+              key={item}
+              className="mx-5 flex items-center gap-4 font-display text-3xl font-bold text-foreground/85 sm:text-4xl"
+            >
+              {item}
+              <span aria-hidden className="gradient-text text-2xl">
+                ✦
+              </span>
+            </span>
+          ))}
+        </Marquee>
+        <Marquee speed={40} reverse>
+          {[...marqueeItems].reverse().map((item) => (
+            <span
+              key={item}
+              className="mx-5 flex items-center gap-4 font-display text-3xl font-bold text-transparent sm:text-4xl"
+              style={{
+                WebkitTextStroke:
+                  "1px color-mix(in srgb, var(--foreground) 38%, transparent)",
+              }}
+            >
+              {item}
+              <span
+                aria-hidden
+                className="text-2xl text-accent-2"
+                style={{ WebkitTextStroke: "0" }}
+              >
+                ✦
+              </span>
+            </span>
+          ))}
+        </Marquee>
       </div>
     </section>
   );

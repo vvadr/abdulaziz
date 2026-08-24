@@ -1,240 +1,190 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
-import { Download, FileText } from "lucide-react";
-import {
-  greetings,
-  heroDescription,
-  heroSocialLinks,
-  resumeLinks,
-} from "@/data/site";
-import { HeroBackdrop } from "./HeroBackdrop";
-import { HeroSocialIcon } from "./HeroSocialIcon";
-import { HeroSystemInfo } from "./HeroSystemInfo";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowDown } from "lucide-react";
+import { Magnetic } from "@/components/shared/Magnetic";
+import { GreetingRotator } from "./GreetingRotator";
+import { heroAvailability, heroLocation, heroTagline } from "@/data/site";
+import { appState, subscribeAppReady } from "@/lib/scroll-state";
+import { isCoarsePointer, prefersReducedMotion } from "@/lib/utils";
 
-const container: Variants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.1 },
-  },
-};
+gsap.registerPlugin(ScrollTrigger);
 
-const item: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
-};
+function Chars({ text }: { text: string }) {
+  return (
+    <span aria-label={text}>
+      {text.split("").map((c, i) => (
+        <span key={i} aria-hidden className="char inline-block will-change-transform">
+          {c === " " ? " " : c}
+        </span>
+      ))}
+    </span>
+  );
+}
 
 export function Hero() {
-  const reduceMotion = useReducedMotion();
-  const [index, setIndex] = useState(0);
-  // The first greeting must paint immediately — animating it in from opacity 0
-  // would leave the line blank under SSR, no-JS, and headless renders.
-  const [hasRotated, setHasRotated] = useState(false);
+  const rootRef = useRef<HTMLElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const ready = useSyncExternalStore(
+    subscribeAppReady,
+    () => appState.ready,
+    () => false,
+  );
 
+  // Intro: character-staggered name, then the supporting rows fade up.
+  // Runs once the preloader releases the page.
   useEffect(() => {
-    if (reduceMotion) return;
-    const intervalId = window.setInterval(() => {
-      setHasRotated(true);
-      setIndex((current) => (current + 1) % greetings.length);
-    }, 2000);
-    return () => window.clearInterval(intervalId);
-  }, [reduceMotion]);
+    if (!ready) return;
+    const ctx = gsap.context(() => {
+      if (prefersReducedMotion()) {
+        gsap.set([".char", "[data-hero-fade]"], { autoAlpha: 1, yPercent: 0, y: 0 });
+        return;
+      }
+      const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
+      tl.fromTo(
+        ".char",
+        { yPercent: 110, rotateX: -60, autoAlpha: 0 },
+        { yPercent: 0, rotateX: 0, autoAlpha: 1, duration: 1.1, stagger: 0.035 },
+        0.05,
+      ).fromTo(
+        "[data-hero-fade]",
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 },
+        "-=0.55",
+      );
+    }, rootRef);
+    return () => ctx.revert();
+  }, [ready]);
 
+  // Scroll-out shrink/fade + pointer parallax on [data-depth] layers.
+  useEffect(() => {
+    const root = rootRef.current;
+    const inner = innerRef.current;
+    if (!root || !inner || prefersReducedMotion()) return;
+
+    const ctx = gsap.context(() => {
+      gsap.to(inner, {
+        scale: 0.94,
+        autoAlpha: 0,
+        ease: "none",
+        scrollTrigger: { trigger: root, start: "top top", end: "bottom 20%", scrub: 0.8 },
+      });
+    }, root);
+
+    let cleanupMouse: (() => void) | undefined;
+    if (!isCoarsePointer()) {
+      const layers = Array.from(root.querySelectorAll<HTMLElement>("[data-depth]"));
+      const setters = layers.map((el) => ({
+        x: gsap.quickTo(el, "x", { duration: 0.9, ease: "power3" }),
+        y: gsap.quickTo(el, "y", { duration: 0.9, ease: "power3" }),
+        depth: Number(el.dataset.depth ?? 0.5),
+      }));
+      const onMove = (e: MouseEvent) => {
+        const nx = e.clientX / window.innerWidth - 0.5;
+        const ny = e.clientY / window.innerHeight - 0.5;
+        setters.forEach((s) => {
+          s.x(nx * 38 * s.depth);
+          s.y(ny * 38 * 0.65 * s.depth);
+        });
+      };
+      window.addEventListener("mousemove", onMove);
+      cleanupMouse = () => window.removeEventListener("mousemove", onMove);
+    }
+
+    return () => {
+      ctx.revert();
+      cleanupMouse?.();
+    };
+  }, []);
+
+  // The section's vertical padding keeps the centred content clear of the
+  // fixed navbar (and the scroll cue) when the viewport is short.
   return (
     <section
-      id="home"
-      className="relative flex min-h-[100svh] items-center overflow-hidden px-4 pb-24 pt-28 sm:px-6 sm:pt-32"
+      ref={rootRef}
+      id="hero"
+      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-5 py-[clamp(5rem,10vh,7.5rem)] text-center sm:px-10"
     >
-      <HeroBackdrop />
+      <div className="grid-bg absolute inset-0" aria-hidden />
+      <div
+        aria-hidden
+        data-depth="0.25"
+        className="absolute left-[12%] top-[18%] size-[28vmax] rounded-full bg-accent/12 blur-[50px] [animation:pulse-glow_9s_ease-in-out_infinite]"
+      />
+      <div
+        aria-hidden
+        data-depth="0.4"
+        className="absolute bottom-[10%] right-[8%] size-[24vmax] rounded-full bg-accent-2/12 blur-[50px] [animation:pulse-glow_11s_ease-in-out_infinite_reverse]"
+      />
 
-      <motion.div
-        variants={container}
-        initial={false}
-        animate="show"
-        className="relative mx-auto grid w-full max-w-6xl grid-cols-1 items-stretch gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10"
+      <div
+        ref={innerRef}
+        className="relative z-10 flex flex-col items-center pb-14 will-change-transform"
       >
-        <motion.div variants={item} className="term-window">
-          <div className="term-titlebar">
-            <span className="window-dots" aria-hidden="true">
-              <span className="window-dot" />
-              <span className="window-dot" />
-              <span className="window-dot" />
-            </span>
-            <span className="term-titlebar-label">whoami.sh — abdulaziz</span>
-          </div>
-
-          <div className="term-body text-sm leading-7 sm:text-[0.95rem]">
-            <div className="line-row">
-              <span className="line-no">1</span>
-              <span>
-                <span className="prompt-glyph">$</span> whoami
-              </span>
-            </div>
-            <div className="line-row">
-              <span className="line-no">2</span>
-              <h1 className="font-mono text-[clamp(2.2rem,1.5rem+3.6vw,4rem)] font-bold leading-[1.05] text-foreground">
-                Abdulaziz Yusupaliev
-                <span className="blink-cursor align-baseline" aria-hidden="true" />
-              </h1>
-            </div>
-            <div className="line-row">
-              <span className="line-no">3</span>
-              <span>&nbsp;</span>
-            </div>
-
-            <div className="line-row">
-              <span className="line-no">4</span>
-              <span>
-                <span className="prompt-glyph">$</span> ./role.sh
-              </span>
-            </div>
-            <div className="line-row">
-              <span className="line-no">5</span>
-              <p className="font-semibold text-accent-strong">
-                Frontend Developer <span className="text-muted">&amp;</span> AI/ML Engineer
-              </p>
-            </div>
-            <div className="line-row">
-              <span className="line-no">6</span>
-              <span>&nbsp;</span>
-            </div>
-
-            <div className="line-row">
-              <span className="line-no">7</span>
-              <span>
-                <span className="prompt-glyph">$</span> locale --greet
-              </span>
-            </div>
-            <div className="line-row items-center">
-              <span className="line-no">8</span>
-              <div
-                aria-hidden="true"
-                className="flex min-h-6 flex-wrap items-center gap-x-2 gap-y-1 text-muted"
-              >
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={greetings[index]}
-                    initial={reduceMotion || !hasRotated ? false : { opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={reduceMotion ? undefined : { opacity: 0, y: -6 }}
-                    transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                    className="font-semibold text-accent"
-                  >
-                    {greetings[index]}
-                  </motion.span>
-                </AnimatePresence>
-                <span>— welcome, thanks for stopping by.</span>
-              </div>
-              <span className="sr-only">{greetings[index]} — welcome, thanks for stopping by.</span>
-            </div>
-            <div className="line-row">
-              <span className="line-no">9</span>
-              <span>&nbsp;</span>
-            </div>
-
-            <div className="line-row">
-              <span className="line-no">10</span>
-              <span>
-                <span className="prompt-glyph">$</span> cat about.md
-              </span>
-            </div>
-            <div className="line-row">
-              <span className="line-no">11</span>
-              <p className="max-w-[58ch] text-muted">{heroDescription}</p>
-            </div>
-            <div className="line-row">
-              <span className="line-no">12</span>
-              <span>&nbsp;</span>
-            </div>
-
-            <div className="line-row">
-              <span className="line-no">13</span>
-              <span>
-                <span className="prompt-glyph">$</span> ls ./resume/
-              </span>
-            </div>
-            <div className="line-row">
-              <span className="line-no">14</span>
-              <div className="flex flex-wrap gap-2.5">
-                {resumeLinks.map((resume) => (
-                  <a
-                    key={resume.href}
-                    href={resume.href}
-                    download
-                    className="btn-ghost text-xs"
-                  >
-                    <FileText className="h-3.5 w-3.5" aria-hidden="true" />
-                    {resume.label}
-                    <Download className="h-3.5 w-3.5" aria-hidden="true" />
-                  </a>
-                ))}
-              </div>
-            </div>
-            <div className="line-row">
-              <span className="line-no">15</span>
-              <span>&nbsp;</span>
-            </div>
-
-            <div className="line-row">
-              <span className="line-no">16</span>
-              <span>
-                <span className="prompt-glyph">$</span> open ./socials/
-              </span>
-            </div>
-            <div className="line-row">
-              <span className="line-no">17</span>
-              <div className="flex flex-wrap items-center gap-2">
-                {heroSocialLinks.map((link) => {
-                  const external = link.href.startsWith("http");
-                  return (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      target={external ? "_blank" : undefined}
-                      rel={external ? "noopener noreferrer" : undefined}
-                      aria-label={link.label}
-                      className="grid size-9 place-items-center rounded-md border border-border-soft text-foreground transition duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--accent)_55%,transparent)] hover:bg-[color-mix(in_oklab,var(--accent)_12%,transparent)] hover:text-accent-strong"
-                    >
-                      <HeroSocialIcon name={link.icon} className="h-4 w-4" />
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="line-row">
-              <span className="line-no">18</span>
-              <span>
-                <span className="prompt-glyph">$</span>
-                <span className="blink-cursor ml-1 align-baseline" aria-hidden="true" />
-              </span>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div variants={item} className="h-full">
-          <HeroSystemInfo />
-        </motion.div>
-      </motion.div>
-
-      {/* scroll cue */}
-      <motion.a
-        href="#skills"
-        aria-label="Scroll to skills"
-        initial={reduceMotion ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.8 }}
-        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-faint transition-colors hover:text-accent-strong sm:flex"
-      >
-        <span className="font-mono text-[0.7rem]">scroll</span>
-        <span className="relative flex h-9 w-5 justify-center rounded-full border border-border">
-          <motion.span
-            className="mt-1.5 h-1.5 w-1 rounded-full bg-accent"
-            animate={reduceMotion ? undefined : { y: [0, 9, 0], opacity: [1, 0.3, 1] }}
-            transition={{ duration: 1.8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+        <p
+          data-hero-fade
+          data-depth="0.18"
+          className="glass mb-6 rounded-full px-5 py-2 text-xs font-medium uppercase tracking-[0.32em] text-muted"
+        >
+          <span
+            aria-hidden
+            className="mr-2 inline-block size-1.5 rounded-full bg-accent align-middle [animation:pulse-glow_2.4s_ease-in-out_infinite]"
           />
+          {heroAvailability} · {heroLocation}
+        </p>
+
+        <div data-hero-fade data-depth="0.14" className="mb-2">
+          <GreetingRotator />
+        </div>
+
+        <h1 data-depth="0.1" className="hero-title font-display font-bold [perspective:900px]">
+          <span className="block overflow-hidden pb-1">
+            <Chars text="Abdulaziz" />
+          </span>
+          <span className="hero-serif hero-surname block overflow-hidden pb-2 text-accent">
+            <Chars text="Yusupaliev" />
+          </span>
+        </h1>
+
+        <p
+          data-hero-fade
+          data-depth="0.16"
+          className="mt-7 max-w-xl text-balance text-base text-muted sm:text-lg"
+        >
+          <span className="serif-accent text-foreground/90">Frontend developer</span>{" "}
+          {heroTagline}
+        </p>
+
+        <div
+          data-hero-fade
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+        >
+          <Magnetic strength={0.35}>
+            <a href="#projects" className="btn-primary btn-lg">
+              View projects
+            </a>
+          </Magnetic>
+          <Magnetic strength={0.35}>
+            <a href="#contact" className="btn-ghost btn-lg">
+              Get in touch
+            </a>
+          </Magnetic>
+        </div>
+      </div>
+
+      <div
+        data-hero-fade
+        aria-hidden
+        className="scroll-cue absolute bottom-8 z-10 flex-col items-center gap-3 text-[0.68rem] uppercase tracking-[0.3em] text-muted"
+      >
+        <span className="relative h-9 w-[22px] rounded-full border border-muted/60">
+          <span className="absolute left-1/2 top-[7px] h-[7px] w-[3px] -translate-x-1/2 rounded-full bg-accent [animation:scroll-dot_1.9s_ease-in-out_infinite]" />
         </span>
-      </motion.a>
+        Scroll
+        <ArrowDown className="size-3.5 text-accent" />
+      </div>
     </section>
   );
 }

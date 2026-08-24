@@ -25,22 +25,21 @@ him — and remembers the site.
 
 ## Brand Personality
 
-Precise, honest, a little playful about being a developer's site. The
-portfolio *is* a dark code editor: an editor-style nav tab bar, a terminal
-hero, a JSON skills manifest, a git-log work history, a file-explorer project
-grid, and a status-bar footer. One phosphor-green accent on near-black is the
-entire color story. Three words: **exact, legible, unmistakably a
-developer's.**
+Cinematic, precise, quietly confident. The portfolio is a noir stage: a
+scroll-driven particle universe behind glass surfaces, bold Space Grotesk
+display type with Instrument Serif italics, and a gold + blue accent pair on
+near-black. The drama stays in the backdrop — the content on top is honest
+and legible. Three words: **cinematic, legible, credible.**
 
 ## Anti-references
 
 - Generic dark SaaS portfolios: near-black + one timid accent + a fade-up on
-  every section. This site commits harder — a real, consistent editor
-  metaphor, not a decorative dark theme.
-- Cosplay without function: the terminal/editor framing has to earn its
-  keep (line numbers that count real lines, nav tabs that are real nav,
-  a live iframe preview inside the "browser chrome" — not just chrome for
-  its own sake).
+  every section. This site commits harder — a full cinematic 3D backdrop that
+  responds to scroll, not a decorative dark theme.
+- Spectacle without function: the cinematic framing has to earn its keep
+  (the particle cloud morphs with real scroll progress, the "browser chrome"
+  wraps a real live iframe, the nav underline tracks the section actually on
+  screen — not chrome for its own sake).
 - Overstated junior framing: fake metrics, "10x", hero-metric stat blocks,
   claims of work not actually done.
 
@@ -50,14 +49,14 @@ developer's.**
    framed honestly (an internship + learning projects), while proven
    frontend work at Hiwelcome.uz and Delever.uz carries the credibility. No
    invented numbers.
-2. **One accent, much dark.** A single phosphor green is the whole color
-   story; everything else is near-black restraint.
+2. **Two accents, one story.** Gold leads, blue supports, and they only meet
+   in the shared gradient; everything else is near-black restraint.
 3. **Contrast is non-negotiable.** Every text/background pair is verified
    readable (`scripts/contrast-check.mjs`). Low-opacity gray "for elegance"
    is banned.
-4. **The metaphor is functional, not decorative.** Nav tabs are real
-   navigation. The live-preview "browser chrome" wraps a real, working
-   iframe. Line numbers correspond to real content lines.
+4. **The spectacle is functional, not decorative.** The particle cloud is
+   driven by real scroll progress, the live-preview "browser chrome" wraps a
+   real working iframe, and the nav underline tracks the section on screen.
 5. **Show the work, then get out of the way.** The fastest path from landing
    to "contact him" wins over decoration.
 
@@ -68,5 +67,5 @@ actual backgrounds. Full keyboard operability (nav, mobile menu, project
 live-preview controls) with visible focus rings. Every decorative animation
 (typed/rotating greeting, scroll reveals, tab-indicator slide) has a
 `prefers-reduced-motion` path. Semantic landmarks and one true `<h1>` per
-page. Green is never the only signal for state — pair it with text, icon, or
-weight for color-blind safety.
+page. Color is never the only signal for state — gold/blue always pairs with
+text, icon, or weight for color-blind safety.

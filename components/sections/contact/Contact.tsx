@@ -1,86 +1,167 @@
-import { ArrowUpRight, Mail } from "lucide-react";
-import { heroSocialLinks, type HeroSocialIconName } from "@/data/site";
-import { HeroSocialIcon } from "../hero/HeroSocialIcon";
-import { SectionReveal } from "../../shared/SectionReveal";
+"use client";
 
-const contactDetails: Record<
-  HeroSocialIconName,
-  { value: string; command: string }
-> = {
-  email: { value: "abdulazizyusupaliev009@gmail.com", command: "./email" },
-  telegram: { value: "@d_vaderrr", command: "./telegram" },
-  github: { value: "vvadr", command: "./github" },
-  linkedin: { value: "Abdulaziz Yusupaliev", command: "./linkedin" },
-};
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowUpRight, FileText, Mail } from "lucide-react";
+import { Magnetic } from "@/components/shared/Magnetic";
+import { SocialIcon } from "@/components/shared/SocialIcon";
+import { contactLinks, resumeLinks, type SocialIconName } from "@/data/site";
+import { prefersReducedMotion } from "@/lib/utils";
 
-// Email and Telegram first — the fastest ways to reach me.
-const orderedLinks = [...heroSocialLinks].sort(
-  (a, b) =>
-    ["email", "telegram", "github", "linkedin"].indexOf(a.icon) -
-    ["email", "telegram", "github", "linkedin"].indexOf(b.icon),
-);
+gsap.registerPlugin(ScrollTrigger);
+
+const email = contactLinks.find((link) => link.label === "Email")!;
+const telegram = contactLinks.find((link) => link.label === "Telegram")!;
+const socialCards = contactLinks.filter((link) => link.label !== "Email");
 
 export function Contact() {
+  const rootRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        "[data-contact-title]",
+        { scale: 0.82, autoAlpha: 0.25 },
+        {
+          scale: 1,
+          autoAlpha: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: rootRef.current,
+            start: "top 85%",
+            end: "top 30%",
+            scrub: 0.7,
+          },
+        },
+      );
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="contact" className="section">
-      <div className="shell max-w-5xl">
-        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-          <SectionReveal>
-            <p className="section-kicker">{"// contact.sh"}</p>
-            <h2 className="section-title mt-2">Let&apos;s talk</h2>
-            <p className="section-lead">
-              Open to internships, freelance work, and collaboration. Email or
-              Telegram reach me fastest — I usually reply within a day.
-            </p>
+    <section
+      ref={rootRef}
+      id="contact"
+      className="relative flex min-h-svh flex-col justify-center px-5 pb-24 pt-32 sm:px-10"
+    >
+      <div className="mx-auto flex w-full max-w-4xl flex-col items-center text-center">
+        <p
+          data-reveal
+          className="section-label mb-6 font-display text-xs font-medium uppercase"
+        >
+          05 — Contact
+        </p>
 
-            <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_oklab,var(--accent)_30%,transparent)] bg-[color-mix(in_oklab,var(--accent)_10%,transparent)] px-3.5 py-1.5 text-sm text-accent-strong">
-              <span className="pulse-dot" aria-hidden="true" />
-              Available now
+        <h2
+          data-contact-title
+          className="font-display text-[clamp(2.8rem,8vw,6.2rem)] font-bold leading-[1.02] tracking-tight will-change-transform"
+        >
+          Let&apos;s build
+          <br />
+          something <span className="serif-accent gradient-text">together</span>
+        </h2>
+
+        <p data-reveal className="mt-7 max-w-md text-muted">
+          Open to internships, freelance work, and interesting projects. Reach
+          out — I&apos;ll get back to you.
+        </p>
+
+        <Magnetic strength={0.25} className="mt-10 max-w-full">
+          <a
+            href={email.href}
+            data-cursor
+            className="glass group inline-flex max-w-full items-center gap-3 rounded-full py-4 pl-6 pr-4 font-display text-sm font-semibold transition-all duration-300 hover:border-accent/50 hover:shadow-[0_0_48px_color-mix(in_srgb,var(--accent)_30%,transparent)] sm:gap-4 sm:pl-7 sm:pr-5 sm:text-lg"
+          >
+            <Mail className="size-5 shrink-0 text-accent" aria-hidden />
+            <span className="break-all text-left">{email.value}</span>
+            <span
+              aria-hidden
+              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-accent text-background transition-transform duration-300 group-hover:rotate-45"
+            >
+              <ArrowUpRight className="size-4" />
             </span>
+          </a>
+        </Magnetic>
 
-            <div className="mt-7">
-              <a href="mailto:abdulazizyusupaliev009@gmail.com" className="btn-primary text-sm">
-                <Mail className="h-4 w-4" aria-hidden="true" />
-                ./email --send
+        {/* Direct channels + both CVs */}
+        <div data-reveal className="mt-12 grid w-full gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {[email, telegram].map((item) => {
+            const Icon = item.icon;
+            const external = item.href.startsWith("http");
+            return (
+              <a
+                key={item.label}
+                href={item.href}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noreferrer" : undefined}
+                data-cursor
+                className="glass group rounded-2xl p-5 text-left transition-all duration-300 hover:border-accent/40 hover:shadow-[0_12px_40px_var(--shadow-deep)]"
+              >
+                <Icon className="size-4 text-accent" aria-hidden />
+                <p className="mt-3 font-display text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
+                  {item.label}
+                </p>
+                <p className="mt-1 break-all text-sm font-medium text-foreground/90 transition-colors group-hover:text-accent">
+                  {item.value}
+                </p>
               </a>
-            </div>
-          </SectionReveal>
+            );
+          })}
+          {resumeLinks.map((resume) => (
+            <a
+              key={resume.label}
+              href={resume.href}
+              download
+              data-cursor
+              className="glass group rounded-2xl p-5 text-left transition-all duration-300 hover:border-accent/40 hover:shadow-[0_12px_40px_var(--shadow-deep)]"
+            >
+              <FileText className="size-4 text-accent-2" aria-hidden />
+              <p className="mt-3 font-display text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
+                {resume.label}
+              </p>
+              <p className="mt-1 text-sm font-medium text-foreground/90 transition-colors group-hover:text-accent">
+                Download PDF
+              </p>
+            </a>
+          ))}
+        </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            {orderedLinks.map((link, index) => {
-              const detail = contactDetails[link.icon];
-              const external = link.href.startsWith("http");
-
-              return (
-                <SectionReveal key={link.label} delay={(index % 2) * 0.07} className="h-full">
-                  <a
-                    href={link.href}
-                    target={external ? "_blank" : undefined}
-                    rel={external ? "noopener noreferrer" : undefined}
-                    className="card-surface card-interactive group flex h-full flex-col justify-between gap-6 p-5"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="grid size-12 place-items-center rounded-md border border-border-soft bg-white/[0.03] text-foreground transition group-hover:border-[color-mix(in_oklab,var(--accent)_50%,transparent)] group-hover:bg-[color-mix(in_oklab,var(--accent)_12%,transparent)] group-hover:text-accent-strong">
-                        <HeroSocialIcon name={link.icon} className="h-5 w-5" />
+        {/* Social profiles */}
+        <div data-reveal className="mt-6 grid w-full gap-3 sm:grid-cols-3">
+          {socialCards.map((social) => {
+            const iconName = social.label.toLowerCase() as SocialIconName;
+            const handle =
+              social.label === "LinkedIn" ? social.value : `@${social.value}`;
+            return (
+              <Magnetic key={social.label} strength={0.35}>
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cursor
+                  className="glass group flex h-full items-center justify-between gap-3 rounded-2xl p-5 transition-all duration-300 hover:border-accent-2/40"
+                >
+                  <span className="text-left">
+                    <span className="flex items-center gap-2">
+                      <SocialIcon name={iconName} className="size-4 text-accent-2" />
+                      <span className="font-display text-sm font-semibold">
+                        {social.label}
                       </span>
-                      <ArrowUpRight
-                        className="h-5 w-5 text-faint transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-strong"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="font-mono text-xs text-accent-strong">
-                        $ {detail.command}
-                      </p>
-                      <p className="mt-1.5 truncate text-base font-medium text-foreground">
-                        {detail.value}
-                      </p>
-                    </div>
-                  </a>
-                </SectionReveal>
-              );
-            })}
-          </div>
+                    </span>
+                    <span className="mt-1 block text-xs text-muted transition-colors group-hover:text-foreground/80">
+                      {handle}
+                    </span>
+                  </span>
+                  <ArrowUpRight
+                    className="size-4 shrink-0 text-muted transition-all duration-300 group-hover:rotate-45 group-hover:text-accent"
+                    aria-hidden
+                  />
+                </a>
+              </Magnetic>
+            );
+          })}
         </div>
       </div>
     </section>
