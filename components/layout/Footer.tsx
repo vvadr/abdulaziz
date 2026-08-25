@@ -30,7 +30,7 @@ export function Footer() {
 
         <span className="flex items-center gap-2">
           <span
-            className="inline-block size-1.5 rounded-full bg-accent [animation:pulse-glow_2.4s_ease-in-out_infinite]"
+            className="inline-block size-1.5 rounded-full bg-accent [animation:pulse-dot_2.6s_ease-in-out_infinite]"
             aria-hidden
           />
           {heroLocation}

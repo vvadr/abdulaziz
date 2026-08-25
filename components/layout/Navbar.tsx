@@ -106,7 +106,7 @@ export function Navbar() {
       <div
         className={`border-b transition-[background-color,border-color] duration-300 ${
           scrolled
-            ? "border-glass-border bg-[color-mix(in_srgb,var(--background)_82%,transparent)] backdrop-blur-xl"
+            ? "border-glass-border bg-[color-mix(in_srgb,var(--background)_94%,transparent)]"
             : "border-transparent bg-transparent"
         }`}
       >
@@ -118,7 +118,7 @@ export function Navbar() {
             data-cursor
             className="font-display text-lg font-bold tracking-tight"
           >
-            AY<span className="gradient-text">.</span>
+            AY<span className="text-accent">.</span>
           </a>
 
           <nav className="hidden items-center gap-7 md:flex" aria-label="Main navigation">
@@ -138,7 +138,7 @@ export function Navbar() {
                     <motion.span
                       layoutId="nav-underline"
                       aria-hidden
-                      className="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-gradient-to-r from-accent to-accent-2"
+                      className="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-accent"
                       transition={
                         reduceMotion
                           ? { duration: 0 }
@@ -249,14 +249,14 @@ function MobileMenu({
           initial={reduceMotion ? { opacity: 1 } : "hidden"}
           animate={reduceMotion ? { opacity: 1 } : "visible"}
           exit={reduceMotion ? { opacity: 0 } : "exit"}
-          className="fixed inset-0 z-[var(--z-menu)] flex flex-col bg-[color-mix(in_srgb,var(--background)_94%,transparent)] px-6 pb-10 pt-4 backdrop-blur-xl md:hidden"
+          className="fixed inset-0 z-[var(--z-menu)] flex flex-col bg-background px-6 pb-10 pt-4 md:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
         >
           <div className="flex h-12 items-center justify-between">
             <span className="font-display text-lg font-bold tracking-tight">
-              AY<span className="gradient-text">.</span>
+              AY<span className="text-accent">.</span>
             </span>
             <button
               ref={closeRef}

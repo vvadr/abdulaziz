@@ -81,9 +81,9 @@ export const siteMetadata = {
 // Section anchors in page order; the hero is reached via the brand mark.
 export const navItems: NavItem[] = [
   { id: "about", label: "About" },
+  { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
-  { id: "skills", label: "Skills" },
   { id: "contact", label: "Contact" },
 ];
 

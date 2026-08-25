@@ -26,7 +26,7 @@ him — and remembers the site.
 ## Brand Personality
 
 Cinematic, precise, quietly confident. The portfolio is a noir stage: a
-scroll-driven particle universe behind glass surfaces, bold Space Grotesk
+static atmospheric star field behind dark surfaces, bold Space Grotesk
 display type with Instrument Serif italics, and a gold + blue accent pair on
 near-black. The drama stays in the backdrop — the content on top is honest
 and legible. Three words: **cinematic, legible, credible.**
@@ -34,12 +34,11 @@ and legible. Three words: **cinematic, legible, credible.**
 ## Anti-references
 
 - Generic dark SaaS portfolios: near-black + one timid accent + a fade-up on
-  every section. This site commits harder — a full cinematic 3D backdrop that
-  responds to scroll, not a decorative dark theme.
+  every section. This site commits harder through its cinematic composition,
+  typography, and gold/blue atmosphere without taxing the visitor's GPU.
 - Spectacle without function: the cinematic framing has to earn its keep
-  (the particle cloud morphs with real scroll progress, the "browser chrome"
-  wraps a real live iframe, the nav underline tracks the section actually on
-  screen — not chrome for its own sake).
+  (the "browser chrome" wraps a real live iframe and the nav underline tracks
+  the section actually on screen — not chrome for its own sake).
 - Overstated junior framing: fake metrics, "10x", hero-metric stat blocks,
   claims of work not actually done.
 
@@ -49,14 +48,15 @@ and legible. Three words: **cinematic, legible, credible.**
    framed honestly (an internship + learning projects), while proven
    frontend work at Hiwelcome.uz and Delever.uz carries the credibility. No
    invented numbers.
-2. **Two accents, one story.** Gold leads, blue supports, and they only meet
-   in the shared gradient; everything else is near-black restraint.
+2. **One accent, no glow.** Sky blue carries every accent; indigo only
+   supports. Colour appears as solid fill, solid text, or a hairline border —
+   never as a gradient in text or a coloured halo.
 3. **Contrast is non-negotiable.** Every text/background pair is verified
    readable (`scripts/contrast-check.mjs`). Low-opacity gray "for elegance"
    is banned.
-4. **The spectacle is functional, not decorative.** The particle cloud is
-   driven by real scroll progress, the live-preview "browser chrome" wraps a
-   real working iframe, and the nav underline tracks the section on screen.
+4. **Effects must earn their performance budget.** The backdrop is static;
+   motion is reserved for navigation, reveals, and interactions that help the
+   visitor understand the page.
 5. **Show the work, then get out of the way.** The fastest path from landing
    to "contact him" wins over decoration.
 

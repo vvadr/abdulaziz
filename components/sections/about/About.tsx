@@ -148,7 +148,7 @@ export function About() {
               className="absolute -bottom-16 -left-16 size-56 rounded-full bg-accent/15 blur-[50px]"
             />
             <div className="relative flex h-full flex-col justify-between p-6 sm:p-8">
-              <span className="gradient-text font-display text-5xl font-bold opacity-90">
+              <span className="font-display text-accent text-5xl font-bold opacity-90">
                 AY
               </span>
               <div>
@@ -171,7 +171,7 @@ export function About() {
         <div>
           <SectionHeading label="01 — About">
             Clean interfaces today,{" "}
-            <span className="serif-accent gradient-text">machine learning</span> ahead
+            <span className="serif-accent text-accent">machine learning</span> ahead
           </SectionHeading>
 
           <p data-reveal className="mt-7 max-w-2xl text-[1.02rem] leading-relaxed text-muted">

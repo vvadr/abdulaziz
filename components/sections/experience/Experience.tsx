@@ -50,8 +50,8 @@ export function Experience() {
     <section ref={rootRef} id="experience" className="relative overflow-hidden">
       <div className="flex min-h-svh flex-col justify-center py-20">
         <div className="px-5 sm:px-10 lg:px-20">
-          <SectionHeading label="02 — Experience">
-            Where I&apos;ve <span className="serif-accent gradient-text">worked</span>
+          <SectionHeading label="03 — Experience">
+            Where I&apos;ve <span className="serif-accent text-accent">worked</span>
           </SectionHeading>
           <p data-reveal className="mt-4 text-sm uppercase tracking-[0.28em] text-muted">
             Travel the timeline →
@@ -139,7 +139,7 @@ export function Experience() {
               <p className="text-center font-display text-3xl font-bold leading-snug text-muted">
                 Next chapter?
                 <br />
-                <a href="#contact" className="gradient-text" data-cursor>
+                <a href="#contact" className="text-accent" data-cursor>
                   Let&apos;s write it together.
                 </a>
               </p>

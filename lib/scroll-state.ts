@@ -1,6 +1,6 @@
-// Mutable module stores read inside rAF loops (three.js scene, GSAP, progress
-// beam). Values update every frame — keeping them out of React state avoids
-// re-rendering the tree per frame.
+// Mutable module stores read inside animation loops (GSAP and the progress
+// beam). Keeping them out of React state avoids re-rendering the tree while
+// scrolling.
 
 export const scrollState = {
   /** 0..1 — overall page scroll progress */

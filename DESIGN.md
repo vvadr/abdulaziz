@@ -1,11 +1,11 @@
 # Design
 
 Visual system for the Abdulaziz Yusupaliev portfolio. Register: **brand**.
-Mood: **cinematic noir/gold** — a near-black space scene with a scroll-driven
-particle cloud behind glass surfaces, gold + blue accents, bold Space Grotesk
-display type, and Instrument Serif italics for accent words. Adapted from the
-reference portfolio the user chose (Habibulloh Karimov's), reimplemented for
-Next.js with the fixes listed at the bottom.
+Mood: **quiet night sky** — a near-black cool-slate page with a parallax star
+field that follows the pointer and the scroll, one sky-blue accent, bold Space
+Grotesk display type, and Instrument Serif italics for accent words. Started
+from the reference portfolio the user chose (Habibulloh Karimov's), then moved
+away from it: no WebGL, and deliberately no glow (see the notes at the bottom).
 
 ## Color
 
@@ -14,24 +14,23 @@ Tokens are hex, defined in `app/globals.css`. Every pair below is verified by
 
 | Token | Hex | Role | Verified |
 |---|---|---|---|
-| `--background` | `#010108` | Page + scene background | — |
-| `--foreground` | `#f8f9fc` | Primary text | 19.8:1 on bg |
-| `--muted` | `#b8c0d8` | Secondary/body text | 11.5:1 on bg |
-| `--accent` | `#fbbf24` | Gold — labels, highlights, primary accent | 12.5:1 on bg |
-| `--accent-2` | `#60a5fa` | Blue — secondary accent, group titles | 8.2:1 on bg |
-| `--accent-3` | `#fcd34d` | Light gold — gradient stops | 14.4:1 on bg |
-| `--glass` | `rgba(4,4,14,0.88)` | Card/nav surface (+ 6–8px backdrop blur) | text ≥11:1 |
-| `--glass-border` | `rgba(255,255,255,0.1)` | Hairline borders | — |
-| `--grid-line` | `rgba(59,130,246,0.06)` | Hero grid pattern | — |
+| `--background` | `#070a0f` | Page + backdrop background | — |
+| `--foreground` | `#f2f5f9` | Primary text | 18.1:1 on bg |
+| `--muted` | `#98a6ba` | Secondary/body text | 8.0:1 on bg |
+| `--accent` | `#7dd3fc` | Sky — the single lead accent | 11.9:1 on bg |
+| `--accent-2` | `#a5b4fc` | Indigo — quiet support | 9.9:1 on bg |
+| `--accent-3` | `#e2e8f0` | Slate — neutral highlight, button hover | 16.1:1 on bg |
+| `--glass` | `rgba(13,17,25,0.90)` | Card/nav surface (no backdrop blur) | text ≥7.7:1 |
+| `--glass-border` | `rgba(255,255,255,0.09)` | Hairline borders | — |
+| `--grid-line` | `rgba(148,163,184,0.05)` | Project-cover grid pattern | — |
 
-Rules: gold is the lead accent (kickers, active nav, tags, cursor); blue is
-support (bento group titles, secondary hovers). The two blend only in
-*decorative* gradients — buttons, the progress beam, orbit rings — never in
-text: interpolating gold→blue passes through a grey midpoint that reads
-washed out (visible on the reference site's headings). `.gradient-text`
-therefore stays in the gold family (every stop ≥12.5:1) and is reserved for
-one or two serif words per section, never body copy. Button text is
-`--background` on the gold→blue fill (≥8.2:1).
+Rules: sky is the lead accent and carries almost everything — kickers, active
+nav, the surname, tags, buttons, the progress beam. Indigo is support only
+(bento group titles, the second orbit ring). **No glowing treatments**: no
+text gradients, no coloured drop shadows, no blurred colour orbs, no rotating
+conic borders. Accent colour appears as solid fill, solid text, or a hairline
+border — nothing that bleeds light. Button text is `--background` on a solid
+`--accent` fill (11.9:1), and hover swaps the fill to `--accent-3`.
 
 ## Typography
 
@@ -39,8 +38,8 @@ one or two serif words per section, never body copy. Button text is
 - **Inter** (`--font-body` → `font-sans`) — body copy. Loaded with the
   Cyrillic subset for the rotating "Привет" greeting.
 - **Instrument Serif italic** (`--font-serif`) — accent words inside headings
-  (`.serif-accent`, `.hero-serif`) and the gold surname. Latin-only; Georgia
-  is the fallback and covers Cyrillic.
+  (`.serif-accent`, `.hero-serif`) and the sky-blue surname. Latin-only;
+  Georgia is the fallback and covers Cyrillic.
 
 All three load via `next/font/google` in `app/layout.tsx` (variables
 `--font-space-grotesk` / `--font-inter` / `--font-instrument-serif`).
@@ -56,48 +55,55 @@ centred content always clears the 4rem navbar, and the scroll cue
 
 ## The backdrop
 
-`components/layout/scene/` — a fixed, full-viewport react-three-fiber canvas
-behind everything (`--z-scene`), lazy-loaded client-only:
+`components/layout/scene/SceneBackdrop.tsx` — a fixed, full-viewport parallax
+composition behind everything (`--z-scene`):
 
-- **MorphingCloud** — ~4,800 particles lerping between six shapes as the page
-  scrolls (sphere → torus → helix → lattice → galaxy → torus knot), color
-  lerping through gold/blue. Spin speed reacts to scroll velocity. The cloud
-  dims ~40% through the galaxy stage so Skills copy stays readable.
-- **OrbitRings** — two thin additive tori (gold r9 / blue r11), slow rotation.
-- **CameraRig** — dolly 16→6 with sinusoidal sway + pointer parallax, FOV
-  narrows 48→42.
-- Stars + gold Sparkles + Bloom + Vignette on capable devices.
-- **Low-power tier** (mobile / coarse pointer / reduced motion — evaluated at
-  mount, not module load): 2,200 particles, dpr 1, no post-processing,
-  fewer stars.
+- Three star fields (repeating radial-gradient tiles) and two flattened CSS
+  orbit rings, each on its own layer.
+- Every layer follows the pointer and counter-scrolls at its own rate, so the
+  field reads as depth: the far stars drift ~6px, the near stars ~28px.
+- Layers are painted once and then only translated — the motion stays on the
+  compositor, with no repaint, no canvas, and no WebGL.
+- The rAF loop starts on pointer/scroll input and **stops once the layers
+  settle**, so an idle page costs nothing. Measured on the production build:
+  ~3% of one core idle, ~2% while scrolling continuously.
+- `prefers-reduced-motion` skips the listeners entirely and the layers stay
+  put; coarse pointers get scroll parallax only.
 
-Between scene and content: `.content-scrim` (fixed radial veil, 0.58→0.84
-black) plus per-element glass and text shadows. Above content: `.noise-overlay`
-(static SVG grain, 5%) and the letterbox gradients (below the nav).
+An earlier version of this site rendered a three.js scene here (~4,800
+particles morphing through six shapes, with bloom). It looked good and cost
+far too much: the morph rewrote a 14,400-float vertex buffer and re-uploaded it
+to the GPU every frame. The reference portfolio still does this — its deployed
+bundle ships a 1.1 MB three.js chunk with `EffectComposer`, `BloomEffect` and
+`VignetteEffect` — so there was no cheaper trick there to copy.
+
+Between backdrop and content: `.content-scrim` (fixed radial veil, 0.45→0.78)
+plus per-element glass and text shadows. Above content: `.noise-overlay`
+(static SVG grain, 4%) and the letterbox gradients (below the nav).
 
 ## Layout
 
 - `.shell` caps content at 72rem with clamp() inline padding; sections use
   `py-32` with `px-5 sm:px-10 lg:px-20` (full-bleed elements like the
   Experience track and marquee escape the shell).
-- Section header pattern: `SectionHeading` — gold uppercase kicker
+- Section header pattern: `SectionHeading` — sky uppercase kicker
   `0N — Label` with gradient hairlines + display title with one serif-italic
   gradient word.
-- Section order: hero → about (includes education cards + stats) →
-  experience (horizontal timeline) → projects → skills → contact.
+- Section order: hero → about (includes education cards + stats) → skills →
+  experience (horizontal timeline) → projects → contact.
 - z-scale (tokens in globals.css): scene 0 · content 10 · letterbox 30 ·
   nav 50 · mobile menu 55 · progress beam 60 · noise 65 · cursor 70 ·
   preloader 80 · skip link 90.
 
 ## Components
 
-- **Glass** (`.glass`, `.glass-strong`): the universal surface. Blur kept at
-  6–8px — backdrop-filter re-renders every frame over the animated canvas.
+- **Glass** (`.glass`, `.glass-strong`): the universal surface. Their dark,
+  nearly opaque fills create depth without live `backdrop-filter` processing.
 - **Buttons**: `.btn-primary` (gold→blue gradient pill, background-colored
   text, glow + lift on hover), `.btn-ghost` (glass pill), `.btn-sm`/`.btn-lg`.
-- **Tags** (`.tag`): gold-tinted hairline pills for tech stacks.
-- **Project cards**: `TiltCard` (pointer 3D tilt) + `.border-spin` conic
-  hover glow + `.preview-shimmer` sweep; cover is a real screenshot
+- **Tags** (`.tag`): sky-tinted hairline pills for tech stacks.
+- **Project cards**: `TiltCard` (pointer 3D tilt) + a border that warms to
+  the accent on hover + `.preview-shimmer` sweep; cover is a real screenshot
   (`project.cover`) or a category-colored gradient/glyph fallback.
 - **Magnetic**: gsap quickTo pull toward the pointer (buttons, social cards).
 - **Marquee**: duplicated-content CSS loop, ±1° rotation, second row
@@ -105,7 +111,7 @@ black) plus per-element glass and text shadows. Above content: `.noise-overlay`
 - **Custom cursor**: dot + trailing ring, `mix-blend-difference`, swells over
   interactive elements. Fine pointers only; native cursor otherwise.
 - **Navbar** (deliberately different from the reference's floating pill):
-  full-width bar, transparent → frosted after 24px scroll, animated gold
+  full-width bar, transparent → opaque after 24px scroll, animated sky
   underline (`layoutId`) tracking the active section via IntersectionObserver,
   magnetic "Hire me", hamburger → full-screen staggered overlay on mobile.
 
@@ -138,10 +144,10 @@ nav underline).
    clipped cards 2..n when the pin was skipped).
 3. Preloader is short, once-per-session, and skipped for reduced motion
    (reference blocked ~3.4s every visit).
-4. Scene dims during its brightest morph stage + stronger scrim (reference's
-   Skills text drowned in the galaxy).
+4. Static GPU-light atmosphere + stronger scrim keeps Skills text readable
+   without a permanent WebGL render loop.
 5. Gradient text constrained to high-luminance stops (reference washed out
    mid-animation).
 6. Letterbox stacked below the nav, not above it.
 7. English-only a11y strings, valid ARIA on split-character text.
-8. Quality tier evaluated at mount, not module load.
+8. No quality tier is needed because the backdrop has no active renderer.

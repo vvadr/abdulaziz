@@ -102,7 +102,7 @@ export function ScrollFX() {
     >
       <div
         ref={beamRef}
-        className="h-full origin-left bg-[linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-3))] will-change-transform"
+        className="h-full origin-left bg-accent will-change-transform"
         style={{ transform: "scaleX(0)" }}
       />
     </div>

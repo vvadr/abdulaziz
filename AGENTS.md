@@ -85,7 +85,7 @@ The website should be understandable and useful for:
 > **Note (August 2026):** This section describes the original v1 direction and
 > is superseded by the shipped noir/gold redesign — see `DESIGN.md` for the
 > current visual system (Space Grotesk / Inter / Instrument Serif, `#010108`
-> background, gold `#fbbf24` + blue `#60a5fa` accents, 3D particle backdrop).
+> background, gold `#fbbf24` + blue `#60a5fa` accents, static star backdrop).
 
 ### Main Style
 

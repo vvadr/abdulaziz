@@ -5,8 +5,8 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 // Palette mirrors app/globals.css tokens (hardcoded — ImageResponse cannot
-// read CSS variables): bg #010108, fg #f8f9fc, muted #b8c0d8, gold #fbbf24,
-// blue #60a5fa, light gold #fcd34d.
+// read CSS variables): bg #070a0f, fg #f2f5f9, muted #98a6ba, gold #7dd3fc,
+// blue #a5b4fc, light gold #e2e8f0.
 export default function OpengraphImage() {
   return new ImageResponse(
     (
@@ -16,7 +16,7 @@ export default function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          background: "#010108",
+          background: "#070a0f",
           position: "relative",
           fontFamily: "sans-serif",
         }}
@@ -29,7 +29,7 @@ export default function OpengraphImage() {
             left: 0,
             right: 0,
             height: "6px",
-            background: "linear-gradient(90deg, #fbbf24, #60a5fa, #fcd34d)",
+            background: "linear-gradient(90deg, #7dd3fc, #a5b4fc, #e2e8f0)",
           }}
         />
         {/* glows */}
@@ -42,7 +42,7 @@ export default function OpengraphImage() {
             height: 460,
             borderRadius: 999,
             background:
-              "radial-gradient(circle, rgba(251,191,36,0.22) 0%, rgba(1,1,8,0) 70%)",
+              "radial-gradient(circle, rgba(125,211,252,0.16) 0%, rgba(7,10,15,0) 70%)",
           }}
         />
         <div
@@ -54,7 +54,7 @@ export default function OpengraphImage() {
             height: 480,
             borderRadius: 999,
             background:
-              "radial-gradient(circle, rgba(96,165,250,0.2) 0%, rgba(1,1,8,0) 70%)",
+              "radial-gradient(circle, rgba(165,180,252,0.14) 0%, rgba(7,10,15,0) 70%)",
           }}
         />
         {/* orbit ring */}
@@ -66,7 +66,7 @@ export default function OpengraphImage() {
             width: 760,
             height: 330,
             borderRadius: 999,
-            border: "2px solid rgba(251,191,36,0.28)",
+            border: "2px solid rgba(125,211,252,0.22)",
             transform: "rotate(-8deg)",
           }}
         />
@@ -79,8 +79,8 @@ export default function OpengraphImage() {
             padding: "34px 64px 0",
           }}
         >
-          <div style={{ display: "flex", fontSize: 30, fontWeight: 700, color: "#f8f9fc" }}>
-            AY<span style={{ color: "#fbbf24" }}>.</span>
+          <div style={{ display: "flex", fontSize: 30, fontWeight: 700, color: "#f2f5f9" }}>
+            AY<span style={{ color: "#7dd3fc" }}>.</span>
           </div>
           <div
             style={{
@@ -88,7 +88,7 @@ export default function OpengraphImage() {
               alignItems: "center",
               gap: 12,
               fontSize: 22,
-              color: "#b8c0d8",
+              color: "#98a6ba",
             }}
           >
             <div
@@ -96,7 +96,7 @@ export default function OpengraphImage() {
                 width: 10,
                 height: 10,
                 borderRadius: 999,
-                background: "#fbbf24",
+                background: "#7dd3fc",
               }}
             />
             Open to internships &amp; freelance
@@ -117,7 +117,7 @@ export default function OpengraphImage() {
               display: "flex",
               fontSize: 100,
               fontWeight: 700,
-              color: "#f8f9fc",
+              color: "#f2f5f9",
               lineHeight: 1,
               letterSpacing: "-4px",
             }}
@@ -132,7 +132,7 @@ export default function OpengraphImage() {
               fontWeight: 500,
               fontStyle: "italic",
               fontFamily: "Georgia, serif",
-              color: "#fbbf24",
+              color: "#7dd3fc",
               lineHeight: 1,
               letterSpacing: "-2px",
             }}
@@ -144,11 +144,11 @@ export default function OpengraphImage() {
               display: "flex",
               marginTop: 34,
               fontSize: 34,
-              color: "#b8c0d8",
+              color: "#98a6ba",
             }}
           >
             Frontend Developer&nbsp;
-            <span style={{ color: "#60a5fa" }}>&amp;</span>
+            <span style={{ color: "#a5b4fc" }}>&amp;</span>
             &nbsp;AI/ML Engineer
           </div>
         </div>
@@ -160,7 +160,7 @@ export default function OpengraphImage() {
             borderTop: "1px solid rgba(255,255,255,0.12)",
             padding: "24px 64px",
             fontSize: 24,
-            color: "#b8c0d8",
+            color: "#98a6ba",
           }}
         >
           <div style={{ display: "flex" }}>github.com/vvadr</div>

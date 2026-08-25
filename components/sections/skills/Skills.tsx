@@ -9,8 +9,8 @@ export function Skills() {
     <section id="skills" className="relative py-32">
       <div className="px-5 sm:px-10 lg:px-20">
         <div className="mx-auto max-w-6xl">
-          <SectionHeading label="04 — Skills">
-            My <span className="serif-accent gradient-text">toolbox</span>
+          <SectionHeading label="02 — Skills">
+            My <span className="serif-accent text-accent">toolbox</span>
           </SectionHeading>
 
           {/* Core stack rows */}
@@ -90,7 +90,7 @@ export function Skills() {
               className="mx-5 flex items-center gap-4 font-display text-3xl font-bold text-foreground/85 sm:text-4xl"
             >
               {item}
-              <span aria-hidden className="gradient-text text-2xl">
+              <span aria-hidden className="text-2xl text-accent">
                 ✦
               </span>
             </span>

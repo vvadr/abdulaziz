@@ -82,7 +82,7 @@ export function Preloader() {
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
               className="font-display text-[clamp(1.6rem,4.5vw,3rem)] font-bold tracking-tight"
             >
-              Abdulaziz Yusupaliev<span className="gradient-text">.</span>
+              Abdulaziz Yusupaliev<span className="text-accent">.</span>
             </motion.p>
           </div>
           <div className="overflow-hidden">
@@ -102,7 +102,7 @@ export function Preloader() {
           >
             <div className="h-px flex-1 self-center overflow-hidden bg-glass-border">
               <div
-                className="h-full bg-[linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent-3))]"
+                className="h-full bg-accent"
                 style={{ transform: `scaleX(${count / 100})`, transformOrigin: "left" }}
               />
             </div>

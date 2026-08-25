@@ -107,18 +107,6 @@ export function Hero() {
       id="hero"
       className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-5 py-[clamp(5rem,10vh,7.5rem)] text-center sm:px-10"
     >
-      <div className="grid-bg absolute inset-0" aria-hidden />
-      <div
-        aria-hidden
-        data-depth="0.25"
-        className="absolute left-[12%] top-[18%] size-[28vmax] rounded-full bg-accent/12 blur-[50px] [animation:pulse-glow_9s_ease-in-out_infinite]"
-      />
-      <div
-        aria-hidden
-        data-depth="0.4"
-        className="absolute bottom-[10%] right-[8%] size-[24vmax] rounded-full bg-accent-2/12 blur-[50px] [animation:pulse-glow_11s_ease-in-out_infinite_reverse]"
-      />
-
       <div
         ref={innerRef}
         className="relative z-10 flex flex-col items-center pb-14 will-change-transform"
@@ -130,7 +118,7 @@ export function Hero() {
         >
           <span
             aria-hidden
-            className="mr-2 inline-block size-1.5 rounded-full bg-accent align-middle [animation:pulse-glow_2.4s_ease-in-out_infinite]"
+            className="mr-2 inline-block size-1.5 rounded-full bg-accent align-middle [animation:pulse-dot_2.6s_ease-in-out_infinite]"
           />
           {heroAvailability} · {heroLocation}
         </p>

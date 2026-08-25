@@ -11,8 +11,8 @@ export function Projects() {
   return (
     <section id="projects" className="relative px-5 py-32 sm:px-10 lg:px-20">
       <div className="mx-auto max-w-6xl">
-        <SectionHeading label="03 — Projects" align="center">
-          Selected <span className="serif-accent gradient-text">work</span>
+        <SectionHeading label="04 — Projects" align="center">
+          Selected <span className="serif-accent text-accent">work</span>
         </SectionHeading>
 
         <div className="mt-16 grid gap-8 md:grid-cols-2">
@@ -25,11 +25,7 @@ export function Projects() {
                 className="block h-full outline-none"
               >
                 <TiltCard className="group relative h-full">
-                  <div className="absolute -inset-px overflow-hidden rounded-[24px]" aria-hidden>
-                    <div className="border-spin" />
-                  </div>
-
-                  <article className="glass relative flex h-full flex-col overflow-hidden rounded-3xl">
+                  <article className="glass relative flex h-full flex-col overflow-hidden rounded-3xl transition-colors duration-300 group-hover:border-accent/40">
                     <ProjectCover project={project} />
 
                     <div className="flex flex-1 flex-col p-6 sm:p-7">

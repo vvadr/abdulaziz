@@ -1,4 +1,4 @@
-// WCAG contrast check for the noir/gold palette in app/globals.css.
+// WCAG contrast check for the palette in app/globals.css.
 // Tokens are hex; alpha-composited surfaces are precomputed against the page
 // background. Update T when globals.css tokens change, then run:
 //   node scripts/contrast-check.mjs
@@ -21,14 +21,14 @@ const ratio = (fg, bg) => {
 };
 
 const T = {
-  bg: "#010108",
-  fg: "#f8f9fc",
-  muted: "#b8c0d8",
-  accent: "#fbbf24",
-  accent2: "#60a5fa",
-  accent3: "#fcd34d",
-  // rgba(4,4,14,0.88) composited over #010108.
-  glass: "#04040d",
+  bg: "#070a0f",
+  fg: "#f2f5f9",
+  muted: "#98a6ba",
+  accent: "#7dd3fc",
+  accent2: "#a5b4fc",
+  accent3: "#e2e8f0",
+  // rgba(13,17,25,0.90) composited over #070a0f.
+  glass: "#0c1017",
 };
 
 const checks = [
@@ -36,13 +36,13 @@ const checks = [
   ["muted / bg", "muted", "bg", 4.5],
   ["fg / glass", "fg", "glass", 4.5],
   ["muted / glass", "muted", "glass", 4.5],
-  ["accent (gold) / bg — body-ish", "accent", "bg", 4.5],
-  ["accent (gold) / glass — body-ish", "accent", "glass", 4.5],
-  ["accent-2 (blue) / bg — body-ish", "accent2", "bg", 4.5],
-  ["accent-2 (blue) / glass — body-ish", "accent2", "glass", 4.5],
-  ["accent-3 (light gold) / bg — body-ish", "accent3", "bg", 4.5],
-  ["bg text on accent (btn-primary gold end)", "bg", "accent", 4.5],
-  ["bg text on accent-2 (btn-primary blue end)", "bg", "accent2", 4.5],
+  ["accent (sky) / bg", "accent", "bg", 4.5],
+  ["accent (sky) / glass", "accent", "glass", 4.5],
+  ["accent-2 (indigo) / bg", "accent2", "bg", 4.5],
+  ["accent-2 (indigo) / glass", "accent2", "glass", 4.5],
+  ["accent-3 (slate) / bg", "accent3", "bg", 4.5],
+  ["bg text on accent (btn-primary fill)", "bg", "accent", 4.5],
+  ["bg text on accent-3 (btn-primary hover)", "bg", "accent3", 4.5],
 ];
 
 let allPass = true;

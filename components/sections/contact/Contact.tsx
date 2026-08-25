@@ -60,7 +60,7 @@ export function Contact() {
         >
           Let&apos;s build
           <br />
-          something <span className="serif-accent gradient-text">together</span>
+          something <span className="serif-accent text-accent">together</span>
         </h2>
 
         <p data-reveal className="mt-7 max-w-md text-muted">
@@ -72,7 +72,7 @@ export function Contact() {
           <a
             href={email.href}
             data-cursor
-            className="glass group inline-flex max-w-full items-center gap-3 rounded-full py-4 pl-6 pr-4 font-display text-sm font-semibold transition-all duration-300 hover:border-accent/50 hover:shadow-[0_0_48px_color-mix(in_srgb,var(--accent)_30%,transparent)] sm:gap-4 sm:pl-7 sm:pr-5 sm:text-lg"
+            className="glass group inline-flex max-w-full items-center gap-3 rounded-full py-4 pl-6 pr-4 font-display text-sm font-semibold transition-colors duration-300 hover:border-accent/50 sm:gap-4 sm:pl-7 sm:pr-5 sm:text-lg"
           >
             <Mail className="size-5 shrink-0 text-accent" aria-hidden />
             <span className="break-all text-left">{email.value}</span>
