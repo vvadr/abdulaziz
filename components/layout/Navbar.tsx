@@ -9,13 +9,12 @@ import {
   type Variants,
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { contactLinks, heroSocialLinks, navItems } from "@/data/site";
+import { heroSocialLinks, navItems } from "@/data/site";
 import { SocialIcon } from "@/components/shared/SocialIcon";
 import { Magnetic } from "@/components/shared/Magnetic";
 import { smoothScroller } from "@/lib/scroll-state";
 
 const DESKTOP_QUERY = "(min-width: 768px)";
-const HIRE_HREF = contactLinks[0].href; // mailto
 
 /**
  * Full-width top bar (deliberately different from the reference site's
@@ -153,8 +152,8 @@ export function Navbar() {
 
           <div className="flex shrink-0 items-center gap-2">
             <Magnetic strength={0.3} className="hidden sm:inline-block">
-              <a href={HIRE_HREF} className="btn-primary btn-sm">
-                Hire me
+              <a href={sectionHref("contact")} className="btn-primary btn-sm">
+                Get in touch
               </a>
             </Magnetic>
 
@@ -320,8 +319,12 @@ function MobileMenu({
                 );
               })}
             </div>
-            <a href={HIRE_HREF} onClick={onClose} className="btn-primary btn-sm">
-              Hire me
+            <a
+              href={isProjectRoute ? "/#contact" : "#contact"}
+              onClick={onClose}
+              className="btn-primary btn-sm"
+            >
+              Get in touch
               <ArrowUpRight size={16} aria-hidden="true" />
             </a>
           </motion.div>

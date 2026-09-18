@@ -1,6 +1,20 @@
+/** The tab a project is filed under in the Projects section. */
+export type ProjectType = "web" | "ai" | "data" | "frontend";
+
+export const projectTypes: { id: ProjectType; label: string }[] = [
+  { id: "web", label: "Web platforms" },
+  { id: "ai", label: "AI & ML" },
+  { id: "data", label: "Data" },
+  { id: "frontend", label: "Frontend & games" },
+];
+
 export type PortfolioProject = {
   slug: string;
   title: string;
+  type: ProjectType;
+  /** Overall ranking, 1 = strongest. Unique across all projects; the section,
+   *  its tabs, and the case-study prev/next links all follow this order. */
+  rank: number;
   category: string;
   state: "Live" | "Case study" | "Source available";
   summary: string;
@@ -20,7 +34,31 @@ export type PortfolioProject = {
 // omitted as standalone case studies.
 export const portfolioProjects: PortfolioProject[] = [
   {
+    slug: "volontyorlar",
+    type: "web",
+    rank: 1,
+    title: "Volontyorlar",
+    category: "Social impact platform",
+    state: "Live",
+    summary:
+      "A trilingual volunteering platform connecting young people with vetted events across all 14 regions of Uzbekistan.",
+    description:
+      "Volontyorlar sources volunteering opportunities, vets the organizers behind them, and connects high-school and university students with events that need help. The public site explains that process, showcases open opportunities and partner organizations, and maps the regional teams growing beyond Tashkent — in Uzbek, Russian, and English.",
+    stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "i18n", "Vercel"],
+    highlights: [
+      "Serves a community of 4,000+ Telegram members and has supplied volunteers to 50+ events.",
+      "Localized routes for Uzbek, Russian, and English with hreflang alternates and per-locale Open Graph metadata.",
+      "Hardened for production with a strict Content-Security-Policy and frame-ancestors protection.",
+    ],
+    liveUrl: "https://volontyorlar.uz",
+    // Sends X-Frame-Options: DENY and CSP frame-ancestors 'none'.
+    embeddable: false,
+    cover: "/images/projects/volontyorlar.jpg",
+  },
+  {
     slug: "loansource-ai",
+    type: "ai",
+    rank: 5,
     title: "LoanSource AI",
     category: "AI engineering",
     state: "Source available",
@@ -38,6 +76,8 @@ export const portfolioProjects: PortfolioProject[] = [
   },
   {
     slug: "loan-terms-assistant",
+    type: "ai",
+    rank: 4,
     title: "Loan Terms Assistant",
     category: "AI product",
     state: "Live",
@@ -57,6 +97,8 @@ export const portfolioProjects: PortfolioProject[] = [
   },
   {
     slug: "dwelve",
+    type: "web",
+    rank: 2,
     title: "Dwelve",
     category: "Full-stack platform",
     state: "Live",
@@ -87,6 +129,8 @@ export const portfolioProjects: PortfolioProject[] = [
   },
   {
     slug: "multi-agent-ai-analyst",
+    type: "ai",
+    rank: 3,
     title: "Multi-Agent AI Analyst",
     category: "AI product",
     state: "Live",
@@ -107,6 +151,8 @@ export const portfolioProjects: PortfolioProject[] = [
   },
   {
     slug: "yelp-restaurant-rating-prep",
+    type: "data",
+    rank: 7,
     title: "Yelp Restaurant Data Prep",
     category: "Data engineering",
     state: "Source available",
@@ -124,6 +170,8 @@ export const portfolioProjects: PortfolioProject[] = [
   },
   {
     slug: "sport-team-odds",
+    type: "data",
+    rank: 10,
     title: "Sport Team Odds",
     category: "Data analysis",
     state: "Source available",
@@ -141,6 +189,8 @@ export const portfolioProjects: PortfolioProject[] = [
   },
   {
     slug: "weather-app-react",
+    type: "frontend",
+    rank: 8,
     title: "Weather App",
     category: "Web application",
     state: "Live",
@@ -160,6 +210,8 @@ export const portfolioProjects: PortfolioProject[] = [
   },
   {
     slug: "geometry-dash",
+    type: "frontend",
+    rank: 9,
     title: "Geometry Dash",
     category: "Browser game",
     state: "Live",
@@ -179,6 +231,8 @@ export const portfolioProjects: PortfolioProject[] = [
   },
   {
     slug: "udevs-app",
+    type: "web",
+    rank: 6,
     title: "udevs",
     category: "Full-stack community app",
     state: "Source available",
@@ -196,6 +250,8 @@ export const portfolioProjects: PortfolioProject[] = [
   },
   {
     slug: "flower-ml-model",
+    type: "ai",
+    rank: 11,
     title: "Flower ML Model",
     category: "Machine learning",
     state: "Source available",
@@ -212,6 +268,9 @@ export const portfolioProjects: PortfolioProject[] = [
     repoUrl: "https://github.com/vvadr/Flower_ML_model",
   },
 ];
+
+/** All projects, strongest first. */
+export const rankedProjects = [...portfolioProjects].sort((a, b) => a.rank - b.rank);
 
 export function getProject(slug: string) {
   return portfolioProjects.find((project) => project.slug === slug);

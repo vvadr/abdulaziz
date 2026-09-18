@@ -25,6 +25,7 @@ const CATEGORY_STYLES: Record<string, CoverStyle> = {
   "Browser game": { colors: ["#f472b6", "#fb7185"], icon: Gamepad2 },
   "Full-stack platform": { colors: ["#34d399", "#10b981"], icon: Globe2 },
   "Full-stack community app": { colors: ["#34d399", "#22d3ee"], icon: Globe2 },
+  "Social impact platform": { colors: ["#7dd3fc", "#34d399"], icon: Globe2 },
 };
 
 const FALLBACK_STYLE: CoverStyle = { colors: ["#fbbf24", "#60a5fa"], icon: Code2 };
