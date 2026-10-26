@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
+import { siteRole } from "@/data/site";
 
-export const alt = "Abdulaziz Yusupaliev — Frontend Developer & AI/ML Engineer";
+export const alt = `Abdulaziz Yusupaliev — ${siteRole}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -147,9 +148,9 @@ export default function OpengraphImage() {
               color: "#98a6ba",
             }}
           >
-            Frontend Developer&nbsp;
+            Applied AI/ML Engineer&nbsp;
             <span style={{ color: "#a5b4fc" }}>&amp;</span>
-            &nbsp;AI/ML Engineer
+            &nbsp;Full-Stack Developer
           </div>
         </div>
 

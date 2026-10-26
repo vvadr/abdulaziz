@@ -1,5 +1,5 @@
 import { Mail } from "lucide-react";
-import { siGithub, siTelegram } from "simple-icons";
+import { siGithub, siHuggingface, siTelegram } from "simple-icons";
 
 import type { SocialIconName } from "@/data/site";
 
@@ -65,6 +65,10 @@ export function SocialIcon({ name, className }: SocialIconProps) {
 
   if (name === "telegram") {
     return <SimpleIcon icon={siTelegram} className={className} />;
+  }
+
+  if (name === "huggingface") {
+    return <SimpleIcon icon={siHuggingface} className={className} />;
   }
 
   return <Mail className={className} />;

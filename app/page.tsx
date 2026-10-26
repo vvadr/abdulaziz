@@ -20,10 +20,10 @@ export default function Home() {
       <Navbar />
       <main id="content">
         <Hero />
-        <About />
-        <Skills />
-        <Experience />
         <Projects />
+        <Experience />
+        <Skills />
+        <About />
         <Contact />
       </main>
       <Footer />

@@ -1,4 +1,4 @@
-import { heroLocation, heroSocialLinks } from "@/data/site";
+import { heroLocation, socialLinks } from "@/data/site";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -12,7 +12,7 @@ export function Footer() {
           className="flex flex-wrap items-center justify-center gap-4"
           aria-label="Social links"
         >
-          {heroSocialLinks.map((link) => {
+          {socialLinks.map((link) => {
             const external = link.href.startsWith("http");
             return (
               <a

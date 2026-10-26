@@ -1,276 +1,327 @@
-/** The tab a project is filed under in the Projects section. */
-export type ProjectType = "web" | "ai" | "data" | "frontend";
+/** Which group a project is listed under in "More projects". */
+export type ProjectArea = "ai" | "web";
 
-export const projectTypes: { id: ProjectType; label: string }[] = [
-  { id: "web", label: "Web platforms" },
-  { id: "ai", label: "AI & ML" },
-  { id: "data", label: "Data" },
-  { id: "frontend", label: "Frontend & games" },
+export const projectAreas: { id: ProjectArea; label: string }[] = [
+  { id: "ai", label: "AI, ML & data" },
+  { id: "web", label: "Web & frontend" },
 ];
+
+export type ProjectLink = {
+  label: string;
+  href: string;
+};
 
 export type PortfolioProject = {
   slug: string;
   title: string;
-  type: ProjectType;
-  /** Overall ranking, 1 = strongest. Unique across all projects; the section,
-   *  its tabs, and the case-study prev/next links all follow this order. */
-  rank: number;
+  /** Featured projects get a full case-study card on the home page; the rest
+   *  are listed compactly under "More projects". */
+  featured: boolean;
+  area: ProjectArea;
   category: string;
-  state: "Live" | "Case study" | "Source available";
+  state: "Live" | "Published" | "Source available";
+  /** One sentence for cards: what it is and what it does. */
   summary: string;
+  /** My part in it, stated plainly. */
+  role: string;
+  /** Two or three short proof points for the featured card. */
+  keyPoints?: string[];
+  /** Case-study intro paragraph. */
   description: string;
-  stack: string[];
+  /** Measured outcomes only — never estimates. */
+  results?: string[];
+  /** What I built, for the case study. */
   highlights: string[];
+  /** Known gaps, stated as the repository states them. */
+  limitations?: string[];
+  stack: string[];
   repoUrl?: string;
   liveUrl?: string;
+  /** Other public artifacts (model hubs, companion repositories). */
+  links?: ProjectLink[];
   /** Set to false when the deployment sends X-Frame-Options/CSP headers that block iframe embedding. */
   embeddable?: boolean;
   /** Screenshot shown on the project card; cards fall back to a styled cover. */
   cover?: string;
 };
 
-// Projects are curated against the public vvadr GitHub account. Profile,
-// portfolio, fork, practice, and support-only repositories are intentionally
-// omitted as standalone case studies.
+// Every claim below is taken from the project's repository, its README, or
+// the live deployment. Array order is display order — strongest first — and
+// the case-study prev/next links follow it.
 export const portfolioProjects: PortfolioProject[] = [
   {
-    slug: "volontyorlar",
-    type: "web",
-    rank: 1,
-    title: "Volontyorlar",
-    category: "Social impact platform",
-    state: "Live",
-    summary:
-      "A trilingual volunteering platform connecting young people with vetted events across all 14 regions of Uzbekistan.",
-    description:
-      "Volontyorlar sources volunteering opportunities, vets the organizers behind them, and connects high-school and university students with events that need help. The public site explains that process, showcases open opportunities and partner organizations, and maps the regional teams growing beyond Tashkent — in Uzbek, Russian, and English.",
-    stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "i18n", "Vercel"],
-    highlights: [
-      "Serves a community of 4,000+ Telegram members and has supplied volunteers to 50+ events.",
-      "Localized routes for Uzbek, Russian, and English with hreflang alternates and per-locale Open Graph metadata.",
-      "Hardened for production with a strict Content-Security-Policy and frame-ancestors protection.",
+    slug: "karakalpak-speech-recognition",
+    title: "Karakalpak Speech Recognition",
+    featured: true,
+    area: "ai",
+    category: "Speech recognition",
+    state: "Published",
+    summary: "Speech-to-text for Karakalpak, a low-resource language.",
+    role: "Data pipeline, training, evaluation, and release.",
+    keyPoints: [
+      "18.61% WER on news, 18.30% on literary speech",
+      "Trained on 77 hours of audio",
+      "Model and datasets on Hugging Face",
     ],
+    description:
+      "wav2vec2 XLS-R 300M fine-tuned with LoRA and decoded with a 4-gram KenLM. The model, decoder, and datasets are public.",
+    results: [
+      "18.61% WER on news and 18.30% on literary speech, down from 38.37% and 22.32% with greedy decoding.",
+      "20.3–21.3% WER on three external test sets.",
+      "Trained on 17,685 clips (77.45 h) in about 2.5 hours on one GPU.",
+    ],
+    highlights: [
+      "Validated 22,108 recordings with provenance tracking and 37 automated checks.",
+      "Karakalpak text normalization and a 35-token character vocabulary.",
+      "Scores recomputed from saved predictions before release.",
+      "CPU inference client for the published model.",
+    ],
+    limitations: [
+      "No speaker IDs, so accuracy on unseen speakers is unknown.",
+      "Overlap between external test sets and training data isn’t ruled out.",
+      "No hosted API yet.",
+    ],
+    stack: ["Python", "PyTorch", "Transformers", "LoRA", "wav2vec2", "KenLM"],
+    repoUrl: "https://github.com/vvadr/karakalpak-stt-model",
+    cover: "/images/projects/karakalpak-speech-recognition.jpg",
+    links: [
+      {
+        label: "Hugging Face",
+        href: "https://huggingface.co/collections/iamabdulaziz/karakalpak-speech-recognition-6adb410958c2ef152fe249f2",
+      },
+    ],
+  },
+  {
+    slug: "dwelve",
+    title: "Dwelve",
+    featured: true,
+    area: "web",
+    category: "Education platform",
+    state: "Live",
+    summary: "Exam and test platform for schools.",
+    role: "Built all four apps, backend to UI.",
+    keyPoints: [
+      "AI turns PDF exam pages into editable tests",
+      "Multi-tenant NestJS + PostgreSQL API",
+      "Four apps live on dwelve.uz",
+    ],
+    description:
+      "Schools run classes, tests, and exams, and teachers can import tests from PDFs with AI. Runs as an API, a product app, a public site, and an admin console.",
+    highlights: [
+      "AI PDF import: Gemini extracts questions from selected pages into a draft test. The original file is never stored.",
+      "School-scoped data with admin, teacher, and student roles.",
+      "Trilingual Next.js app with validated forms.",
+      "Admin console on its own domain, kept out of the student bundle.",
+    ],
+    stack: ["NestJS", "PostgreSQL", "Prisma", "Redis", "Gemini API", "Next.js"],
+    liveUrl: "https://dwelve.uz",
+    // Sends X-Frame-Options: DENY.
+    embeddable: false,
+    cover: "/images/projects/dwelve.jpg",
+  },
+  {
+    slug: "volontyorlar",
+    title: "Volontyorlar",
+    featured: true,
+    area: "web",
+    category: "Volunteering platform",
+    state: "Live",
+    summary: "Volunteering platform for young people in Uzbekistan.",
+    role: "Built the API and all five apps.",
+    keyPoints: [
+      "One NestJS API, five Next.js apps, all live",
+      "Telegram, Google, and email sign-in",
+      "Uzbek, Russian, and English",
+    ],
+    description:
+      "Organizations post vacancies, admins approve them, volunteers apply, and coordinators confirm attendance and hours. Built for a 4,000+ member community that has supplied volunteers to 50+ events.",
+    highlights: [
+      "NestJS + Fastify API with PostgreSQL, Prisma, Redis/BullMQ jobs, and a Telegram bot.",
+      "Separate apps and sessions for volunteers, coordinators, organizations, and admins.",
+      "Typed API clients from OpenAPI; Vitest and Playwright tests.",
+      "Localized routes in three languages and a strict CSP.",
+    ],
+    stack: ["NestJS", "PostgreSQL", "Prisma", "Redis", "BullMQ", "Next.js"],
     liveUrl: "https://volontyorlar.uz",
     // Sends X-Frame-Options: DENY and CSP frame-ancestors 'none'.
     embeddable: false,
     cover: "/images/projects/volontyorlar.jpg",
   },
   {
-    slug: "loansource-ai",
-    type: "ai",
-    rank: 5,
-    title: "LoanSource AI",
-    category: "AI engineering",
-    state: "Source available",
-    summary:
-      "A source-bounded loan-terms assistant with QLoRA training, hybrid retrieval, and page-level citations.",
-    description:
-      "LoanSource AI fine-tunes Qwen 2.5 with QLoRA and pairs the adapter with source-filtered TF-IDF retrieval across five public loan-term documents. The Gradio interface keeps every question scoped to a selected document, cites retrieved pages, and refuses personal financial or legal advice.",
-    stack: ["Python", "Qwen 2.5", "QLoRA", "Transformers", "PEFT", "Gradio", "TF-IDF"],
-    highlights: [
-      "Includes a Colab-ready QLoRA training workflow designed for a free T4 GPU runtime.",
-      "Validates JSONL structure, approved source files, page references, and conflicting duplicate questions before training.",
-      "Ships retrieval, policy, and service tests alongside a held-out evaluation workflow and documented release checks.",
-    ],
-    repoUrl: "https://github.com/vvadr/LoanSource-AI",
-  },
-  {
-    slug: "loan-terms-assistant",
-    type: "ai",
-    rank: 4,
-    title: "Loan Terms Assistant",
-    category: "AI product",
-    state: "Live",
-    summary:
-      "A deployed, single-document RAG assistant that answers loan-term questions with grounded page citations.",
-    description:
-      "This full-stack assistant retrieves clauses from one configured loan document, generates an answer with Gemini, and runs a second grounding check before returning it. A FastAPI service keeps model credentials and retrieval logic away from the browser while a Next.js client provides the public interface.",
-    stack: ["Python", "FastAPI", "Next.js", "TypeScript", "Gemini", "Qdrant", "Docker"],
-    highlights: [
-      "Scopes each deployment to one bank and product so retrieved clauses cannot be mixed across loan documents.",
-      "Blocks unsupported answers and financial advice while requiring page citations for in-scope factual responses.",
-      "Documents a production path across Vercel, Render, and Qdrant with secrets kept on the backend.",
-    ],
-    repoUrl: "https://github.com/vvadr/loan-terms-assistant",
-    liveUrl: "https://loan-terms-assistant-black.vercel.app",
-    cover: "/images/projects/loan-terms-assistant.jpg",
-  },
-  {
-    slug: "dwelve",
-    type: "web",
-    rank: 2,
-    title: "Dwelve",
-    category: "Full-stack platform",
-    state: "Live",
-    summary:
-      "A full-stack exam and test-automation platform for schools and learning centers in Uzbekistan.",
-    description:
-      "Dwelve lets schools, teachers, and students digitize the exam and homework lifecycle: creating classes and groups, assigning tests and exams, submitting and auto-grading work, and tracking results through role-specific dashboards. The product ships as a full-stack app — a Next.js frontend with authentication-aware, trilingual UI on top of an API-driven backend.",
-    stack: [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Tailwind CSS v4",
-      "shadcn/ui",
-      "i18next",
-      "react-hook-form",
-      "zod",
-    ],
-    highlights: [
-      "Full-stack app: role-based dashboards for students and teachers, backed by an API for classes, assignments, and grading.",
-      "Trilingual UI with dedicated flows for exams, homework tasks vs. tests, class/group management, and notifications.",
-      "Typed, schema-validated forms (react-hook-form + zod) across authentication, test creation, and submission flows.",
-    ],
-    liveUrl: "https://dwelve.vercel.app",
-    // Dwelve sends X-Frame-Options: DENY in production (it guards authenticated
-    // dashboards), so browsers refuse to render it inside our preview iframe.
-    embeddable: false,
-    cover: "/images/projects/dwelve.jpg",
-  },
-  {
     slug: "multi-agent-ai-analyst",
-    type: "ai",
-    rank: 3,
     title: "Multi-Agent AI Analyst",
-    category: "AI product",
+    featured: true,
+    area: "ai",
+    category: "AI agents · RAG",
     state: "Live",
-    summary:
-      "A document-analysis product with a FastAPI service, durable background work, and a Next.js client.",
-    description:
-      "Readers can register, upload documents, and ask evidence-backed questions. A supervisor workflow routes work across retrieval, optional research, and analytics before returning a cited answer.",
-    stack: ["FastAPI", "Next.js", "PostgreSQL", "Qdrant", "MinIO", "Docker"],
-    highlights: [
-      "Uses a queued worker model so long-running analysis can survive browser sessions and service restarts.",
-      "Streams persisted progress events back to the browser and restores in-flight work after a reconnect.",
-      "Separates development, test, and production configuration and documents the complete deployment path.",
+    summary: "Ask questions about your documents; agents find and cite the answer.",
+    role: "Built the backend. The Next.js client was generated with Claude.",
+    keyPoints: [
+      "LangGraph supervisor with retrieval, web, SQL, and critic agents",
+      "Resumable runs streamed over SSE",
+      "27 test modules and CI",
     ],
+    description:
+      "Upload PDF, Word, or text files and ask questions. A supervisor picks which agents to call, then returns a cited answer checked by a critic.",
+    highlights: [
+      "Bounded agent graph. The SQL agent is read-only, and model-written code is never run.",
+      "Queued, stored runs that survive closed tabs and server restarts.",
+      "Tenant isolation, Argon2 auth with rotating sessions, and rate limits.",
+      "pytest, GitHub Actions, and RAGAS/Langfuse evaluation hooks.",
+    ],
+    stack: ["Python", "FastAPI", "LangGraph", "Gemini", "Qdrant", "PostgreSQL"],
     repoUrl: "https://github.com/vvadr/Multi-Agent-AI-Analyst",
     liveUrl: "https://multi-agent-ai-analyst-psi.vercel.app",
     embeddable: false,
     cover: "/images/projects/multi-agent-ai-analyst.jpg",
   },
   {
-    slug: "yelp-restaurant-rating-prep",
-    type: "data",
-    rank: 7,
-    title: "Yelp Restaurant Data Prep",
-    category: "Data engineering",
-    state: "Source available",
-    summary:
-      "A reproducible data-preparation pipeline that turns Yelp Open Dataset files into a clean restaurant dataset.",
+    slug: "loan-terms-assistant",
+    title: "Loan Terms Assistant",
+    featured: false,
+    area: "ai",
+    category: "RAG",
+    state: "Live",
+    summary: "Answers loan questions from the document, with page citations.",
+    role: "Built the API, grounding check, and UI.",
     description:
-      "The project filters, transforms, and documents restaurant and review data into a 22-column Parquet output. It includes reusable pipeline code, executed learning notebooks, a findings report, and generated figures.",
-    stack: ["Python", "Pandas", "Parquet", "Jupyter", "Data pipelines"],
+      "Answers only from one loan document. Each answer is checked against the retrieved clauses before it’s shown.",
     highlights: [
-      "Processes large review files in chunks rather than loading everything into memory at once.",
-      "Produces a documented, analysis-ready dataset alongside findings and visual reports.",
-      "Captures data cleaning, feature engineering, feature selection, and end-to-end pipeline work in notebooks.",
+      "Cites the page for every answer, or replies “Not stated in the terms.”",
+      "Refuses off-topic questions and financial advice.",
+      "FastAPI + Qdrant backend; the API key never reaches the browser.",
     ],
+    stack: ["FastAPI", "Gemini", "Qdrant", "Next.js"],
+    repoUrl: "https://github.com/vvadr/loan-terms-assistant",
+    liveUrl: "https://loan-terms-assistant-black.vercel.app",
+    cover: "/images/projects/loan-terms-assistant.jpg",
+  },
+  {
+    slug: "loansource-ai",
+    title: "LoanSource AI",
+    featured: false,
+    area: "ai",
+    category: "LLM fine-tuning",
+    state: "Source available",
+    summary: "Qwen2.5-1.5B fine-tuned with QLoRA for loan-document Q&A.",
+    role: "Built the data checks, training, retrieval, and app.",
+    description:
+      "Pick one of five loan documents and ask a question. Retrieval supplies the citations; the fine-tuned model writes the answer. Trains on a free Colab T4.",
+    highlights: [
+      "43 training and 8 held-out examples, validated before training.",
+      "Tests for retrieval, refusals, and data validation.",
+      "Refuses financial and legal advice.",
+    ],
+    stack: ["Qwen2.5", "QLoRA", "PEFT", "Gradio"],
+    repoUrl: "https://github.com/vvadr/LoanSource-AI",
+  },
+  {
+    slug: "yelp-restaurant-rating-prep",
+    title: "Yelp Restaurant Rating Pipeline",
+    featured: false,
+    area: "ai",
+    category: "Data pipeline",
+    state: "Source available",
+    summary: "Turns raw Yelp data into a clean dataset of 5,852 restaurants.",
+    role: "Built the pipeline and report.",
+    description:
+      "Filters to one city, processes reviews in chunks, and writes a 22-column Parquet dataset for star-rating prediction.",
+    results: [
+      "5,852 restaurants, 22 features, mean rating 3.56.",
+      "Review sentiment was the strongest feature (importance 0.79).",
+    ],
+    highlights: ["One CLI command, configurable by city.", "Six notebooks, from cleaning to pipelines."],
+    stack: ["Python", "pandas", "scikit-learn"],
     repoUrl: "https://github.com/vvadr/yelp-restaurant-rating-prep",
   },
   {
-    slug: "sport-team-odds",
-    type: "data",
-    rank: 10,
-    title: "Sport Team Odds",
-    category: "Data analysis",
+    slug: "udevs-app",
+    title: "udevs",
+    featured: false,
+    area: "web",
+    category: "Social web app",
     state: "Source available",
-    summary:
-      "An exploratory notebook comparing European soccer teams through historical match and bookmaker odds data.",
-    description:
-      "The notebook downloads the European Soccer Database from Kaggle, queries match data from SQLite, and analyzes Bet365 home, draw, and away odds. It then groups total odds by home team and visualizes the teams with the highest and lowest averages.",
-    stack: ["Python", "Pandas", "Matplotlib", "SQLite", "Kaggle", "Jupyter"],
-    highlights: [
-      "Selects match, score, team, and bookmaker fields from the source database for a focused analysis table.",
-      "Calculates combined odds and identifies both match-level and team-level extremes.",
-      "Uses an annotated scatter plot to make the highest- and lowest-average teams easy to compare.",
+    summary: "Twitter-style community app on React, GraphQL, and Strapi.",
+    role: "Built the client and backend.",
+    description: "Profiles, posts, saved content, and topics, served through GraphQL from a Strapi backend.",
+    highlights: ["React client with Apollo Client and Material UI.", "Strapi backend for content and auth."],
+    limitations: ["No live demo — the old domain no longer works."],
+    stack: ["React", "GraphQL", "Strapi"],
+    repoUrl: "https://github.com/vvadr/udevs-app",
+    links: [
+      { label: "Backend source", href: "https://github.com/vvadr/udevs-app-strapi-backend" },
     ],
-    repoUrl: "https://github.com/vvadr/Sport-team-odds",
   },
   {
     slug: "weather-app-react",
-    type: "frontend",
-    rank: 8,
     title: "Weather App",
-    category: "Web application",
+    featured: false,
+    area: "web",
+    category: "Frontend",
     state: "Live",
-    summary:
-      "A responsive React weather interface that fetches and presents live API data.",
-    description:
-      "A client-side weather product built around readable data views, responsive layout behavior, and common React application tooling. The public GitHub Pages deployment is available to try directly from this case study.",
-    stack: ["React", "Axios", "React Router", "React Calendar", "React Toastify"],
-    highlights: [
-      "Connects the interface to weather data through API requests.",
-      "Uses routed views and responsive components to keep weather information easy to scan.",
-      "Includes a verified public GitHub Pages deployment.",
+    summary: "Early React app showing live weather for Uzbek cities.",
+    role: "Built the app.",
+    description: "Current weather from OpenWeatherMap, with a city list and search. Built in 2024.",
+    highlights: ["Temperature, clouds, humidity, wind, and pressure.", "City list and location search."],
+    limitations: [
+      "The repo’s main branch now holds a different project; the live demo is the 2024 build.",
     ],
+    stack: ["React", "OpenWeatherMap API"],
     repoUrl: "https://github.com/vvadr/weather-app-react",
     liveUrl: "https://vvadr.github.io/weather-app-react/",
     cover: "/images/projects/weather-app-react.jpg",
   },
   {
     slug: "geometry-dash",
-    type: "frontend",
-    rank: 9,
     title: "Geometry Dash",
+    featured: false,
+    area: "web",
     category: "Browser game",
     state: "Live",
-    summary:
-      "A canvas runner with local score tracking, collision states, and collectible power-ups.",
-    description:
-      "A browser game inspired by arcade runners. It is implemented without a frontend framework and uses canvas rendering, keyboard controls, local persistence, and responsive page layout.",
-    stack: ["HTML", "CSS", "JavaScript", "Canvas API", "localStorage"],
+    summary: "Canvas runner game in plain JavaScript.",
+    role: "Built the game.",
+    description: "An arcade runner with no framework: canvas rendering, keyboard controls, and saved scores.",
     highlights: [
-      "Playable runner controls include jump, pause, and restart interactions.",
-      "Tracks current and best scores in the browser using localStorage.",
-      "Adds three distinct collectibles that change collision, timing, or jump behavior.",
+      "Jump, pause, restart, and a saved best score.",
+      "Three power-ups: shield, slow motion, and high jump.",
     ],
+    stack: ["JavaScript", "Canvas API"],
     repoUrl: "https://github.com/vvadr/geometry-dash",
     liveUrl: "https://vvadr.github.io/geometry-dash/",
     cover: "/images/projects/geometry-dash.jpg",
   },
   {
-    slug: "udevs-app",
-    type: "web",
-    rank: 6,
-    title: "udevs",
-    category: "Full-stack community app",
+    slug: "sport-team-odds",
+    title: "Sport Team Odds",
+    featured: false,
+    area: "ai",
+    category: "Data analysis",
     state: "Source available",
-    summary:
-      "A social and community web app with a React client, GraphQL, and a Strapi backend.",
-    description:
-      "The frontend includes user, profile, blog, saved-content, and topic views. It consumes a GraphQL API and is paired with a Strapi application that provides content and authentication capabilities.",
-    stack: ["React", "Apollo Client", "GraphQL", "Material UI", "Sass", "Strapi"],
-    highlights: [
-      "Combines a routed React client with an API-driven application architecture.",
-      "Uses Apollo Client, GraphQL, Material UI, Sass, and browser-side state helpers.",
-      "The original public Pages configuration points at an invalid custom domain, so this entry deliberately does not present a broken trial link.",
-    ],
-    repoUrl: "https://github.com/vvadr/udevs-app",
+    summary: "Analysis of European soccer betting odds by team.",
+    role: "Wrote the notebook.",
+    description: "Queries the Kaggle European Soccer Database and compares Bet365 odds across teams.",
+    highlights: ["SQLite queries into a focused analysis table.", "Annotated plot of the highest- and lowest-odds teams."],
+    stack: ["pandas", "SQLite", "Matplotlib"],
+    repoUrl: "https://github.com/vvadr/Sport-team-odds",
   },
   {
     slug: "flower-ml-model",
-    type: "ai",
-    rank: 11,
     title: "Flower ML Model",
+    featured: false,
+    area: "ai",
     category: "Machine learning",
     state: "Source available",
-    summary:
-      "An introductory Iris-classification notebook that demonstrates a full supervised learning workflow.",
-    description:
-      "The notebook goes from loading and inspecting the Iris dataset through train/test splitting, Random Forest training, evaluation, and visualization. It is intentionally compact and transparent as an AI/ML learning project.",
-    stack: ["Python", "Pandas", "Scikit-learn", "Matplotlib", "Jupyter"],
-    highlights: [
-      "Uses a held-out test split to make model evaluation explicit.",
-      "Builds a human-readable comparison of predicted and actual flower species.",
-      "Visualizes the feature space to explain the classifier's result.",
-    ],
+    summary: "Random Forest on the Iris dataset, end to end.",
+    role: "Wrote the notebook.",
+    description: "Load, split, train, predict, score, and plot — the full supervised-learning loop in a few cells.",
+    highlights: ["Held-out test split.", "Predicted-vs-actual table and a feature plot."],
+    stack: ["scikit-learn", "pandas", "Matplotlib"],
     repoUrl: "https://github.com/vvadr/Flower_ML_model",
   },
 ];
 
-/** All projects, strongest first. */
-export const rankedProjects = [...portfolioProjects].sort((a, b) => a.rank - b.rank);
+export const featuredProjects = portfolioProjects.filter((project) => project.featured);
+export const moreProjects = portfolioProjects.filter((project) => !project.featured);
 
 export function getProject(slug: string) {
   return portfolioProjects.find((project) => project.slug === slug);

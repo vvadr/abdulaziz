@@ -84,13 +84,15 @@ plus per-element glass and text shadows. Above content: `.noise-overlay`
 ## Layout
 
 - `.shell` caps content at 72rem with clamp() inline padding; sections use
-  `py-32` with `px-5 sm:px-10 lg:px-20` (full-bleed elements like the
-  Experience track and marquee escape the shell).
+  `py-32` with `px-5 sm:px-10 lg:px-20` and a `max-w-6xl` inner column.
 - Section header pattern: `SectionHeading` — sky uppercase kicker
   `0N — Label` with gradient hairlines + display title with one serif-italic
   gradient word.
-- Section order: hero → about (includes education cards + stats) → skills →
-  experience (horizontal timeline) → projects → contact.
+- Section order follows what a recruiter needs first: hero (role + three
+  linked proof points) → work (four featured case-study cards, then a compact
+  "More projects" list grouped by area) → experience (vertical list) →
+  skills (six groups, each linking to where it was used) → about (bio,
+  education, recognition) → contact.
 - z-scale (tokens in globals.css): scene 0 · content 10 · letterbox 30 ·
   nav 50 · mobile menu 55 · progress beam 60 · noise 65 · cursor 70 ·
   preloader 80 · skip link 90.
@@ -102,18 +104,19 @@ plus per-element glass and text shadows. Above content: `.noise-overlay`
 - **Buttons**: `.btn-primary` (gold→blue gradient pill, background-colored
   text, glow + lift on hover), `.btn-ghost` (glass pill), `.btn-sm`/`.btn-lg`.
 - **Tags** (`.tag`): sky-tinted hairline pills for tech stacks.
-- **Project cards**: `TiltCard` (pointer 3D tilt) + a border that warms to
-  the accent on hover + `.preview-shimmer` sweep; cover is a real screenshot
-  (`project.cover`) or a category-colored gradient/glyph fallback.
+- **Featured project cards** (`FeaturedProjectCard`): cover + category,
+  title, summary, key points, "My role", stack, and links, readable without
+  opening the case study; covers alternate sides on wide screens. The cover
+  is a real screenshot (`project.cover`) or a sky-tinted glyph fallback.
+- **Project cards** (`ProjectCard`): compact list entries with a stretched
+  title link — one target, short accessible name.
 - **Magnetic**: gsap quickTo pull toward the pointer (buttons, social cards).
-- **Marquee**: duplicated-content CSS loop, ±1° rotation, second row
-  outline-stroked; pauses on hover.
 - **Custom cursor**: dot + trailing ring, `mix-blend-difference`, swells over
   interactive elements. Fine pointers only; native cursor otherwise.
 - **Navbar** (deliberately different from the reference's floating pill):
   full-width bar, transparent → opaque after 24px scroll, animated sky
   underline (`layoutId`) tracking the active section via IntersectionObserver,
-  magnetic "Hire me", hamburger → full-screen staggered overlay on mobile.
+  magnetic "Get in touch", hamburger → full-screen staggered overlay on mobile.
 
 ## Motion
 
@@ -129,9 +132,6 @@ nav underline).
   scroll-out scale/fade; pointer-parallax `data-depth` layers.
 - **Reveals**: shared `[data-reveal]` fade/slide/rotateX (ScrollFX re-scans
   per route).
-- **Experience**: native scroll-snap horizontal track by default; wide
-  fine-pointer screens with motion enabled upgrade to the pinned scroll-scrub
-  travel.
 - **Scroll state** lives in a mutable module (`lib/scroll-state.ts`) read
   inside rAF — no per-frame React renders.
 - Global `prefers-reduced-motion` collapse remains in globals.css; JS motion
@@ -140,8 +140,9 @@ nav underline).
 ## Deliberate fixes vs. the reference site
 
 1. Real mobile navigation (reference hid all links below `md`).
-2. Experience reachable under reduced motion / touch / no-JS (reference
-   clipped cards 2..n when the pin was skipped).
+2. Experience is a plain vertical list — readable under reduced motion,
+   touch, and no-JS (the reference's pinned horizontal track clipped cards
+   2..n when the pin was skipped).
 3. Preloader is short, once-per-session, and skipped for reduced motion
    (reference blocked ~3.4s every visit).
 4. Static GPU-light atmosphere + stronger scrim keeps Skills text readable

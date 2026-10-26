@@ -1,10 +1,11 @@
 # Abdulaziz Yusupaliev — Portfolio
 
-Personal portfolio for **Abdulaziz Yusupaliev**, a Frontend Developer & AI/ML
-Engineer from Tashkent. A single-page cinematic noir/gold site — a
-static atmospheric star field behind dark glass surfaces — with hero, about
-(including education), experience timeline, projects, skills, and contact,
-plus a standalone route per project with a live in-page preview.
+Personal portfolio for **Abdulaziz Yusupaliev**, an Applied AI/ML Engineer &
+Full-Stack Developer from Tashkent. A single-page cinematic noir site — a
+static atmospheric star field behind dark glass surfaces — with hero, selected
+work, experience, skills, about (including education), and contact, plus a
+case-study route per project with a live in-page preview where the deployment
+allows embedding.
 
 ## Tech stack
 
@@ -12,8 +13,7 @@ plus a standalone route per project with a live in-page preview.
 - **Tailwind CSS v4** with a hex token system (`app/globals.css`)
 - **Static CSS gradients** — the GPU-light atmospheric backdrop, with no
   canvas, WebGL, or continuous background render loop
-- **GSAP + ScrollTrigger** and **Lenis** — smooth scroll, reveals, the pinned
-  Experience timeline
+- **GSAP + ScrollTrigger** and **Lenis** — smooth scroll and reveals
 - **Framer Motion** — preloader, mobile menu, nav underline, greeting rotator
 - **Space Grotesk / Inter / Instrument Serif** via `next/font/google`
 - Icons: `lucide-react` + `simple-icons`
@@ -49,11 +49,17 @@ links, experience, education, contact, metadata) and
 [`data/projects.ts`](./data/projects.ts) / [`data/skills.ts`](./data/skills.ts).
 Update `siteUrl` in `data/site.ts` when the deployment domain changes.
 
-Each project in `data/projects.ts` gets its own route at `/projects/[slug]`.
-Projects with a `liveUrl` get an embedded, refreshable iframe preview on that
-route (`components/sections/projects/ProjectTrial.tsx`); projects with only a
-`repoUrl` link out to source instead. A project with a `cover` shows that
-screenshot on its card; otherwise the card renders a styled category cover.
+Each project in `data/projects.ts` gets its own route at `/projects/[slug]`
+with its role, results, what was built, and known limits. Array order is
+display order; `featured: true` projects get a full card on the home page and
+the rest are listed compactly by `area`. Projects whose `liveUrl` allows
+framing get an embedded, refreshable iframe preview
+(`components/sections/projects/ProjectTrial.tsx`); the others link out. A
+project with a `cover` shows that screenshot on its card; otherwise the card
+renders a styled category cover.
+
+Content rule: every claim comes from a CV, a role, a repository README, or the
+live deployment — no estimated or invented numbers.
 
 ## Project structure
 
@@ -64,10 +70,10 @@ components/
   layout/                 # Navbar, Footer, ScrollFX, Preloader, cursor, scene/
   sections/<section>/     # hero, about, skills, experience, projects, contact
     projects/route/        # project-page-only pieces (hero, nav, back link)
-  shared/                 # Magnetic, TiltCard, Marquee, SectionHeading, icons
+  shared/                 # Magnetic, SectionHeading, SocialIcon
 data/                     # site.ts, projects.ts, skills.ts
 lib/                      # utils, scroll-state (Lenis/GSAP shared store)
-public/                   # profile photo, skill assets, resume CVs, screenshots
+public/                   # profile photo, resume CVs, project screenshots
 ```
 
 ## Deploy

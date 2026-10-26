@@ -1,185 +1,72 @@
-import type { SimpleIcon } from "simple-icons";
-import {
-  siBootstrap,
-  siCss,
-  siGit,
-  siGithub,
-  siGitlab,
-  siHtml5,
-  siJavascript,
-  siNextdotjs,
-  siNpm,
-  siNumpy,
-  siPandas,
-  siPug,
-  siPython,
-  siReact,
-  siScikitlearn,
-  siTailwindcss,
-  siTypescript,
-  siVercel,
-} from "simple-icons";
-
-export type SkillIcon = {
-  name: string;
-  icon?: SimpleIcon;
-  category: "Language" | "Frontend" | "Styling" | "Tool" | "AI / ML";
-  glyph?: string;
-  assetSrc?: string;
-};
-
-export type PortfolioSkill = {
-  name: string;
-  shortName?: string;
-  assetSrc?: string;
-  assetWidth?: number;
-  assetHeight?: number;
-  fallbackLabel?: string;
-  fallbackColor?: string;
-  showLabel?: boolean;
+export type SkillEvidence = {
+  label: string;
+  href: string;
 };
 
 export type SkillGroup = {
   title: string;
-  skills: PortfolioSkill[];
+  skills: string[];
+  /** Where these skills were used — each links to the evidence. */
+  usedIn: SkillEvidence[];
 };
 
-export const skillIcons: SkillIcon[] = [
-  { name: "React", icon: siReact, category: "Frontend" },
-  { name: "Next.js", icon: siNextdotjs, category: "Frontend" },
-  { name: "JavaScript", icon: siJavascript, category: "Language" },
-  { name: "TypeScript", icon: siTypescript, category: "Language" },
-  { name: "HTML5", icon: siHtml5, category: "Styling" },
-  { name: "CSS3", icon: siCss, category: "Styling" },
-  { name: "Tailwind CSS", icon: siTailwindcss, category: "Styling" },
-  { name: "Bootstrap", icon: siBootstrap, category: "Styling" },
-  { name: "Pug", icon: siPug, category: "Styling" },
-  { name: "Git", icon: siGit, category: "Tool" },
-  { name: "GitHub", icon: siGithub, category: "Tool" },
-  { name: "GitLab", icon: siGitlab, category: "Tool" },
-  { name: "npm", icon: siNpm, category: "Tool" },
-  { name: "Vercel", icon: siVercel, category: "Tool" },
-  { name: "VS Code", glyph: "VS", category: "Tool" },
-  { name: "Python", icon: siPython, category: "Language" },
-  { name: "Pandas", icon: siPandas, category: "AI / ML" },
-  { name: "NumPy", icon: siNumpy, category: "AI / ML" },
-  { name: "Scikit-learn", icon: siScikitlearn, category: "AI / ML" },
-  {
-    name: "Matplotlib",
-    assetSrc: "/matplotlib-logo.svg",
-    glyph: "ML",
-    category: "AI / ML",
-  },
-  {
-    name: "Seaborn",
-    assetSrc: "/seaborn-logo.svg",
-    glyph: "SB",
-    category: "AI / ML",
-  },
-];
+const project = (label: string, slug: string): SkillEvidence => ({
+  label,
+  href: `/projects/${slug}`,
+});
 
-export type CoreSkill = {
-  name: string;
-  meta: string;
-};
-
-// Headline rows in the Skills section — the honest short version of the stack.
-export const coreStack: CoreSkill[] = [
-  {
-    name: "React / Next.js",
-    meta: "Production interfaces at Hiwelcome and API-driven product pages",
-  },
-  {
-    name: "TypeScript",
-    meta: "Typed, maintainable components across every frontend role",
-  },
-  {
-    name: "Python & ML tooling",
-    meta: "Pandas, NumPy, Scikit-learn — datasets prepared, models trained and evaluated",
-  },
-  {
-    name: "Tailwind CSS",
-    meta: "Responsive, consistent UI systems shipped from design to production",
-  },
-  {
-    name: "Git & GitHub",
-    meta: "Organized repos, reviews, and experiment notes across 10 public projects",
-  },
-];
-
-// Names looped in the Skills marquee rows.
-export const marqueeItems = [
-  "React",
-  "Next.js",
-  "TypeScript",
-  "JavaScript",
-  "Python",
-  "Tailwind CSS",
-  "Pandas",
-  "NumPy",
-  "Scikit-learn",
-  "Matplotlib",
-  "Seaborn",
-  "Git",
-  "GitHub",
-  "Vercel",
-  "Jupyter",
-  "FastAPI",
-];
-
+// Grouped by the kind of work rather than by tool type, and limited to tools
+// that appear in a CV, a role, or a public repository.
 export const skillGroups: SkillGroup[] = [
   {
-    title: "Languages",
-    skills: [
-      { name: "JavaScript", showLabel: true },
-      { name: "TypeScript", showLabel: true },
-      { name: "Python", showLabel: true },
+    title: "Machine learning",
+    skills: ["Python", "pandas", "NumPy", "scikit-learn", "Matplotlib"],
+    usedIn: [
+      { label: "IT Park", href: "#experience" },
+      project("Yelp pipeline", "yelp-restaurant-rating-prep"),
+    ],
+  },
+  {
+    title: "Deep learning & speech",
+    skills: ["PyTorch", "Transformers", "LoRA / QLoRA", "wav2vec2 + CTC", "KenLM"],
+    usedIn: [
+      project("Karakalpak ASR", "karakalpak-speech-recognition"),
+      project("LoanSource AI", "loansource-ai"),
+    ],
+  },
+  {
+    title: "LLM applications",
+    skills: ["RAG", "Embeddings", "LangGraph", "Gemini API", "Qdrant"],
+    usedIn: [
+      project("Multi-Agent AI Analyst", "multi-agent-ai-analyst"),
+      project("Loan Terms Assistant", "loan-terms-assistant"),
+      project("Dwelve", "dwelve"),
+    ],
+  },
+  {
+    title: "Backend",
+    skills: ["FastAPI", "NestJS", "PostgreSQL", "Prisma", "Redis", "Docker"],
+    usedIn: [
+      project("Dwelve", "dwelve"),
+      project("Volontyorlar", "volontyorlar"),
+      project("Multi-Agent AI Analyst", "multi-agent-ai-analyst"),
     ],
   },
   {
     title: "Frontend",
-    skills: [
-      { name: "React", showLabel: true },
-      { name: "Next.js", showLabel: true },
-      { name: "Tailwind CSS", shortName: "Tailwind", showLabel: true },
-      { name: "HTML5", shortName: "HTML", showLabel: true },
-      { name: "CSS3", shortName: "CSS", showLabel: true },
-      { name: "Bootstrap", showLabel: true },
-      { name: "Pug", showLabel: true },
+    skills: ["TypeScript", "React", "Next.js", "Tailwind CSS", "TanStack Query"],
+    usedIn: [
+      { label: "Hiwelcome", href: "#experience" },
+      project("Dwelve", "dwelve"),
+      project("Volontyorlar", "volontyorlar"),
     ],
   },
   {
-    title: "Tools",
-    skills: [
-      { name: "Git", showLabel: true },
-      { name: "GitHub", showLabel: true },
-      { name: "GitLab", showLabel: true },
-      { name: "npm", showLabel: true },
-      { name: "Vercel", showLabel: true },
-      { name: "VS Code", showLabel: true },
-    ],
-  },
-  {
-    title: "AI & ML",
-    skills: [
-      { name: "Python", showLabel: true },
-      { name: "Pandas", showLabel: true },
-      { name: "NumPy", showLabel: true },
-      { name: "Scikit-learn", shortName: "Scikit", showLabel: true },
-      {
-        name: "Matplotlib",
-        assetSrc: "/matplotlib-logo.svg",
-        assetWidth: 80,
-        assetHeight: 80,
-        showLabel: true,
-      },
-      {
-        name: "Seaborn",
-        assetSrc: "/seaborn-logo.svg",
-        assetWidth: 150,
-        assetHeight: 44,
-        showLabel: true,
-      },
+    title: "Testing & delivery",
+    skills: ["Git", "GitHub Actions", "pytest", "Playwright", "Vercel"],
+    usedIn: [
+      project("Volontyorlar", "volontyorlar"),
+      project("Multi-Agent AI Analyst", "multi-agent-ai-analyst"),
     ],
   },
 ];
