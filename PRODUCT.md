@@ -15,13 +15,15 @@ overstate ability.
 
 ## Product Purpose
 
-A personal portfolio for **Abdulaziz Yusupaliev** — a Frontend Developer &
-AI/ML Engineer from Tashkent. It exists to convert a quick visit into a
-credible impression and a contact action (email / GitHub / LinkedIn /
-Telegram). Success = the visitor leaves understanding his real stack, real
-shipped work (Hiwelcome.uz, Delever.uz, Dwelve, and a handful of public
-GitHub projects — several with live, embedded previews), and how to reach
-him — and remembers the site.
+A personal portfolio for **Abdulaziz Yusupaliev** — an Applied AI/ML
+Engineer & Full-Stack Developer from Tashkent. It exists to convert a quick
+visit into a credible impression and a contact action (email / GitHub /
+LinkedIn / Hugging Face / Telegram). Success = the visitor leaves
+understanding his real stack, his strongest shipped work (a published
+Karakalpak speech-recognition model, the Dwelve and Volontyorlar platforms he
+built end to end, a multi-agent RAG backend), his roles at Uzinfocom AI Labs
+(zehnmind.ai), Hiwelcome, and IT Park, and how to reach him — and remembers
+the site.
 
 ## Brand Personality
 
@@ -44,10 +46,10 @@ and legible. Three words: **cinematic, legible, credible.**
 
 ## Design Principles
 
-1. **Tell the truth, confidently.** Lead with what's real. AI/ML work is
-   framed honestly (an internship + learning projects), while proven
-   frontend work at Hiwelcome.uz and Delever.uz carries the credibility. No
-   invented numbers.
+1. **Tell the truth, confidently.** Lead with what's real and measured:
+   published WER scores, live platforms, named roles. Every project states
+   the author's actual role (including where code was AI-generated) and its
+   known limits. No invented numbers.
 2. **One accent, no glow.** Sky blue carries every accent; indigo only
    supports. Colour appears as solid fill, solid text, or a hairline border —
    never as a gradient in text or a coloured halo.

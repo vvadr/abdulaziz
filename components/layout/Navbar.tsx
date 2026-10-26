@@ -9,7 +9,7 @@ import {
   type Variants,
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { heroSocialLinks, navItems } from "@/data/site";
+import { socialLinks, navItems } from "@/data/site";
 import { SocialIcon } from "@/components/shared/SocialIcon";
 import { Magnetic } from "@/components/shared/Magnetic";
 import { smoothScroller } from "@/lib/scroll-state";
@@ -299,10 +299,10 @@ function MobileMenu({
 
           <motion.div
             variants={reduceMotion ? undefined : linkVariants}
-            className="flex items-center justify-between gap-4 border-t border-glass-border pt-6"
+            className="flex flex-wrap items-center justify-between gap-4 border-t border-glass-border pt-6"
           >
             <div className="flex items-center gap-2">
-              {heroSocialLinks.map((link) => {
+              {socialLinks.map((link) => {
                 const external = link.href.startsWith("http");
                 return (
                   <a

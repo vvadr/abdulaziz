@@ -1,12 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowDown } from "lucide-react";
 import { Magnetic } from "@/components/shared/Magnetic";
 import { GreetingRotator } from "./GreetingRotator";
-import { heroAvailability, heroLocation, heroTagline } from "@/data/site";
+import {
+  heroAvailability,
+  heroHighlights,
+  heroLocation,
+  heroRole,
+  heroTagline,
+} from "@/data/site";
 import { appState, subscribeAppReady } from "@/lib/scroll-state";
 import { isCoarsePointer, prefersReducedMotion } from "@/lib/utils";
 
@@ -139,19 +146,19 @@ export function Hero() {
         <p
           data-hero-fade
           data-depth="0.16"
-          className="mt-7 max-w-xl text-balance text-base text-muted sm:text-lg"
+          className="mt-7 max-w-2xl text-balance text-base text-muted sm:text-lg"
         >
-          <span className="serif-accent text-foreground/90">Frontend developer</span>{" "}
+          <span className="serif-accent text-[1.15em] text-foreground">{heroRole}</span>{" "}
           {heroTagline}
         </p>
 
         <div
           data-hero-fade
-          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+          className="mt-9 flex flex-wrap items-center justify-center gap-4"
         >
           <Magnetic strength={0.35}>
             <a href="#projects" className="btn-primary btn-lg">
-              View projects
+              See selected work
             </a>
           </Magnetic>
           <Magnetic strength={0.35}>
@@ -160,6 +167,33 @@ export function Hero() {
             </a>
           </Magnetic>
         </div>
+
+        {/* Proof points — each links to its evidence further down the page. */}
+        <ul
+          data-hero-fade
+          aria-label="Highlights"
+          className="glass mt-10 grid w-full max-w-3xl divide-y divide-glass-border overflow-hidden rounded-2xl text-left sm:grid-cols-3 sm:divide-x sm:divide-y-0"
+        >
+          {heroHighlights.map((item) => {
+            // Section anchors stay plain links so Lenis can smooth-scroll them;
+            // case-study routes go through the client router.
+            const Anchor = item.href.startsWith("/") ? Link : "a";
+            return (
+              <li key={item.title}>
+                <Anchor
+                  href={item.href}
+                  data-cursor
+                  className="group flex h-full flex-col gap-1 px-5 py-4 transition-colors duration-300 hover:bg-accent/5"
+                >
+                  <span className="font-display text-sm font-semibold text-foreground transition-colors group-hover:text-accent">
+                    {item.title}
+                  </span>
+                  <span className="text-xs leading-snug text-muted">{item.detail}</span>
+                </Anchor>
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
       <div

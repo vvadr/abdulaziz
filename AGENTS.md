@@ -30,6 +30,12 @@ Secondary goals:
 
 ## 3. Personal Brand Positioning
 
+> **Note (October 2026):** The positioning and section order in this spec are
+> superseded. The site now presents Abdulaziz as an **Applied AI/ML Engineer &
+> Full-Stack Developer** and orders sections hero → work → experience → skills
+> → about → contact. See `PRODUCT.md` and the content in `data/`.
+
+
 ### Name
 
 **Abdulaziz Yusupaliev**

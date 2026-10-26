@@ -6,14 +6,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, FileText, Mail } from "lucide-react";
 import { Magnetic } from "@/components/shared/Magnetic";
 import { SocialIcon } from "@/components/shared/SocialIcon";
-import { contactLinks, resumeLinks, type SocialIconName } from "@/data/site";
+import { resumeLinks, socialLinks } from "@/data/site";
 import { prefersReducedMotion } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const email = contactLinks.find((link) => link.label === "Email")!;
-const telegram = contactLinks.find((link) => link.label === "Telegram")!;
-const socialCards = contactLinks.filter((link) => link.label !== "Email");
+const email = socialLinks.find((link) => link.icon === "email")!;
+const profiles = socialLinks.filter((link) => link.icon !== "email");
 
 export function Contact() {
   const rootRef = useRef<HTMLElement>(null);
@@ -63,9 +62,8 @@ export function Contact() {
           something <span className="serif-accent text-accent">together</span>
         </h2>
 
-        <p data-reveal className="mt-7 max-w-md text-muted">
-          Open to internships, freelance work, and interesting projects. Reach
-          out — I&apos;ll get back to you.
+        <p data-reveal className="mt-7 max-w-lg text-muted">
+          Open to internships and freelance work. Email reaches me fastest.
         </p>
 
         <Magnetic strength={0.25} className="mt-10 max-w-full">
@@ -85,83 +83,52 @@ export function Contact() {
           </a>
         </Magnetic>
 
-        {/* Direct channels + both CVs */}
-        <div data-reveal className="mt-12 grid w-full gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {[email, telegram].map((item) => {
-            const Icon = item.icon;
-            const external = item.href.startsWith("http");
-            return (
-              <a
-                key={item.label}
-                href={item.href}
-                target={external ? "_blank" : undefined}
-                rel={external ? "noreferrer" : undefined}
-                data-cursor
-                className="glass group rounded-2xl p-5 text-left transition-all duration-300 hover:border-accent/40 hover:shadow-[0_12px_40px_var(--shadow-deep)]"
-              >
-                <Icon className="size-4 text-accent" aria-hidden />
-                <p className="mt-3 font-display text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
-                  {item.label}
-                </p>
-                <p className="mt-1 break-all text-sm font-medium text-foreground/90 transition-colors group-hover:text-accent">
-                  {item.value}
-                </p>
-              </a>
-            );
-          })}
-          {resumeLinks.map((resume) => (
-            <a
-              key={resume.label}
-              href={resume.href}
-              download
-              data-cursor
-              className="glass group rounded-2xl p-5 text-left transition-all duration-300 hover:border-accent/40 hover:shadow-[0_12px_40px_var(--shadow-deep)]"
-            >
-              <FileText className="size-4 text-accent-2" aria-hidden />
-              <p className="mt-3 font-display text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
-                {resume.label}
-              </p>
-              <p className="mt-1 text-sm font-medium text-foreground/90 transition-colors group-hover:text-accent">
-                Download PDF
-              </p>
-            </a>
-          ))}
-        </div>
-
-        {/* Social profiles */}
-        <div data-reveal className="mt-6 grid w-full gap-3 sm:grid-cols-3">
-          {socialCards.map((social) => {
-            const iconName = social.label.toLowerCase() as SocialIconName;
-            const handle =
-              social.label === "LinkedIn" ? social.value : `@${social.value}`;
-            return (
-              <Magnetic key={social.label} strength={0.35}>
+        {/* Profiles */}
+        <ul data-reveal className="mt-12 grid w-full gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {profiles.map((profile) => (
+            <li key={profile.label}>
+              <Magnetic strength={0.3} className="block h-full">
                 <a
-                  href={social.href}
+                  href={profile.href}
                   target="_blank"
                   rel="noreferrer"
                   data-cursor
-                  className="glass group flex h-full items-center justify-between gap-3 rounded-2xl p-5 transition-all duration-300 hover:border-accent-2/40"
+                  className="glass group flex h-full items-center justify-between gap-3 rounded-2xl p-5 transition-all duration-300 hover:border-accent/40"
                 >
-                  <span className="text-left">
+                  <span className="min-w-0 text-left">
                     <span className="flex items-center gap-2">
-                      <SocialIcon name={iconName} className="size-4 text-accent-2" />
-                      <span className="font-display text-sm font-semibold">
-                        {social.label}
-                      </span>
+                      <SocialIcon name={profile.icon} className="size-4 shrink-0 text-accent" />
+                      <span className="font-display text-sm font-semibold">{profile.label}</span>
                     </span>
-                    <span className="mt-1 block text-xs text-muted transition-colors group-hover:text-foreground/80">
-                      {handle}
+                    <span className="mt-1 block truncate text-xs text-muted transition-colors group-hover:text-foreground/80">
+                      {profile.icon === "linkedin" ? `in/${profile.value}` : `@${profile.value}`}
                     </span>
                   </span>
                   <ArrowUpRight
                     className="size-4 shrink-0 text-muted transition-all duration-300 group-hover:rotate-45 group-hover:text-accent"
                     aria-hidden
                   />
+                  <span className="sr-only">(opens in a new tab)</span>
                 </a>
               </Magnetic>
-            );
-          })}
+            </li>
+          ))}
+        </ul>
+
+        {/* CVs */}
+        <div data-reveal className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          {resumeLinks.map((resume) => (
+            <a
+              key={resume.label}
+              href={resume.href}
+              download
+              data-cursor
+              className="btn-ghost btn-sm"
+            >
+              <FileText className="size-4 text-accent-2" aria-hidden />
+              {resume.label} (PDF)
+            </a>
+          ))}
         </div>
       </div>
     </section>

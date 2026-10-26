@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { ProjectPage } from "@/components/sections/projects/route/ProjectPage";
-import { getProject, rankedProjects } from "@/data/projects";
+import { getProject, portfolioProjects } from "@/data/projects";
 import { siteUrl } from "@/data/site";
 
 type ProjectPageProps = {
@@ -11,7 +11,7 @@ type ProjectPageProps = {
 };
 
 export function generateStaticParams() {
-  return rankedProjects.map((project) => ({ slug: project.slug }));
+  return portfolioProjects.map((project) => ({ slug: project.slug }));
 }
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
@@ -38,15 +38,15 @@ export default async function ProjectRoute({ params }: ProjectPageProps) {
 
   if (!project) notFound();
 
-  const projectIndex = rankedProjects.findIndex((item) => item.slug === project.slug);
+  const projectIndex = portfolioProjects.findIndex((item) => item.slug === project.slug);
 
   return (
     <div className="relative min-h-screen overflow-x-clip">
       <Navbar />
       <ProjectPage
         project={project}
-        previous={rankedProjects[projectIndex - 1] ?? null}
-        next={rankedProjects[projectIndex + 1] ?? null}
+        previous={portfolioProjects[projectIndex - 1] ?? null}
+        next={portfolioProjects[projectIndex + 1] ?? null}
       />
       <Footer />
     </div>

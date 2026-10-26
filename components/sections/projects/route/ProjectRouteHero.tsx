@@ -3,10 +3,12 @@ import type { PortfolioProject } from "@/data/projects";
 import { ProjectBackLink } from "./ProjectBackLink";
 
 export function ProjectRouteHero({ project }: { project: PortfolioProject }) {
+  const previewable = Boolean(project.liveUrl) && project.embeddable !== false;
+
   return (
     <header>
       <ProjectBackLink />
-      <div className="mt-10 grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+      <div className="mt-10 grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div>
           <p className="section-label font-display text-xs font-medium uppercase">
             {project.category}
@@ -19,24 +21,27 @@ export function ProjectRouteHero({ project }: { project: PortfolioProject }) {
           </p>
         </div>
 
-        <div className="glass rounded-2xl p-6">
-          <span className="grid size-12 place-items-center rounded-xl border border-accent/35 bg-accent/10 text-accent">
-            {project.liveUrl ? (
-              <MonitorPlay size={22} aria-hidden="true" />
-            ) : (
-              <FolderGit2 size={22} aria-hidden="true" />
-            )}
-          </span>
-          <p className="mt-5 font-display text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
-            Status
-          </p>
-          <p className="mt-1 text-lg font-medium text-foreground">{project.state}</p>
-          <p className="mt-3 text-sm leading-6 text-muted">
-            {project.liveUrl
-              ? "Verified public deployment available below."
-              : "Public source can be reviewed on GitHub."}
-          </p>
-        </div>
+        <dl className="glass space-y-5 rounded-2xl p-6">
+          <div>
+            <dt className="font-display text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
+              Status
+            </dt>
+            <dd className="mt-1 flex items-center gap-2 text-lg font-medium text-foreground">
+              {project.liveUrl ? (
+                <MonitorPlay size={18} className="text-accent" aria-hidden="true" />
+              ) : (
+                <FolderGit2 size={18} className="text-accent" aria-hidden="true" />
+              )}
+              {project.state}
+            </dd>
+          </div>
+          <div>
+            <dt className="font-display text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
+              My role
+            </dt>
+            <dd className="mt-1 text-sm leading-6 text-foreground/90">{project.role}</dd>
+          </div>
+        </dl>
       </div>
 
       <div className="mt-9 flex flex-wrap gap-2">
@@ -48,22 +53,37 @@ export function ProjectRouteHero({ project }: { project: PortfolioProject }) {
       </div>
 
       <div className="mt-8 flex flex-wrap gap-3">
-        {project.repoUrl ? (
-          <a
-            href={project.repoUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="btn-ghost btn-sm"
-          >
-            <FolderGit2 size={16} aria-hidden="true" />
-            View source
+        {project.liveUrl ? (
+          <a href={project.liveUrl} target="_blank" rel="noreferrer" className="btn-primary btn-sm">
+            Open live site
+            <ArrowUpRight size={15} aria-hidden="true" />
+            <span className="sr-only">(opens in a new tab)</span>
           </a>
         ) : null}
-        {project.liveUrl ? (
-          <a href="#live-trial" className="btn-primary btn-sm">
+        {previewable ? (
+          <a href="#live-trial" className="btn-ghost btn-sm">
             <MonitorPlay size={16} aria-hidden="true" />
-            Start live trial
+            Preview on this page
+          </a>
+        ) : null}
+        {project.links?.map((link) => (
+          <a
+            key={link.href}
+            href={link.href}
+            target="_blank"
+            rel="noreferrer"
+            className={project.liveUrl ? "btn-ghost btn-sm" : "btn-primary btn-sm"}
+          >
+            {link.label}
             <ArrowUpRight size={15} aria-hidden="true" />
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
+        ))}
+        {project.repoUrl ? (
+          <a href={project.repoUrl} target="_blank" rel="noreferrer" className="btn-ghost btn-sm">
+            <FolderGit2 size={16} aria-hidden="true" />
+            View source
+            <span className="sr-only">(opens in a new tab)</span>
           </a>
         ) : null}
       </div>
