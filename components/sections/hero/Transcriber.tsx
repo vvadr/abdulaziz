@@ -11,7 +11,7 @@ const IDLE = "#c5cddf";
 
 const BAR = 3; // bar width, css px
 const PITCH = 6; // bar + gap
-const BARS_PER_CHAR = 4;
+const MAX_BARS_PER_CHAR = 4;
 const SECONDS_ACROSS = 2.4; // pretend audio length spanning the canvas
 const HOLD_MS = 1500;
 
@@ -29,7 +29,10 @@ function seeded(seed: number) {
 function buildWave(word: string, totalBars: number) {
   const rand = seeded(word.length * 7919 + word.charCodeAt(0));
   const amps = new Array<number>(totalBars).fill(0).map(() => 0.04 + rand() * 0.05);
-  const wordBars = word.length * BARS_PER_CHAR;
+  // Long greetings on narrow canvases get fewer bars per character, so the
+  // whole word always fits and every character gets decoded.
+  const perChar = Math.max(1, Math.min(MAX_BARS_PER_CHAR, Math.floor((totalBars * 0.8) / word.length)));
+  const wordBars = word.length * perChar;
   const start = Math.max(2, Math.round((totalBars - wordBars) * 0.3));
   // Bar index where each character finishes — drives the decoded text.
   const charEnds: number[] = [];
@@ -37,14 +40,14 @@ function buildWave(word: string, totalBars: number) {
   [...word].forEach((char, i) => {
     const vowel = /[aeiouаеёиоуыэюя]/i.test(char);
     const silent = char === " ";
-    for (let b = 0; b < BARS_PER_CHAR; b++) {
-      const idx = start + i * BARS_PER_CHAR + b;
+    for (let b = 0; b < perChar; b++) {
+      const idx = start + i * perChar + b;
       if (idx >= totalBars) break;
-      const shape = Math.sin(((b + 0.5) / BARS_PER_CHAR) * Math.PI);
+      const shape = Math.sin(((b + 0.5) / perChar) * Math.PI);
       const peak = silent ? 0.06 : vowel ? 0.75 + rand() * 0.25 : 0.3 + rand() * 0.35;
       amps[idx] = Math.max(0.05, peak * (0.55 + 0.45 * shape));
     }
-    charEnds.push(start + (i + 1) * BARS_PER_CHAR);
+    charEnds.push(Math.min(totalBars, start + (i + 1) * perChar));
   });
 
   return { amps, charEnds };
@@ -103,6 +106,7 @@ export function Transcriber() {
     };
 
     const charsAt = (p: number) => {
+      if (p >= 1) return wave.charEnds.length;
       const headBar = (p * width) / PITCH;
       return wave.charEnds.filter((end) => end <= headBar).length;
     };
@@ -139,7 +143,6 @@ export function Transcriber() {
       if (!visible) return;
       running = true;
       sweepStart = performance.now();
-      sweepMs = 1500 + greetings[word].text.length * 45;
       raf = requestAnimationFrame(frame);
     };
 
@@ -147,6 +150,9 @@ export function Transcriber() {
       word = (word + 1) % greetings.length;
       wave = buildWave(greetings[word].text, totalBars);
       progress = 0;
+      // Set here, not in sweep(), so a resume after pausing between words
+      // uses this word's duration.
+      sweepMs = 1500 + greetings[word].text.length * 45;
       setIndex(word);
       setDecoded(0);
       setTime(0);
@@ -206,7 +212,7 @@ export function Transcriber() {
   const done = decoded >= greeting.text.length;
 
   return (
-    <div aria-hidden="true" className="select-none">
+    <div aria-hidden="true" className="@container select-none">
       <div className="meta flex items-center justify-between text-ink-soft">
         <span className="flex items-center gap-2">
           <span className="inline-block size-2 rounded-full bg-blue" />
@@ -220,7 +226,8 @@ export function Transcriber() {
       </div>
 
       <div className="mt-3 flex items-baseline justify-between gap-4 border-t border-ink pt-3">
-        <p className="display-m min-h-[1.1em] truncate" lang={greeting.lang}>
+        {/* Sized to the container so "Assalomu alaykum" fits its cell. */}
+        <p className="display-m min-h-[1.1em] truncate text-[min(2.25rem,7.2cqi)]" lang={greeting.lang}>
           {shown}
           <span
             className={`ml-0.5 inline-block h-[0.8em] w-[0.08em] translate-y-[0.08em] bg-blue ${done ? "animate-pulse" : ""}`}

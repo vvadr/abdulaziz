@@ -185,7 +185,7 @@ export const experienceItems: ExperienceItem[] = [
     tech: ["ASR", "Speech data", "Dataset QA"],
   },
   {
-    company: "Hiwelcome.uz",
+    company: "Hiwelcome",
     companyUrl: "https://hiwelcome.uz",
     title: "Frontend Engineer",
     period: "Jan 2026 – Present",
@@ -206,7 +206,7 @@ export const experienceItems: ExperienceItem[] = [
     tech: ["Python", "pandas", "scikit-learn"],
   },
   {
-    company: "Delever.uz",
+    company: "Delever",
     companyUrl: "https://delever.uz",
     title: "Frontend Developer",
     period: "Feb 2026",

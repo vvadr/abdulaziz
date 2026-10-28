@@ -39,7 +39,7 @@ const T = {
 const checks = [
   ["ink / bg", "ink", "bg", 4.5],
   ["ink-soft / bg", "inkSoft", "bg", 4.5],
-  ["ink-soft / surface (row hover)", "inkSoft", "surface", 4.5],
+  ["ink-soft / surface", "inkSoft", "surface", 4.5],
   ["blue text / bg", "blue", "bg", 4.5],
   ["bg text on ink (btn-solid)", "bg", "ink", 4.5],
   ["white on blue (btn-solid hover, contact)", "white", "blue", 4.5],

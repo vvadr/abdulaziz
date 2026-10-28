@@ -1,19 +1,17 @@
 import { ArrowUpRight } from "lucide-react";
+import { SectionHeader } from "@/components/shared/SectionHeader";
 import { experienceItems } from "@/data/site";
 
 export function Experience() {
   return (
     <section id="experience" aria-labelledby="experience-title" className="on-dark section">
       <div className="shell">
-        <div className="grid items-end gap-6 pb-12 lg:grid-cols-12">
-          <h2 id="experience-title" className="display-l lg:col-span-7">
-            Where I work<span className="count">{experienceItems.length}</span>
-          </h2>
-          <p className="max-w-[44ch] text-night-soft lg:col-span-5">
-            Machine learning by day at an AI lab, frontend at a product company, and my own
-            platforms in between.
-          </p>
-        </div>
+        <SectionHeader
+          id="experience-title"
+          title="Experience"
+          count={experienceItems.length}
+          intro="Two current roles, machine learning at an AI lab and frontend at a product company, then the roles before them."
+        />
 
         <ol>
           {experienceItems.map((item) => (

@@ -25,7 +25,7 @@ text pair are verified by `node scripts/contrast-check.mjs`.
 | Token | OKLCH | Hex | Role |
 |---|---|---|---|
 | `--bg` | 0.972 0.005 265 | `#f4f6f9` | Page (true cool off-white, not cream) |
-| `--surface` | 1 0 0 | `#ffffff` | Image mats, list-row hover |
+| `--surface` | 1 0 0 | `#ffffff` | Image mats behind screenshots |
 | `--ink` | 0.2 0.03 268 | `#101524` | Primary text, rules, solid buttons |
 | `--ink-soft` | 0.45 0.03 268 | `#4e5566` | Secondary text (6.9:1) |
 | `--rule` | 0.87 0.012 268 | `#d1d4dc` | Hairlines |
@@ -55,8 +55,13 @@ Scale (all `clamp()`): `.name` (hero, ≤6rem, sized for its 7-column cell) ·
 `.lede` (≤1.45rem) · body 17px · `.meta` 13px tabular. Display tracking
 -0.02 to -0.035em.
 
-Section headings carry no eyebrow. Where a section is a countable list, a small
-superscript count follows the heading (`.count`: "Selected work⁴").
+Section headings carry no eyebrow, and their wording matches the nav (Work →
+"Selected work", Experience, Skills, About; Contact is "Say hello."). Lists of
+discrete things get a small superscript count (`.count`): "Selected work⁴",
+"Also built⁸", "Experience⁴". Skills groups are categories, not items, so no
+count.
+
+Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
 
 ## Layout
 
@@ -64,17 +69,32 @@ superscript count follows the heading (`.count`: "Selected work⁴").
   `--section-pad` block padding.
 - 12-column grids on `lg`, asymmetric splits (7/5, 4/7, 3/4/5).
 - **Hero:** availability line → name (7 cols) beside the transcriber (5 cols)
-  → ink rule → lede + CTAs (6 cols) and three linked proof points (5 cols).
-  On mobile the transcriber comes first, then the name.
+  → ink rule → lede, CTAs and profile links (6 cols) beside three linked
+  proof points (5 cols). On mobile the name comes first, then the
+  transcriber.
+- Every rule and list edge lines up with the `.shell` content edge — rules
+  live inside the shell, never on the padded box, and list rows are not
+  indented.
+- **Section header** (`components/shared/SectionHeader.tsx`): title in 7
+  columns, intro in 5, used by Work, Experience and Skills.
 - **Work:** four featured projects as full-width rows, screenshot and story
   side by side, alternating sides. Then "Also built", grouped by area, as a
-  dense three-column index with a stretched title link.
+  dense three-column index with a stretched title link. Case-study prev/next
+  follows this on-page order (`projectsInDisplayOrder`), not the raw array.
 - **Experience:** period / role + company / details + stack rows on night.
-- **Toolkit:** six groups in a ruled 3/2/1-column grid, each ending with
+- **Skills:** six groups in a ruled 3/2/1-column grid (`.skill-grid`, plain
+  CSS so the dividers stay correct at every column count), each ending with
   "Used in" links to its evidence.
-- **About:** portrait + bio, recognition pill, education as a dated list.
-- **Contact:** blue. Big heading, email as the primary target, profiles list,
-  CV downloads.
+- **About:** portrait + bio, a `dl` (based in, recognition) in the same
+  label/value pattern as the project rows, education as a dated list. It has
+  no top padding — Skills already ends with a section's worth of space.
+- **Contact:** blue. "Say hello.", email as the primary target, profiles
+  list, CV downloads.
+- **Footer:** blue band. On the home page it carries only "Back to top" under
+  a rule; sub-pages (case studies, 404) add "Email me" and "Home". The body is
+  a flex column so the footer sits at the bottom of short pages.
+- **404** (`app/not-found.tsx`): "Nothing to decode here." with links home
+  and to the work.
 - Case studies (`/projects/[slug]`): same system. Title, description, and a
   part/stack/links `dl`, the cover, then Results / What I built / Not done yet
   as ruled two-column sections, an optional live iframe, and prev/next.
@@ -85,7 +105,12 @@ superscript count follows the heading (`.count`: "Selected work⁴").
 - **Buttons** (`.btn` + `.btn-solid` / `.btn-line`, `.btn-sm`): pills with
   ink fill or ink outline, blue on hover. Inverted inside `.on-blue`.
 - **Links** (`.link`): underline whose thickness and colour firm up on hover.
-  `.nudge` arrows shift up-right on hover.
+- **Arrows:** ↗ (`ArrowUpRight` + `.nudge`) only for links that leave the site
+  — live sites, source, profiles, email. → (`ArrowRight` + `.nudge-x`) for
+  everything that stays: case studies, in-page jumps, home.
+- **CV buttons** (`components/shared/CvLinks.tsx`): one component, so the
+  labels and the "(PDF, opens in a new tab)" hint are identical in the hero,
+  mobile menu and contact.
 - **Status** (`.status[data-state]`): a dot before the project state, and the
   shape differs too (filled = Live, square = Published, hollow = Source
   available), so state never depends on colour alone.
@@ -101,7 +126,8 @@ superscript count follows the heading (`.count`: "Selected work⁴").
 No animation libraries. CSS + one canvas.
 
 - **Transcriber** (`components/sections/hero/Transcriber.tsx`): canvas
-  waveform built from the word (one burst per character, vowels louder),
+  waveform built from the word (one burst per character, vowels louder, and
+  fewer bars per character when a long greeting would not fit the canvas),
   swept by a playhead; characters appear as their bars are passed, with a fake
   timestamp. rAF runs only during a sweep. It pauses when off-screen or the
   tab is hidden. Reduced motion: static, fully decoded "Hello". It is

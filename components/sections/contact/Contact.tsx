@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
+import { CvLinks } from "@/components/shared/CvLinks";
 import { SocialIcon } from "@/components/shared/SocialIcon";
-import { resumeLinks, socialLinks } from "@/data/site";
+import { socialLinks } from "@/data/site";
 
 const email = socialLinks.find((link) => link.icon === "email")!;
 const profiles = socialLinks.filter((link) => link.icon !== "email");
@@ -9,15 +10,14 @@ export function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-title" className="on-blue section pb-16">
       <div className="shell">
-        <h2 id="contact-title" className="display-xl max-w-[12ch]">
-          Say hello in any language.
+        <h2 id="contact-title" className="display-xl">
+          Say hello.
         </h2>
 
         <div className="mt-12 grid gap-x-12 gap-y-12 lg:mt-16 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <p className="lede max-w-[36ch] text-blue-pale">
-              Open to internships and freelance work. Email reaches me fastest — I reply in
-              English, Russian, or Uzbek.
+            <p className="lede intro">
+              Open to internships and freelance work. Email reaches me fastest.
             </p>
             <a
               href={email.href}
@@ -27,12 +27,7 @@ export function Contact() {
               <ArrowUpRight className="nudge size-[1.1em] shrink-0" aria-hidden="true" />
             </a>
             <div className="mt-10 flex flex-wrap gap-3">
-              {resumeLinks.map((cv) => (
-                <a key={cv.href} href={cv.href} target="_blank" rel="noreferrer" className="btn btn-line">
-                  Download {cv.label}
-                  <span className="sr-only">(PDF, opens in a new tab)</span>
-                </a>
-              ))}
+              <CvLinks />
             </div>
           </div>
 

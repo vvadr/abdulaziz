@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { ProjectPage } from "@/components/sections/projects/route/ProjectPage";
-import { getProject, portfolioProjects } from "@/data/projects";
+import { getProject, portfolioProjects, projectsInDisplayOrder } from "@/data/projects";
 import { siteUrl } from "@/data/site";
 
 type ProjectPageProps = {
@@ -38,17 +38,17 @@ export default async function ProjectRoute({ params }: ProjectPageProps) {
 
   if (!project) notFound();
 
-  const projectIndex = portfolioProjects.findIndex((item) => item.slug === project.slug);
+  const projectIndex = projectsInDisplayOrder.findIndex((item) => item.slug === project.slug);
 
   return (
     <>
       <Navbar />
       <ProjectPage
         project={project}
-        previous={portfolioProjects[projectIndex - 1] ?? null}
-        next={portfolioProjects[projectIndex + 1] ?? null}
+        previous={projectsInDisplayOrder[projectIndex - 1] ?? null}
+        next={projectsInDisplayOrder[projectIndex + 1] ?? null}
       />
-      <Footer withContact />
+      <Footer subpage />
     </>
   );
 }

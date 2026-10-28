@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { featuredProjects, moreProjects, projectAreas } from "@/data/projects";
+import { SectionHeader } from "@/components/shared/SectionHeader";
 import { cn } from "@/lib/utils";
 import { ExternalLinks } from "./ExternalLinks";
 import { FeaturedProject } from "./FeaturedProject";
@@ -8,15 +9,12 @@ export function Projects() {
   return (
     <section id="projects" aria-labelledby="projects-title" className="section pt-8">
       <div className="shell">
-        <div className="grid items-end gap-6 pb-10 lg:grid-cols-12">
-          <h2 id="projects-title" className="display-l lg:col-span-7">
-            Selected work<span className="count">{featuredProjects.length}</span>
-          </h2>
-          <p className="max-w-[46ch] text-ink-soft lg:col-span-5">
-            Each project says what I built, what it measured, and what still isn’t done.
-            Where code was AI-generated, it says that too.
-          </p>
-        </div>
+        <SectionHeader
+          id="projects-title"
+          title="Selected work"
+          count={featuredProjects.length}
+          intro="Each one states my part, the measured results where there are any, and what still isn’t done. Where code was AI-generated, it says so."
+        />
 
         {featuredProjects.map((project, index) => (
           <FeaturedProject key={project.slug} project={project} flip={index % 2 === 1} />
@@ -44,12 +42,12 @@ export function Projects() {
                   {items.map((project) => (
                     <li
                       key={project.slug}
-                      className="group relative grid gap-x-8 gap-y-2 border-b border-rule py-5 transition-colors hover:bg-surface md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.6fr)_minmax(0,1fr)] md:items-baseline md:px-3"
+                      className="group relative grid gap-x-8 gap-y-2 border-b border-rule py-5 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.6fr)_minmax(0,1fr)] md:items-baseline"
                     >
                       <div>
                         <Link
                           href={`/projects/${project.slug}`}
-                          className="text-lg font-bold tracking-[-0.01em] after:absolute after:inset-0 group-hover:text-blue"
+                          className="text-lg font-bold tracking-[-0.01em] transition-colors after:absolute after:inset-0 group-hover:text-blue"
                         >
                           {project.title}
                         </Link>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { PortfolioProject } from "@/data/projects";
 import { cn } from "@/lib/utils";
 import { ExternalLinks } from "./ExternalLinks";
@@ -73,7 +73,7 @@ export function FeaturedProject({ project, flip }: { project: PortfolioProject; 
         <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 lg:mt-auto lg:pt-8">
           <Link href={href} className="btn btn-solid btn-sm">
             Read the case study
-            <ArrowUpRight size={16} className="nudge" aria-hidden="true" />
+            <ArrowRight size={16} className="nudge-x" aria-hidden="true" />
           </Link>
           <ExternalLinks project={project} />
         </div>

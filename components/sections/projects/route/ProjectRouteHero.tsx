@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { PortfolioProject } from "@/data/projects";
 import { cn } from "@/lib/utils";
 import { ExternalLinks } from "../ExternalLinks";
@@ -45,7 +45,7 @@ export function ProjectRouteHero({ project }: { project: PortfolioProject }) {
             {previewable ? (
               <a href="#live-trial" className="link mt-2 inline-flex items-center gap-1 text-[0.9375rem] font-semibold">
                 Try it on this page
-                <ArrowUpRight size={15} className="nudge rotate-90" aria-hidden="true" />
+                <ArrowRight size={15} className="nudge-x" aria-hidden="true" />
               </a>
             ) : null}
           </dd>

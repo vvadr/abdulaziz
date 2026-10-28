@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { navItems, resumeLinks, socialLinks } from "@/data/site";
+import { CvLinks } from "@/components/shared/CvLinks";
+import { navItems, socialLinks } from "@/data/site";
 import { cn } from "@/lib/utils";
 
 const email = socialLinks.find((link) => link.icon === "email")!;
@@ -146,11 +147,7 @@ export function Navbar() {
             <a href={email.href} className="btn btn-solid">
               Email me
             </a>
-            {resumeLinks.map((cv) => (
-              <a key={cv.href} href={cv.href} className="btn btn-line" target="_blank" rel="noreferrer">
-                {cv.label}
-              </a>
-            ))}
+            <CvLinks />
           </div>
         </nav>
       </div>
