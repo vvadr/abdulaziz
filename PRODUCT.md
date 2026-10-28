@@ -27,20 +27,20 @@ the site.
 
 ## Brand Personality
 
-Cinematic, precise, quietly confident. The portfolio is a noir stage: a
-static atmospheric star field behind dark surfaces, bold Space Grotesk
-display type with Instrument Serif italics, and a gold + blue accent pair on
-near-black. The drama stays in the backdrop — the content on top is honest
-and legible. Three words: **cinematic, legible, credible.**
+Precise, signal-minded, quietly confident. The site reads like a clean
+technical spec sheet with one live instrument on it: a waveform that decodes
+"hello" in three languages, a nod to the speech-recognition work. Cool
+off-white page, ink type in wide Archivo, one committed ultramarine. Three
+words: **measured, legible, credible.**
 
 ## Anti-references
 
 - Generic dark SaaS portfolios: near-black + one timid accent + a fade-up on
-  every section. This site commits harder through its cinematic composition,
-  typography, and gold/blue atmosphere without taxing the visitor's GPU.
-- Spectacle without function: the cinematic framing has to earn its keep
-  (the "browser chrome" wraps a real live iframe and the nav underline tracks
-  the section actually on screen — not chrome for its own sake).
+  every section. This site commits to a light page with one saturated colour
+  and section-level art direction instead.
+- Spectacle without function: the one animated piece (the transcriber) is
+  about his actual field, and pauses off-screen; nothing else moves for
+  its own sake.
 - Overstated junior framing: fake metrics, "10x", hero-metric stat blocks,
   claims of work not actually done.
 
@@ -50,8 +50,7 @@ and legible. Three words: **cinematic, legible, credible.**
    published WER scores, live platforms, named roles. Every project states
    the author's actual role (including where code was AI-generated) and its
    known limits. No invented numbers.
-2. **One accent, no glow.** Sky blue carries every accent; indigo only
-   supports. Colour appears as solid fill, solid text, or a hairline border —
+2. **One accent, no glow.** Ultramarine carries every accent. Colour appears as solid fill, solid text, or a hairline border —
    never as a gradient in text or a coloured halo.
 3. **Contrast is non-negotiable.** Every text/background pair is verified
    readable (`scripts/contrast-check.mjs`). Low-opacity gray "for elegance"
@@ -69,5 +68,5 @@ actual backgrounds. Full keyboard operability (nav, mobile menu, project
 live-preview controls) with visible focus rings. Every decorative animation
 (typed/rotating greeting, scroll reveals, tab-indicator slide) has a
 `prefers-reduced-motion` path. Semantic landmarks and one true `<h1>` per
-page. Color is never the only signal for state — gold/blue always pairs with
-text, icon, or weight for color-blind safety.
+page. Color is never the only signal for state — project status pairs a label
+with a dot shape (filled / square / hollow).

@@ -1,49 +1,81 @@
-import { SectionHeading } from "@/components/shared/SectionHeading";
+import Link from "next/link";
 import { featuredProjects, moreProjects, projectAreas } from "@/data/projects";
-import { FeaturedProjectCard } from "./FeaturedProjectCard";
-import { ProjectCard } from "./ProjectCard";
+import { cn } from "@/lib/utils";
+import { ExternalLinks } from "./ExternalLinks";
+import { FeaturedProject } from "./FeaturedProject";
 
-/** The strongest work first, each readable at a glance; everything else in a
- *  compact list grouped by area. Every project has its own case study. */
 export function Projects() {
   return (
-    <section id="projects" className="relative px-5 py-32 sm:px-10 lg:px-20">
-      <div className="mx-auto max-w-6xl">
-        <SectionHeading label="01 — Work">
-          Selected <span className="serif-accent text-accent">work</span>
-        </SectionHeading>
-
-        <div className="mt-14 space-y-8">
-          {featuredProjects.map((project, index) => (
-            <div key={project.slug} data-reveal>
-              <FeaturedProjectCard project={project} index={index} />
-            </div>
-          ))}
+    <section id="projects" aria-labelledby="projects-title" className="section pt-8">
+      <div className="shell">
+        <div className="grid items-end gap-6 pb-10 lg:grid-cols-12">
+          <h2 id="projects-title" className="display-l lg:col-span-7">
+            Selected work<span className="count">{featuredProjects.length}</span>
+          </h2>
+          <p className="max-w-[46ch] text-ink-soft lg:col-span-5">
+            Each project says what I built, what it measured, and what still isn’t done.
+            Where code was AI-generated, it says that too.
+          </p>
         </div>
 
-        <div className="mt-24">
-          <h3 data-reveal className="font-display text-2xl font-bold sm:text-3xl">
-            More projects
-          </h3>
+        {featuredProjects.map((project, index) => (
+          <FeaturedProject key={project.slug} project={project} flip={index % 2 === 1} />
+        ))}
 
-          <div className="mt-10 grid gap-12 lg:grid-cols-2">
-            {projectAreas.map((area) => (
-              <div key={area.id} data-reveal>
-                <h4 className="section-label font-display text-xs font-medium uppercase">
+        <div className="mt-16 border-t border-ink pt-12 lg:mt-24">
+          <h2 id="more-projects-title" className="display-m">
+            Also built<span className="count">{moreProjects.length}</span>
+          </h2>
+
+          {projectAreas.map((area) => {
+            const items = moreProjects.filter((project) => project.area === area.id);
+            if (items.length === 0) return null;
+
+            return (
+              <section key={area.id} aria-labelledby={`area-${area.id}`} className="mt-10">
+                <h3
+                  id={`area-${area.id}`}
+                  className="meta flex items-center gap-3 pb-3 font-semibold text-blue"
+                >
                   {area.label}
-                </h4>
-                <ul className="mt-5 grid gap-3">
-                  {moreProjects
-                    .filter((project) => project.area === area.id)
-                    .map((project) => (
-                      <li key={project.slug}>
-                        <ProjectCard project={project} />
-                      </li>
-                    ))}
+                  <span className="h-px flex-1 bg-rule" aria-hidden="true" />
+                </h3>
+                <ul>
+                  {items.map((project) => (
+                    <li
+                      key={project.slug}
+                      className="group relative grid gap-x-8 gap-y-2 border-b border-rule py-5 transition-colors hover:bg-surface md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.6fr)_minmax(0,1fr)] md:items-baseline md:px-3"
+                    >
+                      <div>
+                        <Link
+                          href={`/projects/${project.slug}`}
+                          className="text-lg font-bold tracking-[-0.01em] after:absolute after:inset-0 group-hover:text-blue"
+                        >
+                          {project.title}
+                        </Link>
+                        <p className="meta mt-1 flex flex-wrap gap-x-2 text-ink-soft">
+                          <span>{project.category}</span>
+                          <span aria-hidden="true">/</span>
+                          <span
+                            className={cn("status", project.state === "Live" && "text-blue")}
+                            data-state={project.state}
+                          >
+                            {project.state}
+                          </span>
+                        </p>
+                      </div>
+                      <p className="text-[0.9875rem] leading-relaxed">{project.summary}</p>
+                      <div className="flex flex-col gap-2">
+                        <p className="meta text-ink-soft">{project.stack.join(" · ")}</p>
+                        {/* Above the stretched title link so these stay clickable. */}
+                        <ExternalLinks project={project} className="relative z-10 text-sm" />
+                      </div>
+                    </li>
+                  ))}
                 </ul>
-              </div>
-            ))}
-          </div>
+              </section>
+            );
+          })}
         </div>
       </div>
     </section>

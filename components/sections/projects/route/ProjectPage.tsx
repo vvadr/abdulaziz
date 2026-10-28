@@ -1,45 +1,28 @@
-import { Check, CircleAlert, TrendingUp, type LucideIcon } from "lucide-react";
 import type { PortfolioProject } from "@/data/projects";
+import { cn } from "@/lib/utils";
 import { ProjectTrial } from "../ProjectTrial";
 import { ProjectNavigation } from "./ProjectNavigation";
 import { ProjectRouteHero } from "./ProjectRouteHero";
 
 function DetailSection({
   id,
-  label,
   title,
   items,
-  icon: Icon,
-  iconClassName,
+  muted = false,
 }: {
   id: string;
-  label: string;
   title: string;
   items: string[];
-  icon: LucideIcon;
-  iconClassName: string;
+  muted?: boolean;
 }) {
   return (
-    <section
-      className="grid gap-10 border-t border-glass-border pt-14 lg:grid-cols-[minmax(0,0.85fr)_1.15fr]"
-      aria-labelledby={id}
-    >
-      <div data-reveal>
-        <p className="section-label font-display text-xs font-medium uppercase">{label}</p>
-        <h2 id={id} className="mt-3 font-display text-3xl font-semibold text-foreground">
-          {title}
-        </h2>
-      </div>
-      <ul className="space-y-4">
+    <section className="grid gap-x-12 gap-y-6 border-t border-ink pt-8 lg:grid-cols-12" aria-labelledby={id}>
+      <h2 id={id} className="display-m lg:col-span-4">
+        {title}
+      </h2>
+      <ul className={cn("frames space-y-4 text-lg leading-relaxed lg:col-span-7 lg:col-start-6", muted && "text-ink-soft")}>
         {items.map((item) => (
-          <li
-            key={item}
-            data-reveal
-            className="glass flex items-start gap-3 rounded-2xl p-5 leading-relaxed text-muted"
-          >
-            <Icon size={18} className={`mt-1 shrink-0 ${iconClassName}`} aria-hidden="true" />
-            <span>{item}</span>
-          </li>
+          <li key={item}>{item}</li>
         ))}
       </ul>
     </section>
@@ -56,42 +39,27 @@ export function ProjectPage({
   next: PortfolioProject | null;
 }) {
   return (
-    <main className="shell pb-20 pt-28 sm:pt-32">
+    <main id="content" className="shell overflow-x-clip pb-24 pt-10 sm:pt-14">
+      <span id="top" />
       <ProjectRouteHero project={project} />
 
-      <div className="mt-16 space-y-16">
+      <div className="mt-20 space-y-16 lg:mt-24 lg:space-y-20">
         {project.results ? (
-          <DetailSection
-            id="project-results-title"
-            label="Results"
-            title="What it achieved"
-            items={project.results}
-            icon={TrendingUp}
-            iconClassName="text-accent"
-          />
+          <DetailSection id="project-results-title" title="Results" items={project.results} />
         ) : null}
-        <DetailSection
-          id="project-highlights-title"
-          label="Build"
-          title="What I built"
-          items={project.highlights}
-          icon={Check}
-          iconClassName="text-accent"
-        />
+        <DetailSection id="project-highlights-title" title="What I built" items={project.highlights} />
         {project.limitations ? (
           <DetailSection
             id="project-limitations-title"
-            label="Limits"
-            title="What isn't done yet"
+            title="Not done yet"
             items={project.limitations}
-            icon={CircleAlert}
-            iconClassName="text-accent-2"
+            muted
           />
         ) : null}
       </div>
 
       {project.liveUrl && project.embeddable !== false ? (
-        <div id="live-trial" className="mt-16 scroll-mt-28">
+        <div id="live-trial" className="mt-20 scroll-mt-24">
           <ProjectTrial project={project} />
         </div>
       ) : null}

@@ -41,14 +41,14 @@ export default async function ProjectRoute({ params }: ProjectPageProps) {
   const projectIndex = portfolioProjects.findIndex((item) => item.slug === project.slug);
 
   return (
-    <div className="relative min-h-screen overflow-x-clip">
+    <>
       <Navbar />
       <ProjectPage
         project={project}
         previous={portfolioProjects[projectIndex - 1] ?? null}
         next={portfolioProjects[projectIndex + 1] ?? null}
       />
-      <Footer />
-    </div>
+      <Footer withContact />
+    </>
   );
 }

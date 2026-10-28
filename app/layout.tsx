@@ -1,31 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import { Archivo, Onest } from "next/font/google";
 import { siteMetadata, siteUrl } from "@/data/site";
-import { SceneBackdrop } from "@/components/layout/scene/SceneBackdrop";
-import { ScrollFX } from "@/components/layout/ScrollFX";
-import { Preloader } from "@/components/layout/Preloader";
-import { CustomCursor } from "@/components/layout/CustomCursor";
-import { Letterbox } from "@/components/layout/Letterbox";
+import { RevealObserver } from "@/components/layout/RevealObserver";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
+// Archivo's width axis does the display work; see DESIGN.md.
+const archivo = Archivo({
+  subsets: ["latin", "latin-ext"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
+// Cyrillic only — Archivo has no Cyrillic, and the hero greets in Russian.
+const onest = Onest({
+  subsets: ["cyrillic"],
+  variable: "--font-onest",
   display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  variable: "--font-instrument-serif",
-  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -61,8 +53,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#070a0f",
-  colorScheme: "dark",
+  themeColor: "#f4f6f9",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -71,21 +63,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${instrumentSerif.variable}`}
-    >
+    <html lang="en" className={`${archivo.variable} ${onest.variable}`}>
       <body>
-        <Preloader />
-        <SceneBackdrop />
-        <Letterbox />
-        <div className="noise-overlay" aria-hidden />
-        <CustomCursor />
-        <ScrollFX />
-
-        <div className="content-scrim relative z-[var(--z-content)]">
-          {children}
-        </div>
+        <a
+          href="#content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-skip)] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-bg"
+        >
+          Skip to content
+        </a>
+        <RevealObserver />
+        {children}
       </body>
     </html>
   );

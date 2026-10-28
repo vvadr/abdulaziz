@@ -20,29 +20,34 @@ const ratio = (fg, bg) => {
   return Math.max(a, b) / Math.min(a, b);
 };
 
+// Hex equivalents of the OKLCH tokens in app/globals.css.
 const T = {
-  bg: "#070a0f",
-  fg: "#f2f5f9",
-  muted: "#98a6ba",
-  accent: "#7dd3fc",
-  accent2: "#a5b4fc",
-  accent3: "#e2e8f0",
-  // rgba(13,17,25,0.90) composited over #070a0f.
-  glass: "#0c1017",
+  bg: "#f4f6f9", // --bg
+  surface: "#ffffff", // --surface
+  ink: "#101524", // --ink
+  inkSoft: "#4e5566", // --ink-soft
+  blue: "#2349d7", // --blue
+  blueDeep: "#132d94", // --blue-deep
+  bluePale: "#d3e1ff", // --blue-pale
+  white: "#ffffff",
+  night: "#0c111e", // --night
+  nightFg: "#f2f3f8", // --night-fg
+  nightSoft: "#b0b7c8", // --night-soft
+  nightBlue: "#87a8f7", // --night-blue
 };
 
 const checks = [
-  ["fg / bg", "fg", "bg", 4.5],
-  ["muted / bg", "muted", "bg", 4.5],
-  ["fg / glass", "fg", "glass", 4.5],
-  ["muted / glass", "muted", "glass", 4.5],
-  ["accent (sky) / bg", "accent", "bg", 4.5],
-  ["accent (sky) / glass", "accent", "glass", 4.5],
-  ["accent-2 (indigo) / bg", "accent2", "bg", 4.5],
-  ["accent-2 (indigo) / glass", "accent2", "glass", 4.5],
-  ["accent-3 (slate) / bg", "accent3", "bg", 4.5],
-  ["bg text on accent (btn-primary fill)", "bg", "accent", 4.5],
-  ["bg text on accent-3 (btn-primary hover)", "bg", "accent3", 4.5],
+  ["ink / bg", "ink", "bg", 4.5],
+  ["ink-soft / bg", "inkSoft", "bg", 4.5],
+  ["ink-soft / surface (row hover)", "inkSoft", "surface", 4.5],
+  ["blue text / bg", "blue", "bg", 4.5],
+  ["bg text on ink (btn-solid)", "bg", "ink", 4.5],
+  ["white on blue (btn-solid hover, contact)", "white", "blue", 4.5],
+  ["blue-pale on blue (contact secondary)", "bluePale", "blue", 4.5],
+  ["blue-deep on white (btn on blue)", "blueDeep", "white", 4.5],
+  ["night-fg / night", "nightFg", "night", 4.5],
+  ["night-soft / night", "nightSoft", "night", 4.5],
+  ["night-blue / night", "nightBlue", "night", 4.5],
 ];
 
 let allPass = true;

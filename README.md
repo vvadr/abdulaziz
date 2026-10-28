@@ -1,21 +1,20 @@
 # Abdulaziz Yusupaliev — Portfolio
 
 Personal portfolio for **Abdulaziz Yusupaliev**, an Applied AI/ML Engineer &
-Full-Stack Developer from Tashkent. A single-page cinematic noir site — a
-static atmospheric star field behind dark glass surfaces — with hero, selected
-work, experience, skills, about (including education), and contact, plus a
-case-study route per project with a live in-page preview where the deployment
-allows embedding.
+Full-Stack Developer from Tashkent. A light, single-page site built around
+"the transcript": a hero waveform that decodes a greeting in three languages,
+then selected work, experience, toolkit, about (including education), and
+contact, plus a case-study route per project with a live in-page preview where
+the deployment allows embedding. See `DESIGN.md` for the visual system.
 
 ## Tech stack
 
 - **Next.js** (App Router) + **React** + **TypeScript**
-- **Tailwind CSS v4** with a hex token system (`app/globals.css`)
-- **Static CSS gradients** — the GPU-light atmospheric backdrop, with no
-  canvas, WebGL, or continuous background render loop
-- **GSAP + ScrollTrigger** and **Lenis** — smooth scroll and reveals
-- **Framer Motion** — preloader, mobile menu, nav underline, greeting rotator
-- **Space Grotesk / Inter / Instrument Serif** via `next/font/google`
+- **Tailwind CSS v4** with an OKLCH token system (`app/globals.css`)
+- **Canvas 2D** for the hero waveform; everything else is CSS. There are no
+  animation libraries.
+- **Archivo** (variable width) + **Onest** (Cyrillic fallback only) via
+  `next/font/google`
 - Icons: `lucide-react` + `simple-icons`
 
 ## Getting started

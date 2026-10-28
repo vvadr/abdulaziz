@@ -1,493 +1,472 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ */
-/* Design tokens — cool slate with a single sky accent (see DESIGN.md) */
+/* Design tokens — "the transcript" (see DESIGN.md)                   */
+/* Cool off-white page, ink type, one committed ultramarine.          */
+/* Hex equivalents live in scripts/contrast-check.mjs.                */
 /* ------------------------------------------------------------------ */
 :root {
-  --background: #070a0f;
-  --foreground: #f2f5f9;
-  --muted: #98a6ba;
-  --accent: #7dd3fc; /* sky — the lead accent */
-  --accent-2: #a5b4fc; /* indigo — quiet support */
-  --accent-3: #e2e8f0; /* slate — neutral highlight */
-  --glass: rgba(13, 17, 25, 0.9);
-  --glass-strong: rgba(13, 17, 25, 0.96);
-  --glass-border: rgba(255, 255, 255, 0.09);
-  --grid-line: rgba(148, 163, 184, 0.05);
-  --shadow-deep: rgba(0, 0, 0, 0.7);
+  --bg: oklch(0.972 0.005 265); /* page */
+  --surface: oklch(1 0 0); /* image mats, table hover */
+  --ink: oklch(0.2 0.03 268); /* primary text */
+  --ink-soft: oklch(0.45 0.03 268); /* secondary text */
+  --rule: oklch(0.87 0.012 268); /* hairlines */
+  --blue: oklch(0.48 0.22 266); /* the one accent */
+  --blue-deep: oklch(0.36 0.17 266); /* accent hover / pressed */
+  --blue-pale: oklch(0.91 0.045 266); /* secondary text on blue */
+  --wave-idle: oklch(0.83 0.03 266); /* undecoded waveform bars */
 
-  /* Height-aware: on wide-but-short windows a purely vw-based size grows
-     taller than the viewport and pushes the hero under the fixed navbar. */
-  --hero-size: clamp(3.4rem, min(13vw, 18vh), 10.5rem);
-  --section-size: clamp(2.2rem, 4.8vw, 4rem);
+  /* The ink section (experience) */
+  --night: oklch(0.18 0.028 268);
+  --night-fg: oklch(0.965 0.006 268);
+  --night-soft: oklch(0.78 0.025 268);
+  --night-blue: oklch(0.74 0.12 266);
+  --night-rule: oklch(0.32 0.03 268);
 
-  /* Layering (bottom → top):
-     scene 0 · content 10 · letterbox 30 · nav 50 · mobile menu 55 ·
-     progress beam 60 · noise 65 · cursor 70 · preloader 80 · skip link 90 */
-  --z-scene: 0;
-  --z-content: 10;
-  --z-letterbox: 30;
+  --display-xl: clamp(3rem, 1.4rem + 7.4vw, 6rem);
+  --display-l: clamp(2.4rem, 1.5rem + 3.6vw, 4.25rem);
+  --display-m: clamp(1.6rem, 1.25rem + 1.4vw, 2.25rem);
+
+  --gutter: clamp(1rem, 0.4rem + 2.6vw, 3rem);
+  --section-pad: clamp(5rem, 3.5rem + 6vw, 9rem);
+
+  /* Layering: content 0 · nav 50 · mobile menu 60 · skip link 90 */
   --z-nav: 50;
-  --z-menu: 55;
-  --z-progress: 60;
-  --z-noise: 65;
-  --z-cursor: 70;
-  --z-preloader: 80;
+  --z-menu: 60;
   --z-skip: 90;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* ease-out-quint */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --color-accent-2: var(--accent-2);
-  --color-accent-3: var(--accent-3);
-  --color-glass: var(--glass);
-  --color-glass-border: var(--glass-border);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-rule: var(--rule);
+  --color-blue: var(--blue);
+  --color-blue-deep: var(--blue-deep);
+  --color-blue-pale: var(--blue-pale);
+  --color-night: var(--night);
+  --color-night-fg: var(--night-fg);
+  --color-night-soft: var(--night-soft);
+  --color-night-blue: var(--night-blue);
+  --color-night-rule: var(--night-rule);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
-    system-ui, sans-serif;
-  --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+  /* Archivo carries everything; Onest only supplies Cyrillic glyphs. */
+  --font-sans: var(--font-archivo), var(--font-onest), ui-sans-serif, system-ui,
+    sans-serif;
 }
 
-/* ------------------------------------------------------------------ */
-/* Base                                                               */
-/* ------------------------------------------------------------------ */
-* {
-  border-color: var(--glass-border);
-}
+@layer base {
+  /* ------------------------------------------------------------------ */
+  /* Base                                                               */
+  /* ------------------------------------------------------------------ */
+  * {
+    border-color: var(--rule);
+  }
 
-html {
-  /* Lenis drives smooth scrolling; native smooth would fight it. */
-  scroll-behavior: auto;
-  /* Anchor targets clear the fixed navbar. */
-  scroll-padding-top: 5.5rem;
-}
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
 
-html.lenis,
-html.lenis body {
-  height: auto;
-}
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    font-feature-settings: "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
+  p {
+    text-wrap: pretty;
+  }
 
-/* The custom cursor replaces the native one on precise pointers only. */
-@media (pointer: fine) {
-  body.custom-cursor,
-  body.custom-cursor a,
-  body.custom-cursor button {
-    cursor: none;
+  ::selection {
+    background: var(--blue);
+    color: white;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .on-dark :focus-visible,
+  .on-blue :focus-visible {
+    outline-color: white;
   }
 }
 
-::selection {
-  background: color-mix(in srgb, var(--accent) 28%, transparent);
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--accent) 55%, transparent);
-  border-radius: 99px;
-}
-
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
-/* ------------------------------------------------------------------ */
-/* Component classes                                                  */
-/* ------------------------------------------------------------------ */
+/* Component classes sit in the components layer so Tailwind utilities
+   (md:hidden, lg:order-2, …) can still override them. */
 @layer components {
-  .shell {
-    margin-inline: auto;
-    width: 100%;
-    max-width: 72rem;
-    padding-inline: clamp(1.25rem, 4vw, 3rem);
+  /* ------------------------------------------------------------------ */
+  /* Type                                                               */
+  /* ------------------------------------------------------------------ */
+  /* Archivo's width axis is the voice: wide + heavy for display,
+     normal width for reading. */
+  .wide {
+    font-stretch: 125%;
+    font-variation-settings: "wdth" 125;
   }
 
-  /* Opaque enough to avoid backdrop-filter: live blur forces expensive
-     recompositing on every scrolled frame. */
-  .glass {
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
+  .display-xl {
+    font-size: var(--display-xl);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+    font-stretch: 125%;
+    font-variation-settings: "wdth" 125;
   }
 
-  .glass-strong {
-    background: var(--glass-strong);
-    border: 1px solid var(--glass-border);
+  .display-l {
+    font-size: var(--display-l);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-stretch: 125%;
+    font-variation-settings: "wdth" 125;
   }
 
-  /* Copy stays legible over the star layers. */
-  .text-shadow {
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.9);
-  }
-
-  /* Fixed veil between the backdrop and the content. */
-  .content-scrim::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background: radial-gradient(
-      ellipse 95% 75% at 50% 45%,
-      rgba(7, 10, 15, 0.45) 0%,
-      rgba(7, 10, 15, 0.78) 100%
-    );
-  }
-
-  .hero-title {
-    font-size: var(--hero-size);
-    line-height: 0.92;
-    letter-spacing: -0.04em;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
-  }
-
-  .section-title {
-    font-size: var(--section-size);
-    line-height: 1.05;
-    text-shadow: 0 3px 18px rgba(0, 0, 0, 0.9);
-  }
-
-  /* The scroll hint appears only when the hero has room to spare for it. */
-  .scroll-cue {
-    display: none;
-
-    @media (min-width: 640px) and (min-height: 960px) {
-      display: flex;
-    }
-  }
-
-  .hero-serif {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-weight: 400;
+  .display-m {
+    font-size: var(--display-m);
+    font-weight: 700;
+    line-height: 1.08;
     letter-spacing: -0.02em;
+    font-stretch: 112%;
+    font-variation-settings: "wdth" 112;
   }
 
-  /* Split characters need their own solid colour — the parent only carries
-     the shadow. */
-  .hero-surname .char {
-    color: var(--accent);
+  /* Small count after a heading: "Selected work⁴". */
+  .count {
+    display: inline-block;
+    margin-left: 0.15em;
+    font-size: 0.32em;
+    font-weight: 600;
+    letter-spacing: 0;
+    vertical-align: super;
+    line-height: 0;
+    color: var(--blue);
+    font-variant-numeric: tabular-nums;
   }
 
-  .serif-accent {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-weight: 400;
+  .on-dark .count {
+    color: var(--night-blue);
+  }
+
+  .on-blue .count {
+    color: var(--blue-pale);
+  }
+
+  .lede {
+    font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+
+  .meta {
+    font-size: 0.8125rem;
+    font-weight: 500;
     letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
   }
 
-  .section-label {
-    color: var(--accent);
-    letter-spacing: 0.42em;
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
 
-  /* Static grid — animating background-position would repaint constantly. */
-  .grid-bg {
-    background-image:
-      linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 72px 72px;
-    mask-image: radial-gradient(
-      ellipse 75% 65% at 50% 42%,
-      black 25%,
-      transparent 78%
-    );
-    -webkit-mask-image: radial-gradient(
-      ellipse 75% 65% at 50% 42%,
-      black 25%,
-      transparent 78%
-    );
+  /* ------------------------------------------------------------------ */
+  /* Layout                                                             */
+  /* ------------------------------------------------------------------ */
+  .shell {
+    width: 100%;
+    max-width: 84rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
   }
 
-  /* Static film-grain tile (SVG turbulence), no animation. */
-  .noise-overlay {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: var(--z-noise);
-    opacity: 0.04;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 128px 128px;
+  .section {
+    padding-block: var(--section-pad);
   }
 
-  /* Hover sweep on project covers — runs only while hovered. */
-  .preview-shimmer {
-    background: linear-gradient(
-      105deg,
-      transparent 35%,
-      color-mix(in srgb, var(--foreground) 12%, transparent) 50%,
-      transparent 65%
-    );
-    background-size: 250% 100%;
+  .on-dark {
+    background: var(--night);
+    color: var(--night-fg);
   }
 
-  .group:hover .preview-shimmer {
-    animation: shimmer 1.6s ease-in-out infinite;
+  .on-dark * {
+    border-color: var(--night-rule);
   }
 
-  /* Buttons — flat fills, no glow. */
-  .btn-primary {
+  .on-blue {
+    background: var(--blue);
+    color: white;
+  }
+
+  .on-blue * {
+    border-color: oklch(1 0 0 / 0.28);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Links & buttons                                                    */
+  /* ------------------------------------------------------------------ */
+  .link {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: color-mix(in oklch, currentColor 40%, transparent);
+    transition:
+      text-decoration-color 0.2s,
+      text-decoration-thickness 0.2s,
+      color 0.2s;
+  }
+
+  .link:hover {
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 2px;
+  }
+
+  .btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    height: 3rem;
-    padding-inline: 2rem;
-    border-radius: 999px;
-    background: var(--accent);
-    color: var(--background);
-    font-family: var(--font-display);
+    gap: 0.55rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.35rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    font-size: 0.875rem;
-    white-space: nowrap;
-    transition:
-      background-color 0.25s ease,
-      transform 0.25s ease;
-  }
-
-  .btn-primary:hover {
-    background: var(--accent-3);
-    transform: translateY(-1px);
-  }
-
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    height: 3rem;
-    padding-inline: 2rem;
+    line-height: 1;
     border-radius: 999px;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    color: var(--foreground);
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 0.875rem;
-    white-space: nowrap;
+    border: 1.5px solid transparent;
     transition:
-      border-color 0.25s ease,
-      background-color 0.25s ease,
-      transform 0.25s ease;
+      background-color 0.25s var(--ease-out),
+      color 0.25s var(--ease-out),
+      border-color 0.25s var(--ease-out),
+      transform 0.25s var(--ease-out);
+    white-space: nowrap;
   }
 
-  .btn-ghost:hover {
-    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-    background-color: color-mix(in srgb, var(--accent) 8%, transparent);
-    transform: translateY(-1px);
+  .btn:active {
+    transform: translateY(1px);
+  }
+
+  .btn-solid {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .btn-solid:hover {
+    background: var(--blue);
+    color: white;
+  }
+
+  .btn-line {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .btn-line:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .on-blue .btn-solid {
+    background: white;
+    color: var(--blue-deep);
+  }
+
+  .on-blue .btn-solid:hover {
+    background: var(--night);
+    color: white;
+  }
+
+  .on-blue .btn-line {
+    border-color: white;
+    color: white;
+  }
+
+  .on-blue .btn-line:hover {
+    background: white;
+    color: var(--blue-deep);
   }
 
   .btn-sm {
-    height: 2.375rem;
-    padding-inline: 1.25rem;
-    font-size: 0.75rem;
+    min-height: 2.5rem;
+    padding: 0.55rem 1rem;
+    font-size: 0.875rem;
   }
 
-  .btn-lg {
-    height: 3.5rem;
-    padding-inline: 2.5rem;
-    font-size: 1rem;
+  /* Arrow that nudges on hover of its parent link. */
+  .nudge {
+    transition: transform 0.3s var(--ease-out);
   }
 
-  .tag {
+  a:hover > .nudge,
+  a:focus-visible > .nudge,
+  .group:hover .nudge {
+    transform: translate(2px, -2px);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Pieces                                                             */
+  /* ------------------------------------------------------------------ */
+  .status {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    border: 1px solid var(--glass-border);
-    background: color-mix(in srgb, var(--accent) 5%, transparent);
+    gap: 0.45rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .status::before {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    background: currentColor;
     border-radius: 999px;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: var(--accent);
   }
-}
 
-/* ------------------------------------------------------------------ */
-/* Parallax backdrop                                                  */
-/* ------------------------------------------------------------------ */
-/* Three star fields and two orbit rings, each moved by SceneBackdrop at a
-   different rate. Everything here is painted once and then only translated,
-   so the pointer/scroll loop stays on the compositor and idles at zero. */
-.scene-backdrop {
-  background:
-    radial-gradient(
-      ellipse 68% 52% at 50% 38%,
-      rgba(125, 211, 252, 0.05) 0%,
-      transparent 72%
-    ),
-    radial-gradient(
-      ellipse 58% 48% at 14% 88%,
-      rgba(165, 180, 252, 0.04) 0%,
-      transparent 70%
-    ),
-    var(--background);
-}
-
-.scene-layer {
-  position: absolute;
-  inset: -14%;
-  will-change: transform;
-}
-
-.scene-stars {
-  position: absolute;
-  inset: 0;
-  background-repeat: repeat;
-  mask-image: radial-gradient(ellipse 88% 82% at 50% 44%, black, transparent 92%);
-  -webkit-mask-image: radial-gradient(
-    ellipse 88% 82% at 50% 44%,
-    black,
-    transparent 92%
-  );
-}
-
-.scene-stars-far {
-  opacity: 0.5;
-  background-image: radial-gradient(
-    circle,
-    rgba(226, 232, 240, 0.75) 0 1px,
-    transparent 1.4px
-  );
-  background-size: 186px 164px;
-}
-
-.scene-stars-mid {
-  opacity: 0.58;
-  background-image: radial-gradient(
-    circle,
-    rgba(191, 219, 254, 0.72) 0 1px,
-    transparent 1.5px
-  );
-  background-size: 132px 118px;
-  background-position: 41px 27px;
-}
-
-.scene-stars-near {
-  opacity: 0.72;
-  background-image: radial-gradient(
-    circle,
-    rgba(125, 211, 252, 0.7) 0 1.2px,
-    transparent 1.8px
-  );
-  background-size: 97px 89px;
-  background-position: 19px 63px;
-}
-
-.scene-orbit {
-  position: absolute;
-  left: 50%;
-  top: 46%;
-  width: min(78vw, 62rem);
-  aspect-ratio: 1;
-  border: 1px solid transparent;
-  border-radius: 50%;
-}
-
-.scene-orbit-a {
-  border-top-color: rgba(125, 211, 252, 0.42);
-  border-left-color: rgba(125, 211, 252, 0.14);
-  transform: translate(-50%, -50%) rotate(-14deg) scaleY(0.36);
-}
-
-.scene-orbit-b {
-  width: min(92vw, 72rem);
-  border-right-color: rgba(165, 180, 252, 0.34);
-  border-bottom-color: rgba(165, 180, 252, 0.12);
-  transform: translate(-50%, -50%) rotate(18deg) scaleY(0.3);
-}
-
-/* ------------------------------------------------------------------ */
-/* Keyframes                                                          */
-/* ------------------------------------------------------------------ */
-@keyframes shimmer {
-  0% {
-    background-position: 130% 0;
+  /* "Source available" is a hollow dot so state never relies on colour. */
+  .status[data-state="Source available"]::before {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px currentColor;
   }
-  100% {
-    background-position: -130% 0;
-  }
-}
 
-@keyframes scroll-dot {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
+  .status[data-state="Published"]::before {
+    border-radius: 1px;
   }
-  70% {
-    transform: translateY(13px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 0;
-  }
-}
 
-@keyframes float-y {
-  0%,
-  100% {
-    transform: translateY(0);
+  /* Bullet: a short blue bar, like a decoded frame. */
+  .frames > li {
+    position: relative;
+    padding-left: 1.4rem;
   }
-  50% {
-    transform: translateY(-10px);
-  }
-}
 
-@keyframes cursor-blink {
-  0%,
-  49% {
-    opacity: 1;
+  .frames > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 0.7rem;
+    height: 3px;
+    background: var(--blue);
   }
-  50%,
-  100% {
-    opacity: 0;
-  }
-}
 
-/* Status dots only — a gentle fade, not a glow. */
-@keyframes pulse-dot {
-  0%,
-  100% {
-    opacity: 0.45;
+  .on-dark .frames > li::before {
+    background: var(--night-blue);
   }
-  50% {
-    opacity: 1;
-  }
-}
 
-/* ------------------------------------------------------------------ */
-/* Reduced motion                                                     */
-/* ------------------------------------------------------------------ */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .shot {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+  }
+
+  .shot img {
+    transition: transform 0.9s var(--ease-out);
+  }
+
+  a:hover .shot img,
+  .shot:hover img {
+    transform: scale(1.025);
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Motion                                                             */
+  /* ------------------------------------------------------------------ */
+  @layer components {
+  /* Hero name rises out of a mask on first paint. CSS keyframes run even
+       in background tabs once visible, and the end state is the default. */
+    .rise {
+      display: block;
+      overflow: hidden;
+      padding-bottom: 0.06em;
+      margin-bottom: -0.06em;
+    }
+
+    .rise > span {
+      display: block;
+      animation: rise 1.1s var(--ease-out) both;
+      animation-delay: var(--d, 0ms);
+    }
+
+    @keyframes rise {
+      from {
+        transform: translateY(105%);
+      }
+    }
+
+    .fade-in {
+      animation: fade-in 0.9s var(--ease-out) both;
+      animation-delay: var(--d, 0ms);
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+    }
+
+    /* Scroll reveal for project screenshots: a wipe, not a fade. Content is
+       only hidden once JS has marked the document ready to reveal. */
+    html.can-reveal [data-wipe]:not(.is-in) {
+      clip-path: inset(0 0 100% 0);
+    }
+
+    html.can-reveal [data-wipe] {
+      transition: clip-path 1.1s var(--ease-out);
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    html.can-reveal [data-wipe]:not(.is-in) {
+      clip-path: none;
+    }
+  }
+
+  /* Hero name — sized to the 7-column grid it lives in, so "Yusupaliev"
+     never overflows on tablet widths. */
+  .name {
+    font-size: clamp(2.6rem, 0.6rem + 9.4vw, 6rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+    font-stretch: 125%;
+    font-variation-settings: "wdth" 125;
+  }
+
+  @media (min-width: 64rem) {
+    .name {
+      font-size: clamp(4rem, 6.6vw, 6rem);
+    }
   }
 }

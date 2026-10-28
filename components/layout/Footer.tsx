@@ -1,40 +1,28 @@
-import { heroLocation, socialLinks } from "@/data/site";
+import Link from "next/link";
+import { socialLinks } from "@/data/site";
 
-export function Footer() {
+const email = socialLinks.find((link) => link.icon === "email")!;
+
+export function Footer({ withContact = false }: { withContact?: boolean }) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-glass-border">
-      <div className="shell flex flex-col items-center justify-between gap-4 py-7 text-xs text-muted sm:flex-row">
-        <span>© {year} Abdulaziz Yusupaliev</span>
-
-        <nav
-          className="flex flex-wrap items-center justify-center gap-4"
-          aria-label="Social links"
-        >
-          {socialLinks.map((link) => {
-            const external = link.href.startsWith("http");
-            return (
-              <a
-                key={link.label}
-                href={link.href}
-                target={external ? "_blank" : undefined}
-                rel={external ? "noopener noreferrer" : undefined}
-                className="transition-colors hover:text-accent"
-              >
-                {link.label}
-              </a>
-            );
-          })}
-        </nav>
-
-        <span className="flex items-center gap-2">
-          <span
-            className="inline-block size-1.5 rounded-full bg-accent [animation:pulse-dot_2.6s_ease-in-out_infinite]"
-            aria-hidden
-          />
-          {heroLocation}
-        </span>
+    <footer className="on-blue">
+      <div className="shell flex flex-col gap-4 border-t py-8 text-sm sm:flex-row sm:items-center sm:justify-between">
+        <p>© {year} Abdulaziz Yusupaliev. Built with Next.js, set in Archivo.</p>
+        <div className="flex flex-wrap gap-x-6 gap-y-2 font-semibold">
+          {withContact ? (
+            <a href={email.href} className="link">
+              Email me
+            </a>
+          ) : null}
+          <Link href="/" className="link">
+            Home
+          </Link>
+          <a href="#top" className="link">
+            Back to top
+          </a>
+        </div>
       </div>
     </footer>
   );

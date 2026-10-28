@@ -86,12 +86,19 @@ export const navItems: NavItem[] = [
   { id: "contact", label: "Contact" },
 ];
 
-export const greetings = [
-  "Hello",
-  "Привет",
-  "Salom",
-  "Assalomu alaykum",
-  "Hi",
+export type Greeting = {
+  text: string;
+  /** BCP 47 tag, shown next to the decoded word and set as its `lang`. */
+  lang: string;
+};
+
+// Decoded one after another by the hero's waveform.
+export const greetings: Greeting[] = [
+  { text: "Hello", lang: "en" },
+  { text: "Привет", lang: "ru" },
+  { text: "Salom", lang: "uz" },
+  { text: "Assalomu alaykum", lang: "uz" },
+  { text: "Hi", lang: "en" },
 ];
 
 export const heroAvailability = "Open to internships & freelance";
