@@ -1,59 +1,59 @@
 import Link from "next/link";
-import { SectionHeading } from "@/components/shared/SectionHeading";
+import { SectionHeader } from "@/components/shared/SectionHeader";
 import { skillGroups } from "@/data/skills";
 
-/** Skills grouped by the kind of work, each group tied to where it was used. */
 export function Skills() {
   return (
-    <section id="skills" className="relative px-5 py-32 sm:px-10 lg:px-20">
-      <div className="mx-auto max-w-6xl">
-        <SectionHeading label="03 — Skills">
-          What I <span className="serif-accent text-accent">build with</span>
-        </SectionHeading>
-        <ul className="mt-14 grid gap-4 md:grid-cols-2">
-          {skillGroups.map((group, index) => (
-            <li
+    <section id="skills" aria-labelledby="skills-title" className="section">
+      <div className="shell">
+        <SectionHeader
+          id="skills-title"
+          title="Skills"
+          intro="Grouped by the kind of work, and limited to tools I’ve used in a role or a public repository. Each group links to where."
+        />
+
+        <div className="skill-grid">
+          {skillGroups.map((group) => (
+            <section
               key={group.title}
-              data-reveal
-              className="glass flex flex-col rounded-2xl p-6 transition-colors duration-500 hover:border-accent/30 sm:p-7"
+              aria-labelledby={`skills-${group.title}`}
+              className="flex flex-col"
             >
-              <div className="flex items-baseline gap-4">
-                <span aria-hidden className="font-display text-xs tabular-nums text-muted">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-display text-xl font-bold sm:text-2xl">{group.title}</h3>
-              </div>
-              <ul className="mt-5 flex flex-wrap gap-2" aria-label={`${group.title} tools`}>
-                {group.skills.map((skill) => (
-                  <li
-                    key={skill}
-                    className="rounded-full border border-glass-border px-3 py-1.5 text-xs text-foreground/90"
-                  >
+              <h3 id={`skills-${group.title}`} className="text-lg font-bold tracking-[-0.01em]">
+                {group.title}
+              </h3>
+              <ul className="mt-4 flex flex-wrap gap-x-1.5 gap-y-1 text-[1.0625rem]">
+                {group.skills.map((skill, index) => (
+                  <li key={skill}>
                     {skill}
+                    {index < group.skills.length - 1 ? (
+                      <span className="text-blue" aria-hidden="true">
+                        ,
+                      </span>
+                    ) : null}
                   </li>
                 ))}
               </ul>
-
-              <p className="mt-auto pt-5 text-xs leading-relaxed text-muted">
-                <span className="font-medium uppercase tracking-[0.16em]">Used in </span>
-                {group.usedIn.map((item, i) => (
-                  <span key={item.label}>
-                    {i > 0 ? <span aria-hidden> · </span> : null}
-                    {item.href.startsWith("/") ? (
-                      <Link href={item.href} className="text-accent underline-offset-4 hover:underline">
-                        {item.label}
+              <p className="meta mt-auto pt-6 text-ink-soft">
+                Used in{" "}
+                {group.usedIn.map((evidence, index) => (
+                  <span key={evidence.href + evidence.label}>
+                    {evidence.href.startsWith("/") ? (
+                      <Link href={evidence.href} className="link font-semibold text-ink">
+                        {evidence.label}
                       </Link>
                     ) : (
-                      <a href={item.href} className="text-accent underline-offset-4 hover:underline">
-                        {item.label}
+                      <a href={evidence.href} className="link font-semibold text-ink">
+                        {evidence.label}
                       </a>
                     )}
+                    {index < group.usedIn.length - 1 ? ", " : ""}
                   </span>
                 ))}
               </p>
-            </li>
+            </section>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );

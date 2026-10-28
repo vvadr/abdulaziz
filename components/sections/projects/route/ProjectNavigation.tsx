@@ -10,28 +10,13 @@ export function ProjectNavigation({
   next: PortfolioProject | null;
 }) {
   return (
-    <nav
-      className="mt-16 grid gap-3 border-t border-glass-border pt-8 sm:grid-cols-2"
-      aria-label="Project navigation"
-    >
+    <nav className="mt-24 grid border-t border-ink sm:grid-cols-2" aria-label="More projects">
       {previous ? (
-        <Link
-          href={`/projects/${previous.slug}`}
-          data-cursor
-          className="glass group flex items-center gap-4 rounded-2xl p-5 transition-all duration-300 hover:border-accent/40"
-        >
-          <ArrowLeft
-            size={18}
-            className="shrink-0 text-muted transition-colors group-hover:text-accent"
-            aria-hidden="true"
-          />
+        <Link href={`/projects/${previous.slug}`} className="group flex items-start gap-4 border-b border-rule py-8 sm:border-b-0 sm:pr-8">
+          <ArrowLeft size={22} className="mt-1 shrink-0 text-blue transition-transform group-hover:-translate-x-1" aria-hidden="true" />
           <span>
-            <span className="block text-[0.7rem] font-medium uppercase tracking-[0.2em] text-muted">
-              Previous
-            </span>
-            <span className="mt-1 block font-display font-semibold text-foreground transition-colors group-hover:text-accent">
-              {previous.title}
-            </span>
+            <span className="meta block text-ink-soft">Previous</span>
+            <span className="display-m mt-1 block transition-colors group-hover:text-blue">{previous.title}</span>
           </span>
         </Link>
       ) : (
@@ -40,22 +25,13 @@ export function ProjectNavigation({
       {next ? (
         <Link
           href={`/projects/${next.slug}`}
-          data-cursor
-          className="glass group flex items-center justify-end gap-4 rounded-2xl p-5 text-right transition-all duration-300 hover:border-accent/40"
+          className="group flex items-start justify-end gap-4 py-8 text-right sm:border-l sm:pl-8"
         >
           <span>
-            <span className="block text-[0.7rem] font-medium uppercase tracking-[0.2em] text-muted">
-              Next
-            </span>
-            <span className="mt-1 block font-display font-semibold text-foreground transition-colors group-hover:text-accent">
-              {next.title}
-            </span>
+            <span className="meta block text-ink-soft">Next</span>
+            <span className="display-m mt-1 block transition-colors group-hover:text-blue">{next.title}</span>
           </span>
-          <ArrowRight
-            size={18}
-            className="shrink-0 text-muted transition-colors group-hover:text-accent"
-            aria-hidden="true"
-          />
+          <ArrowRight size={22} className="mt-1 shrink-0 text-blue transition-transform group-hover:translate-x-1" aria-hidden="true" />
         </Link>
       ) : (
         <span />

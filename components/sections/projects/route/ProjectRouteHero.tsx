@@ -1,92 +1,70 @@
-import { ArrowUpRight, FolderGit2, MonitorPlay } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { PortfolioProject } from "@/data/projects";
-import { ProjectBackLink } from "./ProjectBackLink";
+import { cn } from "@/lib/utils";
+import { ExternalLinks } from "../ExternalLinks";
 
 export function ProjectRouteHero({ project }: { project: PortfolioProject }) {
   const previewable = Boolean(project.liveUrl) && project.embeddable !== false;
 
   return (
     <header>
-      <ProjectBackLink />
-      <div className="mt-10 grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <div>
-          <p className="section-label font-display text-xs font-medium uppercase">
-            {project.category}
-          </p>
-          <h1 className="mt-4 max-w-4xl font-display text-[clamp(2.6rem,1.6rem+4.2vw,5.5rem)] font-bold leading-[0.96] tracking-tight text-foreground">
-            {project.title}
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
-            {project.description}
-          </p>
-        </div>
+      <Link href="/#projects" className="meta link inline-flex items-center gap-2 font-semibold">
+        <ArrowLeft size={15} aria-hidden="true" />
+        All work
+      </Link>
 
-        <dl className="glass space-y-5 rounded-2xl p-6">
-          <div>
-            <dt className="font-display text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
-              Status
-            </dt>
-            <dd className="mt-1 flex items-center gap-2 text-lg font-medium text-foreground">
-              {project.liveUrl ? (
-                <MonitorPlay size={18} className="text-accent" aria-hidden="true" />
-              ) : (
-                <FolderGit2 size={18} className="text-accent" aria-hidden="true" />
-              )}
-              {project.state}
-            </dd>
-          </div>
-          <div>
-            <dt className="font-display text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-muted">
-              My role
-            </dt>
-            <dd className="mt-1 text-sm leading-6 text-foreground/90">{project.role}</dd>
-          </div>
+      <p className="meta fade-in mt-10 flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-soft">
+        <span>{project.category}</span>
+        <span aria-hidden="true">/</span>
+        <span className={cn("status", project.state === "Live" && "text-blue")} data-state={project.state}>
+          {project.state}
+        </span>
+      </p>
+
+      <h1 className="display-xl mt-5 max-w-[16ch] break-words">
+        <span className="rise">
+          <span style={{ "--d": "60ms" } as React.CSSProperties}>{project.title}</span>
+        </span>
+      </h1>
+
+      <div className="mt-10 grid gap-x-12 gap-y-10 border-t border-ink pt-8 lg:grid-cols-12">
+        <p className="lede fade-in lg:col-span-7" style={{ "--d": "200ms" } as React.CSSProperties}>
+          {project.description}
+        </p>
+
+        <dl className="grid gap-x-6 gap-y-3 text-[0.9375rem] sm:grid-cols-[6.5rem_1fr] lg:col-span-4 lg:col-start-9">
+          <dt className="font-semibold">My part</dt>
+          <dd className="text-ink-soft">{project.role}</dd>
+          <dt className="font-semibold">Stack</dt>
+          <dd className="text-ink-soft">{project.stack.join(" · ")}</dd>
+          <dt className="font-semibold">Links</dt>
+          <dd>
+            <ExternalLinks project={project} />
+            {previewable ? (
+              <a href="#live-trial" className="link mt-2 inline-flex items-center gap-1 text-[0.9375rem] font-semibold">
+                Try it on this page
+                <ArrowRight size={15} className="nudge-x" aria-hidden="true" />
+              </a>
+            ) : null}
+          </dd>
         </dl>
       </div>
 
-      <div className="mt-9 flex flex-wrap gap-2">
-        {project.stack.map((item) => (
-          <span key={item} className="tag">
-            {item}
-          </span>
-        ))}
-      </div>
-
-      <div className="mt-8 flex flex-wrap gap-3">
-        {project.liveUrl ? (
-          <a href={project.liveUrl} target="_blank" rel="noreferrer" className="btn-primary btn-sm">
-            Open live site
-            <ArrowUpRight size={15} aria-hidden="true" />
-            <span className="sr-only">(opens in a new tab)</span>
-          </a>
-        ) : null}
-        {previewable ? (
-          <a href="#live-trial" className="btn-ghost btn-sm">
-            <MonitorPlay size={16} aria-hidden="true" />
-            Preview on this page
-          </a>
-        ) : null}
-        {project.links?.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            target="_blank"
-            rel="noreferrer"
-            className={project.liveUrl ? "btn-ghost btn-sm" : "btn-primary btn-sm"}
-          >
-            {link.label}
-            <ArrowUpRight size={15} aria-hidden="true" />
-            <span className="sr-only">(opens in a new tab)</span>
-          </a>
-        ))}
-        {project.repoUrl ? (
-          <a href={project.repoUrl} target="_blank" rel="noreferrer" className="btn-ghost btn-sm">
-            <FolderGit2 size={16} aria-hidden="true" />
-            View source
-            <span className="sr-only">(opens in a new tab)</span>
-          </a>
-        ) : null}
-      </div>
+      {project.cover ? (
+        <div className="shot fade-in mt-12 aspect-[16/10]" style={{ "--d": "300ms" } as React.CSSProperties}>
+          <Image
+            src={project.cover}
+            alt={`Screenshot of ${project.title}`}
+            width={1000}
+            height={625}
+            sizes="(min-width: 84rem) 80rem, 100vw"
+            priority
+            className="h-full w-full object-cover object-top"
+          />
+        </div>
+      ) : null}
     </header>
   );
 }

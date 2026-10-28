@@ -1,211 +1,89 @@
-"use client";
-
-import { useEffect, useRef, useSyncExternalStore } from "react";
-import Link from "next/link";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown } from "lucide-react";
-import { Magnetic } from "@/components/shared/Magnetic";
-import { GreetingRotator } from "./GreetingRotator";
+import { ArrowRight } from "lucide-react";
+import { CvLinks } from "@/components/shared/CvLinks";
+import { SocialIcon } from "@/components/shared/SocialIcon";
 import {
   heroAvailability,
   heroHighlights,
   heroLocation,
   heroRole,
   heroTagline,
+  socialLinks,
 } from "@/data/site";
-import { appState, subscribeAppReady } from "@/lib/scroll-state";
-import { isCoarsePointer, prefersReducedMotion } from "@/lib/utils";
+import { Transcriber } from "./Transcriber";
 
-gsap.registerPlugin(ScrollTrigger);
-
-function Chars({ text }: { text: string }) {
-  return (
-    <span aria-label={text}>
-      {text.split("").map((c, i) => (
-        <span key={i} aria-hidden className="char inline-block will-change-transform">
-          {c === " " ? " " : c}
-        </span>
-      ))}
-    </span>
-  );
-}
+const delay = (ms: number) => ({ "--d": `${ms}ms` }) as React.CSSProperties;
+const profiles = socialLinks.filter((link) => link.icon !== "email");
 
 export function Hero() {
-  const rootRef = useRef<HTMLElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const ready = useSyncExternalStore(
-    subscribeAppReady,
-    () => appState.ready,
-    () => false,
-  );
-
-  // Intro: character-staggered name, then the supporting rows fade up.
-  // Runs once the preloader releases the page.
-  useEffect(() => {
-    if (!ready) return;
-    const ctx = gsap.context(() => {
-      if (prefersReducedMotion()) {
-        gsap.set([".char", "[data-hero-fade]"], { autoAlpha: 1, yPercent: 0, y: 0 });
-        return;
-      }
-      const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
-      tl.fromTo(
-        ".char",
-        { yPercent: 110, rotateX: -60, autoAlpha: 0 },
-        { yPercent: 0, rotateX: 0, autoAlpha: 1, duration: 1.1, stagger: 0.035 },
-        0.05,
-      ).fromTo(
-        "[data-hero-fade]",
-        { autoAlpha: 0, y: 30 },
-        { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 },
-        "-=0.55",
-      );
-    }, rootRef);
-    return () => ctx.revert();
-  }, [ready]);
-
-  // Scroll-out shrink/fade + pointer parallax on [data-depth] layers.
-  useEffect(() => {
-    const root = rootRef.current;
-    const inner = innerRef.current;
-    if (!root || !inner || prefersReducedMotion()) return;
-
-    const ctx = gsap.context(() => {
-      gsap.to(inner, {
-        scale: 0.94,
-        autoAlpha: 0,
-        ease: "none",
-        scrollTrigger: { trigger: root, start: "top top", end: "bottom 20%", scrub: 0.8 },
-      });
-    }, root);
-
-    let cleanupMouse: (() => void) | undefined;
-    if (!isCoarsePointer()) {
-      const layers = Array.from(root.querySelectorAll<HTMLElement>("[data-depth]"));
-      const setters = layers.map((el) => ({
-        x: gsap.quickTo(el, "x", { duration: 0.9, ease: "power3" }),
-        y: gsap.quickTo(el, "y", { duration: 0.9, ease: "power3" }),
-        depth: Number(el.dataset.depth ?? 0.5),
-      }));
-      const onMove = (e: MouseEvent) => {
-        const nx = e.clientX / window.innerWidth - 0.5;
-        const ny = e.clientY / window.innerHeight - 0.5;
-        setters.forEach((s) => {
-          s.x(nx * 38 * s.depth);
-          s.y(ny * 38 * 0.65 * s.depth);
-        });
-      };
-      window.addEventListener("mousemove", onMove);
-      cleanupMouse = () => window.removeEventListener("mousemove", onMove);
-    }
-
-    return () => {
-      ctx.revert();
-      cleanupMouse?.();
-    };
-  }, []);
-
-  // The section's vertical padding keeps the centred content clear of the
-  // fixed navbar (and the scroll cue) when the viewport is short.
   return (
-    <section
-      ref={rootRef}
-      id="hero"
-      className="relative flex min-h-svh flex-col items-center justify-center overflow-hidden px-5 py-[clamp(5rem,10vh,7.5rem)] text-center sm:px-10"
-    >
-      <div
-        ref={innerRef}
-        className="relative z-10 flex flex-col items-center pb-14 will-change-transform"
-      >
-        <p
-          data-hero-fade
-          data-depth="0.18"
-          className="glass mb-6 rounded-full px-5 py-2 text-xs font-medium uppercase tracking-[0.32em] text-muted"
-        >
-          <span
-            aria-hidden
-            className="mr-2 inline-block size-1.5 rounded-full bg-accent align-middle [animation:pulse-dot_2.6s_ease-in-out_infinite]"
-          />
-          {heroAvailability} · {heroLocation}
-        </p>
+    <section id="top" aria-labelledby="hero-title" className="shell pb-20 pt-8 sm:pt-12 lg:pb-28">
+      <p className="meta fade-in flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-soft" style={delay(0)}>
+        <span className="status text-blue">{heroAvailability}</span>
+        <span aria-hidden="true" className="hidden sm:inline">
+          /
+        </span>
+        <span>{heroLocation}</span>
+      </p>
 
-        <div data-hero-fade data-depth="0.14" className="mb-2">
-          <GreetingRotator />
-        </div>
-
-        <h1 data-depth="0.1" className="hero-title font-display font-bold [perspective:900px]">
-          <span className="block overflow-hidden pb-1">
-            <Chars text="Abdulaziz" />
+      <div className="mt-10 grid items-end gap-x-12 gap-y-10 lg:mt-14 lg:grid-cols-12">
+        <h1 id="hero-title" className="name lg:col-span-7">
+          <span className="rise">
+            <span style={delay(80)}>Abdulaziz</span>
           </span>
-          <span className="hero-serif hero-surname block overflow-hidden pb-2 text-accent">
-            <Chars text="Yusupaliev" />
+          <span className="rise">
+            <span style={delay(180)}>Yusupaliev</span>
           </span>
         </h1>
 
-        <p
-          data-hero-fade
-          data-depth="0.16"
-          className="mt-7 max-w-2xl text-balance text-base text-muted sm:text-lg"
-        >
-          <span className="serif-accent text-[1.15em] text-foreground">{heroRole}</span>{" "}
-          {heroTagline}
-        </p>
-
-        <div
-          data-hero-fade
-          className="mt-9 flex flex-wrap items-center justify-center gap-4"
-        >
-          <Magnetic strength={0.35}>
-            <a href="#projects" className="btn-primary btn-lg">
-              See selected work
-            </a>
-          </Magnetic>
-          <Magnetic strength={0.35}>
-            <a href="#contact" className="btn-ghost btn-lg">
-              Get in touch
-            </a>
-          </Magnetic>
+        <div className="fade-in lg:col-span-5 lg:pb-3" style={delay(350)}>
+          <Transcriber />
         </div>
-
-        {/* Proof points — each links to its evidence further down the page. */}
-        <ul
-          data-hero-fade
-          aria-label="Highlights"
-          className="glass mt-10 grid w-full max-w-3xl divide-y divide-glass-border overflow-hidden rounded-2xl text-left sm:grid-cols-3 sm:divide-x sm:divide-y-0"
-        >
-          {heroHighlights.map((item) => {
-            // Section anchors stay plain links so Lenis can smooth-scroll them;
-            // case-study routes go through the client router.
-            const Anchor = item.href.startsWith("/") ? Link : "a";
-            return (
-              <li key={item.title}>
-                <Anchor
-                  href={item.href}
-                  data-cursor
-                  className="group flex h-full flex-col gap-1 px-5 py-4 transition-colors duration-300 hover:bg-accent/5"
-                >
-                  <span className="font-display text-sm font-semibold text-foreground transition-colors group-hover:text-accent">
-                    {item.title}
-                  </span>
-                  <span className="text-xs leading-snug text-muted">{item.detail}</span>
-                </Anchor>
-              </li>
-            );
-          })}
-        </ul>
       </div>
 
-      <div
-        data-hero-fade
-        aria-hidden
-        className="scroll-cue absolute bottom-8 z-10 flex-col items-center gap-3 text-[0.68rem] uppercase tracking-[0.3em] text-muted"
-      >
-        <span className="relative h-9 w-[22px] rounded-full border border-muted/60">
-          <span className="absolute left-1/2 top-[7px] h-[7px] w-[3px] -translate-x-1/2 rounded-full bg-accent [animation:scroll-dot_1.9s_ease-in-out_infinite]" />
-        </span>
-        Scroll
-        <ArrowDown className="size-3.5 text-accent" />
+      <div className="mt-12 grid gap-x-12 gap-y-12 border-t border-ink pt-8 lg:mt-16 lg:grid-cols-12">
+        <div className="fade-in lg:col-span-6" style={delay(450)}>
+          <p className="lede">
+            <strong className="font-bold text-blue">{heroRole}</strong> {heroTagline}
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <a href="#projects" className="btn btn-solid">
+              See the work
+            </a>
+            <CvLinks />
+          </div>
+          <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-[0.9375rem] font-semibold" aria-label="Profiles">
+            {profiles.map((profile) => (
+              <li key={profile.label}>
+                <a
+                  href={profile.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors hover:text-blue"
+                >
+                  <SocialIcon name={profile.icon} className="size-4" />
+                  {profile.label}
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <ul className="fade-in lg:col-span-5 lg:col-start-8" style={delay(550)} aria-label="Highlights">
+          {heroHighlights.map((item) => (
+            <li key={item.title} className="border-b border-rule first:border-t lg:first:border-t-0">
+              <a href={item.href} className="group flex items-center justify-between gap-6 py-4">
+                <span>
+                  <span className="block font-semibold transition-colors group-hover:text-blue">
+                    {item.title}
+                  </span>
+                  <span className="block text-[0.9375rem] text-ink-soft">{item.detail}</span>
+                </span>
+                <ArrowRight size={20} className="nudge-x shrink-0 text-blue" aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

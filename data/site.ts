@@ -86,12 +86,19 @@ export const navItems: NavItem[] = [
   { id: "contact", label: "Contact" },
 ];
 
-export const greetings = [
-  "Hello",
-  "Привет",
-  "Salom",
-  "Assalomu alaykum",
-  "Hi",
+export type Greeting = {
+  text: string;
+  /** BCP 47 tag, shown next to the decoded word and set as its `lang`. */
+  lang: string;
+};
+
+// Decoded one after another by the hero's waveform.
+export const greetings: Greeting[] = [
+  { text: "Hello", lang: "en" },
+  { text: "Привет", lang: "ru" },
+  { text: "Salom", lang: "uz" },
+  { text: "Assalomu alaykum", lang: "uz" },
+  { text: "Hi", lang: "en" },
 ];
 
 export const heroAvailability = "Open to internships & freelance";
@@ -178,7 +185,7 @@ export const experienceItems: ExperienceItem[] = [
     tech: ["ASR", "Speech data", "Dataset QA"],
   },
   {
-    company: "Hiwelcome.uz",
+    company: "Hiwelcome",
     companyUrl: "https://hiwelcome.uz",
     title: "Frontend Engineer",
     period: "Jan 2026 – Present",
@@ -199,7 +206,7 @@ export const experienceItems: ExperienceItem[] = [
     tech: ["Python", "pandas", "scikit-learn"],
   },
   {
-    company: "Delever.uz",
+    company: "Delever",
     companyUrl: "https://delever.uz",
     title: "Frontend Developer",
     period: "Feb 2026",

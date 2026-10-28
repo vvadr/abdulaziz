@@ -46,8 +46,8 @@ export type PortfolioProject = {
 };
 
 // Every claim below is taken from the project's repository, its README, or
-// the live deployment. Array order is display order — strongest first — and
-// the case-study prev/next links follow it.
+// the live deployment. Array order is ranking — strongest first; see
+// projectsInDisplayOrder for how the home page groups them.
 export const portfolioProjects: PortfolioProject[] = [
   {
     slug: "karakalpak-speech-recognition",
@@ -322,6 +322,13 @@ export const portfolioProjects: PortfolioProject[] = [
 
 export const featuredProjects = portfolioProjects.filter((project) => project.featured);
 export const moreProjects = portfolioProjects.filter((project) => !project.featured);
+
+/** The order a visitor meets projects on the home page — featured first,
+ *  then "Also built" grouped by area. Case-study prev/next follows it. */
+export const projectsInDisplayOrder = [
+  ...featuredProjects,
+  ...projectAreas.flatMap((area) => moreProjects.filter((project) => project.area === area.id)),
+];
 
 export function getProject(slug: string) {
   return portfolioProjects.find((project) => project.slug === slug);

@@ -1,40 +1,42 @@
-import { heroLocation, socialLinks } from "@/data/site";
+import Link from "next/link";
+import { socialLinks } from "@/data/site";
+import { cn } from "@/lib/utils";
 
-export function Footer() {
+const email = socialLinks.find((link) => link.icon === "email")!;
+
+/** On the home page the contact section sits right above, so the footer only
+ *  needs "back to top". Sub-pages also get email and a way home. */
+export function Footer({ subpage = false }: { subpage?: boolean }) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-glass-border">
-      <div className="shell flex flex-col items-center justify-between gap-4 py-7 text-xs text-muted sm:flex-row">
-        <span>© {year} Abdulaziz Yusupaliev</span>
-
-        <nav
-          className="flex flex-wrap items-center justify-center gap-4"
-          aria-label="Social links"
+    <footer className="on-blue">
+      <div className="shell">
+        {/* The rule separates the footer from the contact section above it on
+            the home page; on sub-pages the blue band is separation enough. */}
+        <div
+          className={cn(
+            "flex flex-col gap-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between",
+            !subpage && "border-t",
+          )}
         >
-          {socialLinks.map((link) => {
-            const external = link.href.startsWith("http");
-            return (
-              <a
-                key={link.label}
-                href={link.href}
-                target={external ? "_blank" : undefined}
-                rel={external ? "noopener noreferrer" : undefined}
-                className="transition-colors hover:text-accent"
-              >
-                {link.label}
-              </a>
-            );
-          })}
-        </nav>
-
-        <span className="flex items-center gap-2">
-          <span
-            className="inline-block size-1.5 rounded-full bg-accent [animation:pulse-dot_2.6s_ease-in-out_infinite]"
-            aria-hidden
-          />
-          {heroLocation}
-        </span>
+          <p>© {year} Abdulaziz Yusupaliev. Built with Next.js, set in Archivo.</p>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 font-semibold">
+            {subpage ? (
+              <>
+                <a href={email.href} className="link">
+                  Email me
+                </a>
+                <Link href="/" className="link">
+                  Home
+                </Link>
+              </>
+            ) : null}
+            <a href="#top" className="link">
+              Back to top
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   );

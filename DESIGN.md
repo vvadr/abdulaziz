@@ -1,154 +1,140 @@
 # Design
 
 Visual system for the Abdulaziz Yusupaliev portfolio. Register: **brand**.
-Mood: **quiet night sky** — a near-black cool-slate page with a parallax star
-field that follows the pointer and the scroll, one sky-blue accent, bold Space
-Grotesk display type, and Instrument Serif italics for accent words. Started
-from the reference portfolio the user chose (Habibulloh Karimov's), then moved
-away from it: no WebGL, and deliberately no glow (see the notes at the bottom).
+Concept: **the transcript.** He trains speech-recognition models, so the
+signature element is a waveform swept by a playhead that "decodes" a greeting
+in English, Russian and Uzbek. Everything else is set like a clean technical
+spec sheet: a cool off-white page, ink type, hairline rules, and one committed
+ultramarine.
+
+Scene sentence that set the theme: *a recruiter or engineering lead opens the
+link from a LinkedIn message at their desk, in a bright office, with a minute
+to spare and other candidates in the queue* → light theme, fast to scan.
+
+This replaced the October 2026 "noir / star field" design (dark slate,
+parallax stars, Space Grotesk + Instrument Serif, GSAP + Lenis, preloader,
+custom cursor). All of that is gone.
 
 ## Color
 
-Tokens are hex, defined in `app/globals.css`. Every pair below is verified by
-`node scripts/contrast-check.mjs` (WCAG relative luminance).
+Strategy: **Committed.** Ultramarine is the only hue; it carries the accent
+text, the decoded waveform, and two full-bleed sections (mobile menu and
+contact). Tokens are OKLCH in `app/globals.css`; hex equivalents and every
+text pair are verified by `node scripts/contrast-check.mjs`.
 
-| Token | Hex | Role | Verified |
+| Token | OKLCH | Hex | Role |
 |---|---|---|---|
-| `--background` | `#070a0f` | Page + backdrop background | — |
-| `--foreground` | `#f2f5f9` | Primary text | 18.1:1 on bg |
-| `--muted` | `#98a6ba` | Secondary/body text | 8.0:1 on bg |
-| `--accent` | `#7dd3fc` | Sky — the single lead accent | 11.9:1 on bg |
-| `--accent-2` | `#a5b4fc` | Indigo — quiet support | 9.9:1 on bg |
-| `--accent-3` | `#e2e8f0` | Slate — neutral highlight, button hover | 16.1:1 on bg |
-| `--glass` | `rgba(13,17,25,0.90)` | Card/nav surface (no backdrop blur) | text ≥7.7:1 |
-| `--glass-border` | `rgba(255,255,255,0.09)` | Hairline borders | — |
-| `--grid-line` | `rgba(148,163,184,0.05)` | Project-cover grid pattern | — |
+| `--bg` | 0.972 0.005 265 | `#f4f6f9` | Page (true cool off-white, not cream) |
+| `--surface` | 1 0 0 | `#ffffff` | Image mats behind screenshots |
+| `--ink` | 0.2 0.03 268 | `#101524` | Primary text, rules, solid buttons |
+| `--ink-soft` | 0.45 0.03 268 | `#4e5566` | Secondary text (6.9:1) |
+| `--rule` | 0.87 0.012 268 | `#d1d4dc` | Hairlines |
+| `--blue` | 0.48 0.22 266 | `#2349d7` | The accent (6.5:1 on bg) |
+| `--blue-deep` | 0.36 0.17 266 | `#132d94` | Text on white buttons inside blue |
+| `--blue-pale` | 0.91 0.045 266 | `#d3e1ff` | Secondary text on blue (5.3:1) |
+| `--night` | 0.18 0.028 268 | `#0c111e` | Experience section |
+| `--night-fg` / `--night-soft` / `--night-blue` | — | — | Text on night (17 / 9.4 / 8:1) |
 
-Rules: sky is the lead accent and carries almost everything — kickers, active
-nav, the surname, tags, buttons, the progress beam. Indigo is support only
-(bento group titles, the second orbit ring). **No glowing treatments**: no
-text gradients, no coloured drop shadows, no blurred colour orbs, no rotating
-conic borders. Accent colour appears as solid fill, solid text, or a hairline
-border — nothing that bleeds light. Button text is `--background` on a solid
-`--accent` fill (11.9:1), and hover swaps the fill to `--accent-3`.
+Section art direction: hero, work, skills, about on `--bg` → experience on
+`--night` (`.on-dark`) → contact + footer on `--blue` (`.on-blue`). The two
+wrappers re-tint borders, focus rings, buttons and counts for their ground.
+
+No gradients, glows, glass or shadows. Colour is solid text, solid fill, or a
+hairline.
 
 ## Typography
 
-- **Space Grotesk** (`--font-display`) — headings, buttons, nav, numbers.
-- **Inter** (`--font-body` → `font-sans`) — body copy. Loaded with the
-  Cyrillic subset for the rotating "Привет" greeting.
-- **Instrument Serif italic** (`--font-serif`) — accent words inside headings
-  (`.serif-accent`, `.hero-serif`) and the sky-blue surname. Latin-only;
-  Georgia is the fallback and covers Cyrillic.
+- **Archivo** (variable, `wdth` 62–125, `wght` 100–900) carries everything.
+  The width axis is the voice: display text is set at `wdth 125` / 800,
+  reading text at normal width.
+- **Onest** loads only its Cyrillic subset as a glyph fallback, since Archivo
+  has no Cyrillic and the hero greets in Russian.
 
-All three load via `next/font/google` in `app/layout.tsx` (variables
-`--font-space-grotesk` / `--font-inter` / `--font-instrument-serif`).
-Hero title: `clamp(3.4rem, min(13vw, 18vh), 10.5rem)`, line-height 0.92,
-tracking -0.04em — the `18vh` term keeps a wide-but-short window from growing
-the name taller than the viewport (which pushed the hero up under the fixed
-navbar). Section titles: `clamp(2.2rem, 4.8vw, 4rem)`. Text over the scene
-always carries `.text-shadow` (or sits on glass).
+Scale (all `clamp()`): `.name` (hero, ≤6rem, sized for its 7-column cell) ·
+`.display-xl` (≤6rem) · `.display-l` (≤4.25rem) · `.display-m` (≤2.25rem) ·
+`.lede` (≤1.45rem) · body 17px · `.meta` 13px tabular. Display tracking
+-0.02 to -0.035em.
 
-The hero reserves `clamp(5rem, 10vh, 7.5rem)` of vertical padding so its
-centred content always clears the 4rem navbar, and the scroll cue
-(`.scroll-cue`) only renders when the viewport is at least 820px tall.
+Section headings carry no eyebrow, and their wording matches the nav (Work →
+"Selected work", Experience, Skills, About; Contact is "Say hello."). Lists of
+discrete things get a small superscript count (`.count`): "Selected work⁴",
+"Also built⁸", "Experience⁴". Skills groups are categories, not items, so no
+count.
 
-## The backdrop
-
-`components/layout/scene/SceneBackdrop.tsx` — a fixed, full-viewport parallax
-composition behind everything (`--z-scene`):
-
-- Three star fields (repeating radial-gradient tiles) and two flattened CSS
-  orbit rings, each on its own layer.
-- Every layer follows the pointer and counter-scrolls at its own rate, so the
-  field reads as depth: the far stars drift ~6px, the near stars ~28px.
-- Layers are painted once and then only translated — the motion stays on the
-  compositor, with no repaint, no canvas, and no WebGL.
-- The rAF loop starts on pointer/scroll input and **stops once the layers
-  settle**, so an idle page costs nothing. Measured on the production build:
-  ~3% of one core idle, ~2% while scrolling continuously.
-- `prefers-reduced-motion` skips the listeners entirely and the layers stay
-  put; coarse pointers get scroll parallax only.
-
-An earlier version of this site rendered a three.js scene here (~4,800
-particles morphing through six shapes, with bloom). It looked good and cost
-far too much: the morph rewrote a 14,400-float vertex buffer and re-uploaded it
-to the GPU every frame. The reference portfolio still does this — its deployed
-bundle ships a 1.1 MB three.js chunk with `EffectComposer`, `BloomEffect` and
-`VignetteEffect` — so there was no cheaper trick there to copy.
-
-Between backdrop and content: `.content-scrim` (fixed radial veil, 0.45→0.78)
-plus per-element glass and text shadows. Above content: `.noise-overlay`
-(static SVG grain, 4%) and the letterbox gradients (below the nav).
+Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
 
 ## Layout
 
-- `.shell` caps content at 72rem with clamp() inline padding; sections use
-  `py-32` with `px-5 sm:px-10 lg:px-20` and a `max-w-6xl` inner column.
-- Section header pattern: `SectionHeading` — sky uppercase kicker
-  `0N — Label` with gradient hairlines + display title with one serif-italic
-  gradient word.
-- Section order follows what a recruiter needs first: hero (role + three
-  linked proof points) → work (four featured case-study cards, then a compact
-  "More projects" list grouped by area) → experience (vertical list) →
-  skills (six groups, each linking to where it was used) → about (bio,
-  education, recognition) → contact.
-- z-scale (tokens in globals.css): scene 0 · content 10 · letterbox 30 ·
-  nav 50 · mobile menu 55 · progress beam 60 · noise 65 · cursor 70 ·
-  preloader 80 · skip link 90.
+- `.shell`: max 84rem, `--gutter` inline padding. `.section`: fluid
+  `--section-pad` block padding.
+- 12-column grids on `lg`, asymmetric splits (7/5, 4/7, 3/4/5).
+- **Hero:** availability line → name (7 cols) beside the transcriber (5 cols)
+  → ink rule → lede, CTAs and profile links (6 cols) beside three linked
+  proof points (5 cols). On mobile the name comes first, then the
+  transcriber.
+- Every rule and list edge lines up with the `.shell` content edge — rules
+  live inside the shell, never on the padded box, and list rows are not
+  indented.
+- **Section header** (`components/shared/SectionHeader.tsx`): title in 7
+  columns, intro in 5, used by Work, Experience and Skills.
+- **Work:** four featured projects as full-width rows, screenshot and story
+  side by side, alternating sides. Then "Also built", grouped by area, as a
+  dense three-column index with a stretched title link. Case-study prev/next
+  follows this on-page order (`projectsInDisplayOrder`), not the raw array.
+- **Experience:** period / role + company / details + stack rows on night.
+- **Skills:** six groups in a ruled 3/2/1-column grid (`.skill-grid`, plain
+  CSS so the dividers stay correct at every column count), each ending with
+  "Used in" links to its evidence.
+- **About:** portrait + bio, a `dl` (based in, recognition) in the same
+  label/value pattern as the project rows, education as a dated list. It has
+  no top padding — Skills already ends with a section's worth of space.
+- **Contact:** blue. "Say hello.", email as the primary target, profiles
+  list, CV downloads.
+- **Footer:** blue band. On the home page it carries only "Back to top" under
+  a rule; sub-pages (case studies, 404) add "Email me" and "Home". The body is
+  a flex column so the footer sits at the bottom of short pages.
+- **404** (`app/not-found.tsx`): "Nothing to decode here." with links home
+  and to the work.
+- Case studies (`/projects/[slug]`): same system. Title, description, and a
+  part/stack/links `dl`, the cover, then Results / What I built / Not done yet
+  as ruled two-column sections, an optional live iframe, and prev/next.
+- z-scale: content 0 · nav 50 · mobile menu 60 · skip link 90.
 
 ## Components
 
-- **Glass** (`.glass`, `.glass-strong`): the universal surface. Their dark,
-  nearly opaque fills create depth without live `backdrop-filter` processing.
-- **Buttons**: `.btn-primary` (gold→blue gradient pill, background-colored
-  text, glow + lift on hover), `.btn-ghost` (glass pill), `.btn-sm`/`.btn-lg`.
-- **Tags** (`.tag`): sky-tinted hairline pills for tech stacks.
-- **Featured project cards** (`FeaturedProjectCard`): cover + category,
-  title, summary, key points, "My role", stack, and links, readable without
-  opening the case study; covers alternate sides on wide screens. The cover
-  is a real screenshot (`project.cover`) or a sky-tinted glyph fallback.
-- **Project cards** (`ProjectCard`): compact list entries with a stretched
-  title link — one target, short accessible name.
-- **Magnetic**: gsap quickTo pull toward the pointer (buttons, social cards).
-- **Custom cursor**: dot + trailing ring, `mix-blend-difference`, swells over
-  interactive elements. Fine pointers only; native cursor otherwise.
-- **Navbar** (deliberately different from the reference's floating pill):
-  full-width bar, transparent → opaque after 24px scroll, animated sky
-  underline (`layoutId`) tracking the active section via IntersectionObserver,
-  magnetic "Get in touch", hamburger → full-screen staggered overlay on mobile.
+- **Buttons** (`.btn` + `.btn-solid` / `.btn-line`, `.btn-sm`): pills with
+  ink fill or ink outline, blue on hover. Inverted inside `.on-blue`.
+- **Links** (`.link`): underline whose thickness and colour firm up on hover.
+- **Arrows:** ↗ (`ArrowUpRight` + `.nudge`) only for links that leave the site
+  — live sites, source, profiles, email. → (`ArrowRight` + `.nudge-x`) for
+  everything that stays: case studies, in-page jumps, home.
+- **CV buttons** (`components/shared/CvLinks.tsx`): one component, so the
+  labels and the "(PDF, opens in a new tab)" hint are identical in the hero,
+  mobile menu and contact.
+- **Status** (`.status[data-state]`): a dot before the project state, and the
+  shape differs too (filled = Live, square = Published, hollow = Source
+  available), so state never depends on colour alone.
+- **Frames** (`ul.frames`): bullets drawn as short blue bars, like decoded
+  frames.
+- **Shot** (`.shot`): 1px-ink-bordered image frame with a slow zoom on hover.
+- **Navbar:** sticky, solid `--bg`, hairline after scroll, blue underline on
+  the section in view. Below `md`, a full-screen blue menu (Escape closes it,
+  and focus returns to the button).
 
 ## Motion
 
-GSAP + ScrollTrigger, driven by Lenis smooth scroll (`ScrollFX`, duration
-1.3). Framer Motion for enter/exit UI (preloader, mobile menu, greeting,
-nav underline).
+No animation libraries. CSS + one canvas.
 
-- **Preloader**: name reveal + 0→100 counter (~1.1s), clip-path exit; plays
-  once per session, skipped for reduced motion; page scroll unlocks via the
-  `app:ready` event (`lib/scroll-state.ts`).
-- **Hero**: character-staggered name intro gated on `app:ready`; rotating
-  multilingual greeting with blinking caret (sr-only static mirror);
-  scroll-out scale/fade; pointer-parallax `data-depth` layers.
-- **Reveals**: shared `[data-reveal]` fade/slide/rotateX (ScrollFX re-scans
-  per route).
-- **Scroll state** lives in a mutable module (`lib/scroll-state.ts`) read
-  inside rAF — no per-frame React renders.
-- Global `prefers-reduced-motion` collapse remains in globals.css; JS motion
-  checks `prefersReducedMotion()` per effect.
-
-## Deliberate fixes vs. the reference site
-
-1. Real mobile navigation (reference hid all links below `md`).
-2. Experience is a plain vertical list — readable under reduced motion,
-   touch, and no-JS (the reference's pinned horizontal track clipped cards
-   2..n when the pin was skipped).
-3. Preloader is short, once-per-session, and skipped for reduced motion
-   (reference blocked ~3.4s every visit).
-4. Static GPU-light atmosphere + stronger scrim keeps Skills text readable
-   without a permanent WebGL render loop.
-5. Gradient text constrained to high-luminance stops (reference washed out
-   mid-animation).
-6. Letterbox stacked below the nav, not above it.
-7. English-only a11y strings, valid ARIA on split-character text.
-8. No quality tier is needed because the backdrop has no active renderer.
+- **Transcriber** (`components/sections/hero/Transcriber.tsx`): canvas
+  waveform built from the word (one burst per character, vowels louder, and
+  fewer bars per character when a long greeting would not fit the canvas),
+  swept by a playhead; characters appear as their bars are passed, with a fake
+  timestamp. rAF runs only during a sweep. It pauses when off-screen or the
+  tab is hidden. Reduced motion: static, fully decoded "Hello". It is
+  `aria-hidden` because it is decoration.
+- **Hero load:** the name rises out of a mask (`.rise`), the rest fades up
+  (`.fade-in`) with staggered `--d` delays. The end state is the default.
+- **Screenshot wipe:** `[data-wipe]` reveals with a `clip-path` wipe on scroll
+  (`RevealObserver`). It is only armed after hydration (`html.can-reveal`),
+  is skipped in hidden tabs, and anything already on screen shows at once.
+- `prefers-reduced-motion` collapses every animation and transition globally.
