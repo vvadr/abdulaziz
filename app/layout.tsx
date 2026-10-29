@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Onest } from "next/font/google";
 import { siteMetadata, siteUrl } from "@/data/site";
+import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
 import { RevealObserver } from "@/components/layout/RevealObserver";
 import "./globals.css";
 
@@ -72,7 +74,9 @@ export default function RootLayout({
           Skip to content
         </a>
         <RevealObserver />
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

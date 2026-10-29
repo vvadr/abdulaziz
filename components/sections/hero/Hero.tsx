@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { CvLinks } from "@/components/shared/CvLinks";
 import { SocialIcon } from "@/components/shared/SocialIcon";
@@ -16,7 +17,7 @@ const profiles = socialLinks.filter((link) => link.icon !== "email");
 
 export function Hero() {
   return (
-    <section id="top" aria-labelledby="hero-title" className="shell pb-20 pt-8 sm:pt-12 lg:pb-28">
+    <section aria-labelledby="hero-title" className="shell pb-20 pt-8 sm:pt-12 lg:pb-28">
       <p className="meta fade-in flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-soft" style={delay(0)}>
         <span className="status text-blue">{heroAvailability}</span>
         <span aria-hidden="true" className="hidden sm:inline">
@@ -46,9 +47,9 @@ export function Hero() {
             <strong className="font-bold text-blue">{heroRole}</strong> {heroTagline}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a href="#projects" className="btn btn-solid">
+            <Link href="/work" className="btn btn-solid">
               See the work
-            </a>
+            </Link>
             <CvLinks />
           </div>
           <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-[0.9375rem] font-semibold" aria-label="Profiles">
@@ -72,7 +73,7 @@ export function Hero() {
         <ul className="fade-in lg:col-span-5 lg:col-start-8" style={delay(550)} aria-label="Highlights">
           {heroHighlights.map((item) => (
             <li key={item.title} className="border-b border-rule first:border-t lg:first:border-t-0">
-              <a href={item.href} className="group flex items-center justify-between gap-6 py-4">
+              <Link href={item.href} className="group flex items-center justify-between gap-6 py-4">
                 <span>
                   <span className="block font-semibold transition-colors group-hover:text-blue">
                     {item.title}
@@ -80,7 +81,7 @@ export function Hero() {
                   <span className="block text-[0.9375rem] text-ink-soft">{item.detail}</span>
                 </span>
                 <ArrowRight size={20} className="nudge-x shrink-0 text-blue" aria-hidden="true" />
-              </a>
+              </Link>
             </li>
           ))}
         </ul>

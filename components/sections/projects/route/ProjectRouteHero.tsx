@@ -10,7 +10,7 @@ export function ProjectRouteHero({ project }: { project: PortfolioProject }) {
 
   return (
     <header>
-      <Link href="/#projects" className="meta link inline-flex items-center gap-2 font-semibold">
+      <Link href="/work" className="meta link inline-flex items-center gap-2 font-semibold">
         <ArrowLeft size={15} aria-hidden="true" />
         All work
       </Link>

@@ -49,7 +49,7 @@ words: **measured, legible, credible.**
 1. **Tell the truth, confidently.** Lead with what's real and measured:
    published WER scores, live platforms, named roles. Every project states
    the author's actual role (including where code was AI-generated) and its
-   known limits. No invented numbers.
+   next steps, framed positively and without buzzwords. No invented numbers.
 2. **One accent, no glow.** Ultramarine carries every accent. Colour appears as solid fill, solid text, or a hairline border —
    never as a gradient in text or a coloured halo.
 3. **Contrast is non-negotiable.** Every text/background pair is verified

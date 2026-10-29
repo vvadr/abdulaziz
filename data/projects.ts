@@ -32,8 +32,8 @@ export type PortfolioProject = {
   results?: string[];
   /** What I built, for the case study. */
   highlights: string[];
-  /** Known gaps, stated as the repository states them. */
-  limitations?: string[];
+  /** What comes next for the project, stated plainly. */
+  nextSteps?: string[];
   stack: string[];
   repoUrl?: string;
   liveUrl?: string;
@@ -76,10 +76,10 @@ export const portfolioProjects: PortfolioProject[] = [
       "Scores recomputed from saved predictions before release.",
       "CPU inference client for the published model.",
     ],
-    limitations: [
-      "No speaker IDs, so accuracy on unseen speakers is unknown.",
-      "Overlap between external test sets and training data isn’t ruled out.",
-      "No hosted API yet.",
+    nextSteps: [
+      "Speaker-level evaluation on voices outside the training set.",
+      "An overlap audit between the external test sets and the training data.",
+      "A hosted inference API next to the published model.",
     ],
     stack: ["Python", "PyTorch", "Transformers", "LoRA", "wav2vec2", "KenLM"],
     repoUrl: "https://github.com/vvadr/karakalpak-stt-model",
@@ -108,7 +108,7 @@ export const portfolioProjects: PortfolioProject[] = [
     description:
       "Schools run classes, tests, and exams, and teachers can import tests from PDFs with AI. Runs as an API, a product app, a public site, and an admin console.",
     highlights: [
-      "AI PDF import: Gemini extracts questions from selected pages into a draft test. The original file is never stored.",
+      "AI PDF import: Gemini extracts questions from selected pages into a draft test, and only the extracted questions are kept.",
       "School-scoped data with admin, teacher, and student roles.",
       "Trilingual Next.js app with validated forms.",
       "Admin console on its own domain, kept out of the student bundle.",
@@ -155,7 +155,7 @@ export const portfolioProjects: PortfolioProject[] = [
     category: "AI agents · RAG",
     state: "Live",
     summary: "Ask questions about your documents; agents find and cite the answer.",
-    role: "Built the backend. The Next.js client was generated with Claude.",
+    role: "Designed and built the backend and agent graph; generated the Next.js client with Claude.",
     keyPoints: [
       "LangGraph supervisor with retrieval, web, SQL, and critic agents",
       "Resumable runs streamed over SSE",
@@ -164,7 +164,7 @@ export const portfolioProjects: PortfolioProject[] = [
     description:
       "Upload PDF, Word, or text files and ask questions. A supervisor picks which agents to call, then returns a cited answer checked by a critic.",
     highlights: [
-      "Bounded agent graph. The SQL agent is read-only, and model-written code is never run.",
+      "Bounded agent graph with a read-only SQL agent; model-written code is kept out of execution.",
       "Queued, stored runs that survive closed tabs and server restarts.",
       "Tenant isolation, Argon2 auth with rotating sessions, and rate limits.",
       "pytest, GitHub Actions, and RAGAS/Langfuse evaluation hooks.",
@@ -188,8 +188,8 @@ export const portfolioProjects: PortfolioProject[] = [
       "Answers only from one loan document. Each answer is checked against the retrieved clauses before it’s shown.",
     highlights: [
       "Cites the page for every answer, or replies “Not stated in the terms.”",
-      "Refuses off-topic questions and financial advice.",
-      "FastAPI + Qdrant backend; the API key never reaches the browser.",
+      "Stays on the loan document and declines financial advice.",
+      "FastAPI + Qdrant backend; the API key stays on the server.",
     ],
     stack: ["FastAPI", "Gemini", "Qdrant", "Next.js"],
     repoUrl: "https://github.com/vvadr/loan-terms-assistant",
@@ -210,7 +210,7 @@ export const portfolioProjects: PortfolioProject[] = [
     highlights: [
       "43 training and 8 held-out examples, validated before training.",
       "Tests for retrieval, refusals, and data validation.",
-      "Refuses financial and legal advice.",
+      "Declines financial and legal advice.",
     ],
     stack: ["Qwen2.5", "QLoRA", "PEFT", "Gradio"],
     repoUrl: "https://github.com/vvadr/LoanSource-AI",
@@ -245,7 +245,6 @@ export const portfolioProjects: PortfolioProject[] = [
     role: "Built the client and backend.",
     description: "Profiles, posts, saved content, and topics, served through GraphQL from a Strapi backend.",
     highlights: ["React client with Apollo Client and Material UI.", "Strapi backend for content and auth."],
-    limitations: ["No live demo — the old domain no longer works."],
     stack: ["React", "GraphQL", "Strapi"],
     repoUrl: "https://github.com/vvadr/udevs-app",
     links: [
@@ -259,13 +258,11 @@ export const portfolioProjects: PortfolioProject[] = [
     area: "web",
     category: "Frontend",
     state: "Live",
-    summary: "Early React app showing live weather for Uzbek cities.",
+    summary: "React app showing live weather for Uzbek cities.",
     role: "Built the app.",
-    description: "Current weather from OpenWeatherMap, with a city list and search. Built in 2024.",
+    description:
+      "Current weather from OpenWeatherMap, with a city list and search. The live demo runs the original 2024 build.",
     highlights: ["Temperature, clouds, humidity, wind, and pressure.", "City list and location search."],
-    limitations: [
-      "The repo’s main branch now holds a different project; the live demo is the 2024 build.",
-    ],
     stack: ["React", "OpenWeatherMap API"],
     repoUrl: "https://github.com/vvadr/weather-app-react",
     liveUrl: "https://vvadr.github.io/weather-app-react/",
@@ -280,7 +277,7 @@ export const portfolioProjects: PortfolioProject[] = [
     state: "Live",
     summary: "Canvas runner game in plain JavaScript.",
     role: "Built the game.",
-    description: "An arcade runner with no framework: canvas rendering, keyboard controls, and saved scores.",
+    description: "An arcade runner in plain JavaScript: canvas rendering, keyboard controls, and saved scores.",
     highlights: [
       "Jump, pause, restart, and a saved best score.",
       "Three power-ups: shield, slow motion, and high jump.",

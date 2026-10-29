@@ -1,25 +1,15 @@
-import { About } from "@/components/sections/about/About";
 import { Contact } from "@/components/sections/contact/Contact";
-import { Experience } from "@/components/sections/experience/Experience";
 import { Hero } from "@/components/sections/hero/Hero";
-import { Footer } from "@/components/layout/Footer";
-import { Navbar } from "@/components/layout/Navbar";
 import { Projects } from "@/components/sections/projects/Projects";
-import { Skills } from "@/components/sections/skills/Skills";
 
+// Home is the overview: who, the strongest work, and how to get in touch.
+// Every section also has its own page, reached from the nav.
 export default function Home() {
   return (
-    <>
-      <Navbar />
-      <main id="content" className="overflow-x-clip">
-        <Hero />
-        <Projects />
-        <Experience />
-        <Skills />
-        <About />
-        <Contact />
-      </main>
-      <Footer />
-    </>
+    <main id="content" className="page-enter overflow-x-clip">
+      <Hero />
+      <Projects />
+      <Contact />
+    </main>
   );
 }

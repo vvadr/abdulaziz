@@ -8,7 +8,16 @@ import { ExternalLinks } from "./ExternalLinks";
 /** One featured project as a full-width row: screenshot on one side, the
  *  whole story (what, proof, my part, stack, links) on the other — readable
  *  without opening the case study. Sides alternate on wide screens. */
-export function FeaturedProject({ project, flip }: { project: PortfolioProject; flip: boolean }) {
+export function FeaturedProject({
+  project,
+  flip,
+  titleAs: Title = "h3",
+}: {
+  project: PortfolioProject;
+  flip: boolean;
+  /** h2 on /work, where the section title is the page's h1. */
+  titleAs?: "h2" | "h3";
+}) {
   const href = `/projects/${project.slug}`;
 
   return (
@@ -47,11 +56,11 @@ export function FeaturedProject({ project, flip }: { project: PortfolioProject; 
           </span>
         </p>
 
-        <h3 id={`${project.slug}-title`} className="display-m mt-4">
+        <Title id={`${project.slug}-title`} className="display-m mt-4">
           <Link href={href} className="transition-colors hover:text-blue">
             {project.title}
           </Link>
-        </h3>
+        </Title>
 
         <p className="mt-4 text-lg leading-relaxed">{project.summary}</p>
 

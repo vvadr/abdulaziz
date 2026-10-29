@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Footer } from "@/components/layout/Footer";
-import { Navbar } from "@/components/layout/Navbar";
 import { ProjectPage } from "@/components/sections/projects/route/ProjectPage";
 import { getProject, portfolioProjects, projectsInDisplayOrder } from "@/data/projects";
 import { siteUrl } from "@/data/site";
@@ -41,14 +39,10 @@ export default async function ProjectRoute({ params }: ProjectPageProps) {
   const projectIndex = projectsInDisplayOrder.findIndex((item) => item.slug === project.slug);
 
   return (
-    <>
-      <Navbar />
-      <ProjectPage
-        project={project}
-        previous={projectsInDisplayOrder[projectIndex - 1] ?? null}
-        next={projectsInDisplayOrder[projectIndex + 1] ?? null}
-      />
-      <Footer subpage />
-    </>
+    <ProjectPage
+      project={project}
+      previous={projectsInDisplayOrder[projectIndex - 1] ?? null}
+      next={projectsInDisplayOrder[projectIndex + 1] ?? null}
+    />
   );
 }

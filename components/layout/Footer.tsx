@@ -1,28 +1,33 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { socialLinks } from "@/data/site";
 import { cn } from "@/lib/utils";
 
 const email = socialLinks.find((link) => link.icon === "email")!;
 
-/** On the home page the contact section sits right above, so the footer only
- *  needs "back to top". Sub-pages also get email and a way home. */
-export function Footer({ subpage = false }: { subpage?: boolean }) {
+/** Rendered once by the root layout. Home already closes with the contact
+ *  section, so it only needs "back to top"; other pages also get email and a
+ *  way home. A rule separates the footer from a blue contact section above. */
+export function Footer() {
+  const pathname = usePathname();
+  const home = pathname === "/";
+  const afterContact = home || pathname === "/contact";
   const year = new Date().getFullYear();
 
   return (
     <footer className="on-blue">
       <div className="shell">
-        {/* The rule separates the footer from the contact section above it on
-            the home page; on sub-pages the blue band is separation enough. */}
         <div
           className={cn(
             "flex flex-col gap-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between",
-            !subpage && "border-t",
+            afterContact && "border-t",
           )}
         >
           <p>© {year} Abdulaziz Yusupaliev. Built with Next.js, set in Archivo.</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2 font-semibold">
-            {subpage ? (
+            {home ? null : (
               <>
                 <a href={email.href} className="link">
                   Email me
@@ -31,8 +36,8 @@ export function Footer({ subpage = false }: { subpage?: boolean }) {
                   Home
                 </Link>
               </>
-            ) : null}
-            <a href="#top" className="link">
+            )}
+            <a href="#content" className="link">
               Back to top
             </a>
           </div>
