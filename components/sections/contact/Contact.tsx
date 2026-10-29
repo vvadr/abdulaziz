@@ -2,17 +2,24 @@ import { ArrowUpRight } from "lucide-react";
 import { CvLinks } from "@/components/shared/CvLinks";
 import { SocialIcon } from "@/components/shared/SocialIcon";
 import { socialLinks } from "@/data/site";
+import { cn } from "@/lib/utils";
 
 const email = socialLinks.find((link) => link.icon === "email")!;
 const profiles = socialLinks.filter((link) => link.icon !== "email");
 
-export function Contact() {
+/** Closes the home page, and is the whole of /contact (`page`). */
+export function Contact({ page = false }: { page?: boolean }) {
+  const Heading = page ? "h1" : "h2";
   return (
-    <section id="contact" aria-labelledby="contact-title" className="on-blue section pb-16">
+    <section
+      id="contact"
+      aria-labelledby="contact-title"
+      className={cn("on-blue section pb-16", page && "page-top")}
+    >
       <div className="shell">
-        <h2 id="contact-title" className="display-xl">
+        <Heading id="contact-title" className="display-xl">
           Say hello.
-        </h2>
+        </Heading>
 
         <div className="mt-12 grid gap-x-12 gap-y-12 lg:mt-16 lg:grid-cols-12">
           <div className="lg:col-span-7">

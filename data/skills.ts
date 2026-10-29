@@ -22,7 +22,7 @@ export const skillGroups: SkillGroup[] = [
     title: "Machine learning",
     skills: ["Python", "pandas", "NumPy", "scikit-learn", "Matplotlib"],
     usedIn: [
-      { label: "IT Park", href: "#experience" },
+      { label: "IT Park", href: "/experience" },
       project("Yelp pipeline", "yelp-restaurant-rating-prep"),
     ],
   },
@@ -56,7 +56,7 @@ export const skillGroups: SkillGroup[] = [
     title: "Frontend",
     skills: ["TypeScript", "React", "Next.js", "Tailwind CSS", "TanStack Query"],
     usedIn: [
-      { label: "Hiwelcome", href: "#experience" },
+      { label: "Hiwelcome", href: "/experience" },
       project("Dwelve", "dwelve"),
       project("Volontyorlar", "volontyorlar"),
     ],

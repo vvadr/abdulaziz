@@ -1,0 +1,208 @@
+/* Shared print styles for the two CVs. Same voice as the site (Archivo,
+   ink + ultramarine, hairline rules), tuned for one A4 page. Single column
+   and real text throughout so applicant-tracking systems read it in order. */
+
+@page {
+  size: A4;
+  margin: 11mm 13mm 10mm;
+}
+
+:root {
+  --ink: #101524;
+  --ink-soft: #4e5566;
+  --rule: #d1d4dc;
+  --blue: #2349d7;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 8.8pt;
+  line-height: 1.34;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- Header ---------- */
+header {
+  padding-bottom: 2.8mm;
+  border-bottom: 1.4pt solid var(--ink);
+}
+
+.name {
+  font-size: 22pt;
+  font-weight: 800;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.role {
+  margin-top: 1.6mm;
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.role span {
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.contact {
+  margin-top: 1.8mm;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 3.2mm;
+  row-gap: 0.4mm;
+  color: var(--ink-soft);
+}
+
+.contact a {
+  color: var(--ink);
+}
+
+.summary {
+  margin-top: 2.6mm;
+  font-size: 9.2pt;
+  line-height: 1.4;
+}
+
+/* ---------- Sections ---------- */
+section {
+  margin-top: 3mm;
+}
+
+h2 {
+  font-size: 8.4pt;
+  font-weight: 800;
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding-bottom: 0.9mm;
+  border-bottom: 0.6pt solid var(--rule);
+  margin-bottom: 1.5mm;
+}
+
+.entry {
+  break-inside: avoid;
+}
+
+.entry + .entry {
+  margin-top: 1.9mm;
+}
+
+.entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4mm;
+}
+
+.entry-title {
+  font-weight: 700;
+  font-size: 9.5pt;
+}
+
+.entry-title .at {
+  font-weight: 500;
+}
+
+.entry-title .alias,
+.entry-title .link {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.date {
+  flex-shrink: 0;
+  font-size: 8.4pt;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.stack {
+  margin-top: 0.3mm;
+  font-size: 8.4pt;
+  color: var(--blue);
+  font-weight: 500;
+}
+
+ul.points {
+  margin-top: 0.6mm;
+  list-style: none;
+}
+
+ul.points li {
+  position: relative;
+  padding-left: 3.4mm;
+}
+
+ul.points li + li {
+  margin-top: 0.2mm;
+}
+
+/* Short blue bar, the site's "decoded frame" bullet. */
+ul.points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 1.8mm;
+  height: 0.6mm;
+  background: var(--blue);
+}
+
+/* ---------- Skills ---------- */
+dl.skills {
+  display: grid;
+  grid-template-columns: 35mm 1fr;
+  row-gap: 0.5mm;
+  column-gap: 3mm;
+}
+
+dl.skills dt {
+  font-weight: 700;
+}
+
+/* ---------- Compact rows (education, earlier work) ---------- */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4mm;
+}
+
+.row + .row {
+  margin-top: 0.9mm;
+}
+
+.row .what {
+  font-weight: 600;
+}
+
+.row .detail {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.note {
+  margin-top: 1.4mm;
+}
+
+.note strong {
+  font-weight: 700;
+}

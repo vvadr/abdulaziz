@@ -65,6 +65,14 @@ Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
 
 ## Layout
 
+- **One page per section.** Home (`/`) is the overview: hero, the four
+  featured projects with a "See all projects" link, and the contact band.
+  Each nav item opens its own page — `/work`, `/experience`, `/skills`,
+  `/about`, `/contact` — instead of scrolling. On its own page a section's
+  title is the `<h1>` (`page` prop / `SectionHeader as="h1"`), its
+  subheadings move up a level, and it starts just under the nav
+  (`.section.page-top`). Navbar and footer live in the root layout; `main`
+  carries `.page-enter` so each route settles in with a short fade.
 - `.shell`: max 84rem, `--gutter` inline padding. `.section`: fluid
   `--section-pad` block padding.
 - 12-column grids on `lg`, asymmetric splits (7/5, 4/7, 3/4/5).
@@ -77,28 +85,36 @@ Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
   indented.
 - **Section header** (`components/shared/SectionHeader.tsx`): title in 7
   columns, intro in 5, used by Work, Experience and Skills.
-- **Work:** four featured projects as full-width rows, screenshot and story
-  side by side, alternating sides. Then "Also built", grouped by area, as a
-  dense three-column index with a stretched title link. Case-study prev/next
-  follows this on-page order (`projectsInDisplayOrder`), not the raw array.
+- **Work** (`/work`): four featured projects as full-width rows, screenshot
+  and story side by side, alternating sides. Then "Also built", grouped by
+  area, as a dense three-column index with a stretched title link. Case-study
+  prev/next follows this order (`projectsInDisplayOrder`), not the raw array.
 - **Experience:** period / role + company / details + stack rows on night.
 - **Skills:** six groups in a ruled 3/2/1-column grid (`.skill-grid`, plain
   CSS so the dividers stay correct at every column count), each ending with
   "Used in" links to its evidence.
-- **About:** portrait + bio, a `dl` (based in, recognition) in the same
-  label/value pattern as the project rows, education as a dated list. It has
-  no top padding — Skills already ends with a section's worth of space.
+- **About** (`/about`): portrait + bio, a `dl` (based in, recognition) in the
+  same label/value pattern as the project rows, education as a dated list.
 - **Contact:** blue. "Say hello.", email as the primary target, profiles
   list, CV downloads.
-- **Footer:** blue band. On the home page it carries only "Back to top" under
-  a rule; sub-pages (case studies, 404) add "Email me" and "Home". The body is
-  a flex column so the footer sits at the bottom of short pages.
+- **Footer:** blue band, rendered once by the root layout. On home it carries
+  only "Back to top"; every other page adds "Email me" and "Home". A rule
+  separates it from a blue contact section above (home, `/contact`). The body
+  is a flex column so the footer sits at the bottom of short pages.
 - **404** (`app/not-found.tsx`): "Nothing to decode here." with links home
   and to the work.
 - Case studies (`/projects/[slug]`): same system. Title, description, and a
-  part/stack/links `dl`, the cover, then Results / What I built / Not done yet
+  part/stack/links `dl`, the cover, then Results / What I built / Next steps
   as ruled two-column sections, an optional live iframe, and prev/next.
 - z-scale: content 0 · nav 50 · mobile menu 60 · skip link 90.
+
+## Copy
+
+Positive and plain. Projects say what was built and measured, and what comes
+next ("Next steps"), never what is missing. Features are phrased as what the
+software does ("keeps to the loan document", "the API key stays on the
+server"), not as refusals. No buzzwords: no "passionate", "cutting-edge",
+"seamless", "leverage", "robust".
 
 ## Components
 
@@ -107,7 +123,7 @@ Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
 - **Links** (`.link`): underline whose thickness and colour firm up on hover.
 - **Arrows:** ↗ (`ArrowUpRight` + `.nudge`) only for links that leave the site
   — live sites, source, profiles, email. → (`ArrowRight` + `.nudge-x`) for
-  everything that stays: case studies, in-page jumps, home.
+  everything that stays: case studies, section pages, home.
 - **CV buttons** (`components/shared/CvLinks.tsx`): one component, so the
   labels and the "(PDF, opens in a new tab)" hint are identical in the hero,
   mobile menu and contact.
@@ -117,9 +133,10 @@ Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
 - **Frames** (`ul.frames`): bullets drawn as short blue bars, like decoded
   frames.
 - **Shot** (`.shot`): 1px-ink-bordered image frame with a slow zoom on hover.
-- **Navbar:** sticky, solid `--bg`, hairline after scroll, blue underline on
-  the section in view. Below `md`, a full-screen blue menu (Escape closes it,
-  and focus returns to the button).
+- **Navbar:** sticky, solid `--bg`, hairline after scroll, blue underline and
+  `aria-current="page"` on the current page (case studies count as Work).
+  Below `md`, a full-screen blue menu (Escape closes it, and focus returns to
+  the button).
 
 ## Motion
 

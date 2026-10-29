@@ -32,8 +32,9 @@ Secondary goals:
 
 > **Note (October 2026):** The positioning and section order in this spec are
 > superseded. The site now presents Abdulaziz as an **Applied AI/ML Engineer &
-> Full-Stack Developer** and orders sections hero → work → experience → skills
-> → about → contact. See `PRODUCT.md` and the content in `data/`.
+> Full-Stack Developer**. Home is hero → featured work → contact, and every
+> section has its own page: /work, /experience, /skills, /about, /contact.
+> See `PRODUCT.md`, `DESIGN.md`, and the content in `data/`.
 
 
 ### Name

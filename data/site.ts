@@ -1,6 +1,9 @@
 export type NavItem = {
-  id: string;
+  /** A dedicated page — every section has its own route. */
+  href: string;
   label: string;
+  /** Short description for the page's metadata. */
+  description: string;
 };
 
 export type ExperienceItem = {
@@ -77,13 +80,33 @@ export const siteMetadata = {
   ],
 };
 
-// Section anchors in page order; the hero is reached via the brand mark.
+// One page per section, in reading order; home is reached via the brand mark.
 export const navItems: NavItem[] = [
-  { id: "projects", label: "Work" },
-  { id: "experience", label: "Experience" },
-  { id: "skills", label: "Skills" },
-  { id: "about", label: "About" },
-  { id: "contact", label: "Contact" },
+  {
+    href: "/work",
+    label: "Work",
+    description: "Selected projects in speech recognition, LLM applications, and full-stack web platforms.",
+  },
+  {
+    href: "/experience",
+    label: "Experience",
+    description: "Roles at Uzinfocom AI Labs, Hiwelcome, IT Park, and Delever.",
+  },
+  {
+    href: "/skills",
+    label: "Skills",
+    description: "Machine learning, speech, LLM, backend, and frontend tools, each linked to where it was used.",
+  },
+  {
+    href: "/about",
+    label: "About",
+    description: "Background, education, and recognition.",
+  },
+  {
+    href: "/contact",
+    label: "Contact",
+    description: "Email, profiles, and CV downloads.",
+  },
 ];
 
 export type Greeting = {
@@ -120,12 +143,12 @@ export const heroHighlights: HeroHighlight[] = [
   {
     title: "Dwelve & Volontyorlar",
     detail: "Two live platforms, end to end",
-    href: "#projects",
+    href: "/work",
   },
   {
     title: "Uzinfocom AI Labs",
     detail: "ML engineer at zehnmind.ai",
-    href: "#experience",
+    href: "/experience",
   },
 ];
 

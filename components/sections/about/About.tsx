@@ -1,13 +1,12 @@
 import Image from "next/image";
 import { aboutParagraphs, educationItems, heroLocation, recognition } from "@/data/site";
 
+/** Always its own page now, so it opens with the page's h1. */
 export function About() {
-  // No top padding: Skills above already ends with a section's worth of
-  // space, and the ink rule marks the change.
   return (
-    <section id="about" aria-labelledby="about-title" className="section pt-0">
+    <section id="about" aria-labelledby="about-title" className="section page-top">
       <div className="shell">
-        <div className="grid gap-x-12 gap-y-12 border-t border-ink pt-12 lg:grid-cols-12 lg:pt-16">
+        <div className="grid gap-x-12 gap-y-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <div className="shot aspect-square max-w-[22rem]" data-wipe>
               <Image
@@ -22,9 +21,9 @@ export function About() {
           </div>
 
           <div className="lg:col-span-7 lg:col-start-6">
-            <h2 id="about-title" className="display-l">
+            <h1 id="about-title" className="display-l">
               About
-            </h2>
+            </h1>
             <div className="lede mt-8 space-y-5">
               {aboutParagraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
@@ -38,7 +37,7 @@ export function About() {
               <dd className="text-ink-soft">{recognition}</dd>
             </dl>
 
-            <h3 className="mt-14 text-lg font-bold tracking-[-0.01em]">Education & training</h3>
+            <h2 className="mt-14 text-lg font-bold tracking-[-0.01em]">Education & training</h2>
             <ol className="mt-4 border-t border-ink">
               {educationItems.map((item) => (
                 <li

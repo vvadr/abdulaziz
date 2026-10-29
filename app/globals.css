@@ -212,6 +212,16 @@
     padding-block: var(--section-pad);
   }
 
+  /* A section that is its own page starts just under the nav. */
+  .section.page-top {
+    padding-top: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  }
+
+  /* Route changes: the new page settles in rather than snapping. */
+  .page-enter {
+    animation: fade-in 0.6s var(--ease-out) both;
+  }
+
   .on-dark {
     background: var(--night);
     color: var(--night-fg);

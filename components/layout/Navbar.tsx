@@ -9,16 +9,17 @@ import { cn } from "@/lib/utils";
 
 const email = socialLinks.find((link) => link.icon === "email")!;
 
+/** Case studies live under /projects but belong to Work. */
+function isCurrent(pathname: string, href: string) {
+  return pathname === href || (href === "/work" && pathname.startsWith("/projects/"));
+}
+
 export function Navbar() {
   const pathname = usePathname();
-  const isHome = pathname === "/";
-  const [active, setActive] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
-
-  const hrefFor = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -26,31 +27,6 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  // Track the section that crosses the upper third of the viewport.
-  useEffect(() => {
-    if (!isHome) return;
-    const sections = navItems
-      .map((item) => document.getElementById(item.id))
-      .filter((el): el is HTMLElement => Boolean(el));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        }
-      },
-      { rootMargin: "-30% 0px -65% 0px" },
-    );
-    sections.forEach((section) => observer.observe(section));
-    const onTop = () => {
-      if (window.scrollY < window.innerHeight * 0.4) setActive(null);
-    };
-    window.addEventListener("scroll", onTop, { passive: true });
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", onTop);
-    };
-  }, [isHome]);
 
   // Mobile menu: lock scroll, close on Escape, return focus to the button.
   useEffect(() => {
@@ -78,7 +54,7 @@ export function Navbar() {
     >
       <div className="shell flex h-16 items-center justify-between gap-6">
         <Link
-          href={isHome ? "#top" : "/"}
+          href="/"
           className="wide text-[0.95rem] font-extrabold tracking-[-0.01em]"
           aria-label="Abdulaziz Yusupaliev — home"
         >
@@ -87,21 +63,24 @@ export function Navbar() {
 
         <nav aria-label="Primary" className="hidden md:block">
           <ul className="flex items-center gap-7 text-[0.9375rem] font-medium">
-            {navItems.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={hrefFor(item.id)}
-                  aria-current={active === item.id ? "location" : undefined}
-                  className={cn(
-                    "relative py-2 transition-colors hover:text-blue",
-                    "after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[2px] after:origin-left after:bg-blue after:transition-transform after:duration-300",
-                    active === item.id ? "text-blue after:scale-x-100" : "after:scale-x-0",
-                  )}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+            {navItems.map((item) => {
+              const current = isCurrent(pathname, item.href);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={current ? "page" : undefined}
+                    className={cn(
+                      "relative py-2 transition-colors hover:text-blue",
+                      "after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[2px] after:origin-left after:bg-blue after:transition-transform after:duration-300",
+                      current ? "text-blue after:scale-x-100" : "after:scale-x-0",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -132,14 +111,15 @@ export function Navbar() {
         <nav aria-label="Mobile" className="shell flex min-h-full flex-col justify-between py-10">
           <ul className="space-y-1">
             {navItems.map((item, index) => (
-              <li key={item.id} className="fade-in" style={{ "--d": `${index * 50}ms` } as React.CSSProperties}>
-                <a
-                  href={hrefFor(item.id)}
+              <li key={item.href} className="fade-in" style={{ "--d": `${index * 50}ms` } as React.CSSProperties}>
+                <Link
+                  href={item.href}
                   onClick={() => setOpen(false)}
-                  className="display-l block py-2"
+                  aria-current={isCurrent(pathname, item.href) ? "page" : undefined}
+                  className="display-l block py-2 aria-[current=page]:underline aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-8"
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

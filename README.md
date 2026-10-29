@@ -49,9 +49,9 @@ links, experience, education, contact, metadata) and
 Update `siteUrl` in `data/site.ts` when the deployment domain changes.
 
 Each project in `data/projects.ts` gets its own route at `/projects/[slug]`
-with its role, results, what was built, and known limits. Array order is
-display order; `featured: true` projects get a full card on the home page and
-the rest are listed compactly by `area`. Projects whose `liveUrl` allows
+with its role, results, what was built, and next steps. Array order is
+ranking; `featured: true` projects get a full card on home and `/work`, and
+the rest are listed on `/work` compactly by `area`. Projects whose `liveUrl` allows
 framing get an embedded, refreshable iframe preview
 (`components/sections/projects/ProjectTrial.tsx`); the others link out. A
 project with a `cover` shows that screenshot on its card; otherwise the card
@@ -60,19 +60,35 @@ renders a styled category cover.
 Content rule: every claim comes from a CV, a role, a repository README, or the
 live deployment — no estimated or invented numbers.
 
+## CVs
+
+The two PDFs in `public/` are rendered from `resume/ai-ml.html` and
+`resume/frontend.html` (shared styles in `resume/resume.css`). Edit the HTML,
+then:
+
+```bash
+node scripts/build-resumes.mjs
+```
+
+It needs Playwright with Chromium (`npm i --no-save playwright && npx
+playwright install chromium`) and reports the page count — each CV should be
+one A4 page.
+
 ## Project structure
 
 ```
-app/                     # layout (scene, FX shell), page, globals.css, OG image
-  projects/[slug]/        # per-project route
+app/                      # layout (navbar + footer), home, globals.css, OG image
+  work/ experience/ skills/ about/ contact/   # one page per section
+  projects/[slug]/        # per-project case study
 components/
-  layout/                 # Navbar, Footer, ScrollFX, Preloader, cursor, scene/
-  sections/<section>/     # hero, about, skills, experience, projects, contact
-    projects/route/        # project-page-only pieces (hero, nav, back link)
-  shared/                 # Magnetic, SectionHeading, SocialIcon
+  layout/                 # Navbar, Footer, RevealObserver
+  sections/<section>/     # hero, projects, experience, skills, about, contact
+    projects/route/       # case-study-only pieces (hero, prev/next)
+  shared/                 # SectionHeader, CvLinks, SocialIcon
 data/                     # site.ts, projects.ts, skills.ts
-lib/                      # utils, scroll-state (Lenis/GSAP shared store)
-public/                   # profile photo, resume CVs, project screenshots
+lib/                      # utils, metadata, use-client
+resume/                   # CV sources (HTML) → public/*.pdf
+public/                   # profile photo, CVs, project screenshots
 ```
 
 ## Deploy

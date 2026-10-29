@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Abdulaziz Yusupaliev — Machine Learning Engineer CV</title>
+    <meta name="author" content="Abdulaziz Yusupaliev" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=block" />
+    <link rel="stylesheet" href="resume.css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="name">Abdulaziz Yusupaliev</h1>
+      <p class="role">Machine Learning Engineer <span>· speech recognition, LLM applications, Python backends</span></p>
+      <p class="contact">
+        <span>Tashkent, Uzbekistan</span>
+        <a href="tel:+998936165985">+998 93 616 59 85</a>
+        <a href="mailto:abdulazizyusupaliev009@gmail.com">abdulazizyusupaliev009@gmail.com</a>
+        <a href="https://abdulazizyusupaliev.vercel.app">abdulazizyusupaliev.vercel.app</a>
+        <a href="https://github.com/vvadr">github.com/vvadr</a>
+        <a href="https://huggingface.co/iamabdulaziz">huggingface.co/iamabdulaziz</a>
+        <a href="https://www.linkedin.com/in/1mabdulaziz/">linkedin.com/in/1mabdulaziz</a>
+      </p>
+      <p class="summary">
+        Machine learning engineer at Uzinfocom AI Labs. I trained and published a Karakalpak
+        speech-to-text model (18.3–18.6% WER) and build the systems that put models to work:
+        retrieval and agent pipelines, typed APIs, and evaluation. Comfortable from data
+        validation through training to a deployed service.
+      </p>
+    </header>
+
+    <section>
+      <h2>Experience</h2>
+
+      <div class="entry">
+        <div class="entry-head">
+          <p class="entry-title">Machine Learning Engineer <span class="at">· Uzinfocom AI Labs</span> <span class="alias">(zehnmind.ai)</span></p>
+          <p class="date">Sep 2026 – Present</p>
+        </div>
+        <ul class="points">
+          <li>Review and correct transcriptions that become speech-to-text training data.</li>
+          <li>Annotate and quality-check speech datasets for ASR models.</li>
+          <li>Joined the core team after a three-week internship.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head">
+          <p class="entry-title">AI/ML Intern <span class="at">· IT Park</span></p>
+          <p class="date">Apr 2026 – Aug 2026</p>
+        </div>
+        <ul class="points">
+          <li>Cleaned, encoded, and scaled datasets with pandas and scikit-learn transformers.</li>
+          <li>Built and evaluated scikit-learn pipelines for regression and classification (MSE, MAE, R², accuracy).</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head">
+          <p class="entry-title">Frontend Engineer <span class="at">· Hiwelcome</span></p>
+          <p class="date">Jan 2026 – Present</p>
+        </div>
+        <ul class="points">
+          <li>Build pages and reusable components on the company’s APIs with Next.js, TypeScript, and Tailwind CSS.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projects</h2>
+
+      <div class="entry">
+        <div class="entry-head">
+          <p class="entry-title">Karakalpak Speech Recognition <span class="link">· published on Hugging Face</span></p>
+          <p class="date">2026</p>
+        </div>
+        <p class="stack">Python · PyTorch · Transformers · wav2vec2 XLS-R · LoRA · KenLM · pyctcdecode · librosa · jiwer</p>
+        <ul class="points">
+          <li>Fine-tuned wav2vec2 XLS-R 300M with LoRA on 77.45 h (17,685 clips) of a low-resource language, about 2.5 hours on one GPU.</li>
+          <li>4-gram KenLM decoding: 18.61% WER on news and 18.30% on literary speech (from 38.37% and 22.32% greedy); 20.3–21.3% on three external sets.</li>
+          <li>Validated 22,108 recordings with 37 automated checks; wrote Karakalpak text normalization and a 35-token vocabulary.</li>
+          <li>Released the model, decoder, and datasets with a CPU inference client.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head">
+          <p class="entry-title">Multi-Agent AI Analyst <span class="link">· github.com/vvadr/Multi-Agent-AI-Analyst</span></p>
+          <p class="date">2026</p>
+        </div>
+        <p class="stack">FastAPI · LangGraph · Gemini · Qdrant · PostgreSQL · SQLAlchemy · Redis · Docker · GitHub Actions</p>
+        <ul class="points">
+          <li>LangGraph supervisor routing retrieval, web, read-only SQL, and critic agents to a cited answer.</li>
+          <li>Durable runs queued in PostgreSQL and streamed over SSE, resumable after a restart or from another device.</li>
+          <li>Tenant isolation, Argon2 auth, rate limits; 27 pytest modules, CI, and RAGAS/Langfuse evaluation hooks.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head">
+          <p class="entry-title">LoanSource AI <span class="alias">· LLM fine-tuning</span></p>
+          <p class="date">2026</p>
+        </div>
+        <p class="stack">Qwen2.5-1.5B · QLoRA · PEFT · TRL · bitsandbytes · Gradio</p>
+        <ul class="points">
+          <li>Fine-tuned Qwen2.5-1.5B with QLoRA on a free Colab T4 for loan-document Q&amp;A, with retrieval supplying the citations.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head">
+          <p class="entry-title">Loan Terms Assistant <span class="alias">· RAG</span></p>
+          <p class="date">2026</p>
+        </div>
+        <p class="stack">FastAPI · Gemini · Qdrant · Next.js · Docker</p>
+        <ul class="points">
+          <li>Answers from one loan document with a page citation, checked against the retrieved clauses before it is shown.</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-head">
+          <p class="entry-title">Yelp Restaurant Rating Pipeline <span class="alias">· data pipeline</span></p>
+          <p class="date">2026</p>
+        </div>
+        <p class="stack">pandas · scikit-learn · Parquet · joblib</p>
+        <ul class="points">
+          <li>One-command pipeline from raw Yelp data to a 22-feature dataset of 5,852 restaurants; sentiment led feature importance (0.79).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <dl class="skills">
+        <dt>Machine learning</dt>
+        <dd>Python, pandas, NumPy, scikit-learn, Matplotlib, Seaborn, Jupyter</dd>
+        <dt>Deep learning &amp; speech</dt>
+        <dd>PyTorch, Transformers, PEFT (LoRA, QLoRA), TRL, wav2vec2 + CTC, KenLM, librosa, Hugging Face Hub</dd>
+        <dt>LLM applications</dt>
+        <dd>RAG, embeddings, LangGraph, Gemini API, Qdrant, RAGAS, Langfuse</dd>
+        <dt>Backend</dt>
+        <dd>FastAPI, SQLAlchemy, Alembic, PostgreSQL, Redis, NestJS, Docker</dd>
+        <dt>Delivery</dt>
+        <dd>Git, GitHub Actions, pytest, ruff, Render, Vercel; TypeScript and Next.js for product UIs</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="row">
+        <p class="what">Full Scholarship Program in AI &amp; ML <span class="detail">· Bepro, with the World Bank and IT Park — data preparation, feature engineering, pipelines, regression, trees and forests, SVM/KNN, regularization, model selection</span></p>
+        <p class="date">2026</p>
+      </div>
+      <div class="row">
+        <p class="what">Frontend Development Program <span class="detail">· IT Park — React, Next.js, TypeScript</span></p>
+        <p class="date">2024</p>
+      </div>
+      <div class="row">
+        <p class="what">Frontend Development Program <span class="detail">· Proweb — HTML, CSS, JavaScript</span></p>
+        <p class="date">2022 – 2023</p>
+      </div>
+      <p class="note"><strong>Recognition:</strong> National and international AIMO medalist.</p>
+    </section>
+  </body>
+</html>

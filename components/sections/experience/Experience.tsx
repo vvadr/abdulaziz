@@ -1,12 +1,19 @@
 import { ArrowUpRight } from "lucide-react";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { cn } from "@/lib/utils";
 import { experienceItems } from "@/data/site";
 
-export function Experience() {
+export function Experience({ page = false }: { page?: boolean }) {
+  const Role = page ? "h2" : "h3";
   return (
-    <section id="experience" aria-labelledby="experience-title" className="on-dark section">
+    <section
+      id="experience"
+      aria-labelledby="experience-title"
+      className={cn("on-dark section", page && "page-top")}
+    >
       <div className="shell">
         <SectionHeader
+          as={page ? "h1" : "h2"}
           id="experience-title"
           title="Experience"
           count={experienceItems.length}
@@ -22,7 +29,7 @@ export function Experience() {
               <p className="meta tabular pt-1 text-night-soft lg:col-span-3">{item.period}</p>
 
               <div className="lg:col-span-4">
-                <h3 className="text-2xl font-bold tracking-[-0.015em]">{item.title}</h3>
+                <Role className="text-2xl font-bold tracking-[-0.015em]">{item.title}</Role>
                 <p className="mt-1 text-night-soft">
                   {item.companyUrl ? (
                     <a
