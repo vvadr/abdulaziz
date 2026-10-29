@@ -82,7 +82,7 @@ header {
 
 /* ---------- Sections ---------- */
 section {
-  margin-top: 3mm;
+  margin-top: 2.6mm;
 }
 
 h2 {
@@ -94,7 +94,7 @@ h2 {
   text-transform: uppercase;
   padding-bottom: 0.9mm;
   border-bottom: 0.6pt solid var(--rule);
-  margin-bottom: 1.5mm;
+  margin-bottom: 1.3mm;
 }
 
 .entry {
@@ -102,7 +102,7 @@ h2 {
 }
 
 .entry + .entry {
-  margin-top: 1.9mm;
+  margin-top: 1.6mm;
 }
 
 .entry-head {
@@ -200,7 +200,7 @@ dl.skills dt {
 }
 
 .note {
-  margin-top: 1.4mm;
+  margin-top: 1mm;
 }
 
 .note strong {
