@@ -1,23 +1,18 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { featuredProjects, moreProjects, portfolioProjects, projectAreas } from "@/data/projects";
+import { featuredProjects, moreProjects, projectAreas } from "@/data/projects";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { cn } from "@/lib/utils";
 import { ExternalLinks } from "./ExternalLinks";
 import { FeaturedProject } from "./FeaturedProject";
 
-/** On the home page: the featured projects and a link to the rest. On /work
- *  (`page`): the same rows under the page's h1, followed by "Also built". */
-export function Projects({ page = false }: { page?: boolean }) {
+/** The /work page: the featured projects as full rows, then "Also built".
+ *  Home shows WorkPreview instead. */
+export function Projects() {
   return (
-    <section
-      id="projects"
-      aria-labelledby="projects-title"
-      className={cn("section", page ? "page-top" : "pt-8")}
-    >
+    <section id="projects" aria-labelledby="projects-title" className="section page-top">
       <div className="shell">
         <SectionHeader
-          as={page ? "h1" : "h2"}
+          as="h1"
           id="projects-title"
           title="Selected work"
           count={featuredProjects.length}
@@ -25,24 +20,10 @@ export function Projects({ page = false }: { page?: boolean }) {
         />
 
         {featuredProjects.map((project, index) => (
-          <FeaturedProject
-            key={project.slug}
-            project={project}
-            flip={index % 2 === 1}
-            titleAs={page ? "h2" : "h3"}
-          />
+          <FeaturedProject key={project.slug} project={project} flip={index % 2 === 1} />
         ))}
 
-        {page ? (
-          <AlsoBuilt />
-        ) : (
-          <div className="border-t border-ink pt-10">
-            <Link href="/work" className="btn btn-line">
-              See all {portfolioProjects.length} projects
-              <ArrowRight size={16} className="nudge-x" aria-hidden="true" />
-            </Link>
-          </div>
-        )}
+        <AlsoBuilt />
       </div>
     </section>
   );

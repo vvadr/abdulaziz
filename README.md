@@ -50,8 +50,8 @@ Update `siteUrl` in `data/site.ts` when the deployment domain changes.
 
 Each project in `data/projects.ts` gets its own route at `/projects/[slug]`
 with its role, results, what was built, and next steps. Array order is
-ranking; `featured: true` projects get a full card on home and `/work`, and
-the rest are listed on `/work` compactly by `area`. Projects whose `liveUrl` allows
+ranking; `featured: true` projects get a card on home and a full row on
+`/work`, and the rest are listed on `/work` compactly by `area`. Projects whose `liveUrl` allows
 framing get an embedded, refreshable iframe preview
 (`components/sections/projects/ProjectTrial.tsx`); the others link out. A
 project with a `cover` shows that screenshot on its card; otherwise the card
@@ -77,14 +77,15 @@ one A4 page.
 ## Project structure
 
 ```
-app/                      # layout (navbar + footer), home, globals.css, OG image
+app/                      # layout (loader, navbar, footer), home, globals.css, OG image
   work/ experience/ skills/ about/ contact/   # one page per section
   projects/[slug]/        # per-project case study
 components/
-  layout/                 # Navbar, Footer, RevealObserver
-  sections/<section>/     # hero, projects, experience, skills, about, contact
+  layout/                 # Loader, Navbar, Footer, RevealObserver
+  sections/<section>/     # hero, projects, experience, skills, about, contact;
+                          # *Preview.tsx is the short home-page version
     projects/route/       # case-study-only pieces (hero, prev/next)
-  shared/                 # SectionHeader, CvLinks, SocialIcon
+  shared/                 # SectionHeader, MoreLink, CvLinks, SocialIcon
 data/                     # site.ts, projects.ts, skills.ts
 lib/                      # utils, metadata, use-client
 resume/                   # CV sources (HTML) → public/*.pdf

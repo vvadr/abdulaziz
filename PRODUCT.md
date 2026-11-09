@@ -38,8 +38,10 @@ words: **measured, legible, credible.**
 - Generic dark SaaS portfolios: near-black + one timid accent + a fade-up on
   every section. This site commits to a light page with one saturated colour
   and section-level art direction instead.
-- Spectacle without function: the one animated piece (the transcriber) is
-  about his actual field, and pauses off-screen; nothing else moves for
+- Spectacle without function: the two animated pieces (the hero's
+  transcriber and the first-load waterfall) are about his actual field;
+  the transcriber pauses off-screen and the loader ends with the page
+  load, capped at a few seconds. Nothing else moves for
   its own sake.
 - Overstated junior framing: fake metrics, "10x", hero-metric stat blocks,
   claims of work not actually done.

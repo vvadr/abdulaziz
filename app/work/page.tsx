@@ -6,7 +6,7 @@ export const metadata = sectionMetadata("/work");
 export default function WorkPage() {
   return (
     <main id="content" className="page-enter">
-      <Projects page />
+      <Projects />
     </main>
   );
 }
