@@ -13,7 +13,9 @@ to spare and other candidates in the queue* → light theme, fast to scan.
 
 This replaced the October 2026 "noir / star field" design (dark slate,
 parallax stars, Space Grotesk + Instrument Serif, GSAP + Lenis, preloader,
-custom cursor). All of that is gone.
+custom cursor). All of that is gone. The current first-load overlay (see
+Motion) is a different thing: pure CSS, on brand, and over as soon as the
+page has loaded.
 
 ## Color
 
@@ -35,8 +37,9 @@ text pair are verified by `node scripts/contrast-check.mjs`.
 | `--night` | 0.18 0.028 268 | `#0c111e` | Experience section |
 | `--night-fg` / `--night-soft` / `--night-blue` | — | — | Text on night (17 / 9.4 / 8:1) |
 
-Section art direction: hero, work, skills, about on `--bg` → experience on
-`--night` (`.on-dark`) → contact + footer on `--blue` (`.on-blue`). The two
+Section art direction: loader on `--blue` → hero and work on `--bg` →
+experience on `--night` (`.on-dark`) → skills and about on `--bg` → contact +
+footer on `--blue` (`.on-blue`). The two
 wrappers re-tint borders, focus rings, buttons and counts for their ground.
 
 No gradients, glows, glass or shadows. Colour is solid text, solid fill, or a
@@ -65,10 +68,24 @@ Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
 
 ## Layout
 
-- **One page per section.** Home (`/`) is the overview: hero, the four
-  featured projects with a "See all projects" link, and the contact band.
-  Each nav item opens its own page — `/work`, `/experience`, `/skills`,
-  `/about`, `/contact` — instead of scrolling. On its own page a section's
+- **One page per section, with a short version on home.** Home (`/`) is the
+  overview: the hero, then a preview of every section in nav order, each
+  closed by a `MoreLink` ("See all 12 projects", "See what I did in each
+  role", "See where each skill was used", "See education and background")
+  to its full page. Each nav item opens that page — `/work`, `/experience`,
+  `/skills`, `/about`, `/contact` — instead of scrolling. Previews live next
+  to their full versions as `*Preview.tsx` and are deliberately a different
+  shape, not the full page cut short:
+  - **Work:** the four featured projects as a 2×2 gallery (shot, title, one
+    line, the strongest proof point). `/work` has full rows and "Also built".
+  - **Experience:** one line per role (period, role and company, summary).
+    `/experience` adds the details, stack and company links.
+  - **Skills:** the whole stack set as one run of large text, each group's
+    name a small blue label before its tools, like speaker tags in a
+    transcript. `/skills` adds the "Used in" evidence.
+  - **About:** portrait, one line, and two facts (studied, recognition).
+    `/about` adds the bio and every program.
+  - **Contact:** the same blue section on both. On its own page a section's
   title is the `<h1>` (`page` prop / `SectionHeader as="h1"`), its
   subheadings move up a level, and it starts just under the nav
   (`.section.page-top`). Navbar and footer live in the root layout; `main`
@@ -106,7 +123,7 @@ Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
 - Case studies (`/projects/[slug]`): same system. Title, description, and a
   part/stack/links `dl`, the cover, then Results / What I built / Next steps
   as ruled two-column sections, an optional live iframe, and prev/next.
-- z-scale: content 0 · nav 50 · mobile menu 60 · skip link 90.
+- z-scale: content 0 · nav 50 · mobile menu 60 · loader 80 · skip link 90.
 
 ## Copy
 
@@ -124,6 +141,8 @@ server"), not as refusals. No buzzwords: no "passionate", "cutting-edge",
 - **Arrows:** ↗ (`ArrowUpRight` + `.nudge`) only for links that leave the site
   — live sites, source, profiles, email. → (`ArrowRight` + `.nudge-x`) for
   everything that stays: case studies, section pages, home.
+- **More link** (`components/shared/MoreLink.tsx`): a strong rule in the
+  text colour, then a `.btn-line` with →. It closes every home preview.
 - **CV buttons** (`components/shared/CvLinks.tsx`): one component, so the
   labels and the "(PDF, opens in a new tab)" hint are identical in the hero,
   mobile menu and contact.
@@ -142,6 +161,26 @@ server"), not as refusals. No buzzwords: no "passionate", "cutting-edge",
 
 No animation libraries. CSS + one canvas.
 
+- **Loader** (`components/layout/Loader.tsx`): a full-screen blue panel
+  with a 3D audio waterfall. Sixteen speech-like ridges stand on a floor
+  in CSS 3D (`perspective`, `preserve-3d`, `rotate: x -90deg`). Each one
+  is "recorded" at a white record head on the front edge, then recedes and
+  fades, while the floor pans ±7°. Above it, a "Decoding the page" label
+  and a clock counted in CSS (`@property` integers), the same header as
+  the transcriber. The brand mark sits exactly where the navbar's does.
+  - It runs before hydration. An inline script at the top of `<body>` puts
+    `is-loading` on `<html>`. When `load` and webfonts are done, with at
+    least 1.3 s since navigation and at most 6 s, it swaps that for
+    `is-leaving`: the panel is cleared from the top down (0.8 s) and
+    `site:ready` fires. State lives only on `<html>`, never on
+    React-managed nodes, so hydration sees untouched markup.
+  - The hero's entrance (`.rise`, `.fade-in`, `.page-enter`) is paused
+    while `is-loading` is set, and the transcriber waits for `site:ready`
+    (`onSiteReady` in `lib/utils.ts`), so both play as the panel leaves.
+  - Without JavaScript it never shows. In-app navigation never replays it.
+    Hidden tabs and reduced motion skip the minimum and the wipe.
+  - The 16 ridges reuse 8 SVG shapes via `<use>` (every other one
+    mirrored), which keeps the markup to about 2 KB gzipped.
 - **Transcriber** (`components/sections/hero/Transcriber.tsx`): canvas
   waveform built from the word (one burst per character, vowels louder, and
   fewer bars per character when a long greeting would not fit the canvas),

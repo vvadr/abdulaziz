@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Archivo, Onest } from "next/font/google";
 import { siteMetadata, siteUrl } from "@/data/site";
 import { Footer } from "@/components/layout/Footer";
+import { Loader } from "@/components/layout/Loader";
 import { Navbar } from "@/components/layout/Navbar";
 import { RevealObserver } from "@/components/layout/RevealObserver";
 import "./globals.css";
@@ -65,8 +66,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${onest.variable}`}>
+    // The loader's inline script adds state classes to <html> before React
+    // hydrates; suppressHydrationWarning covers this element's own attributes.
+    <html lang="en" className={`${archivo.variable} ${onest.variable}`} suppressHydrationWarning>
       <body>
+        <Loader />
         <a
           href="#content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[var(--z-skip)] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-bg"

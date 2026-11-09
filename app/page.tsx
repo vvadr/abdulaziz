@@ -1,14 +1,20 @@
+import { AboutPreview } from "@/components/sections/about/AboutPreview";
 import { Contact } from "@/components/sections/contact/Contact";
+import { ExperiencePreview } from "@/components/sections/experience/ExperiencePreview";
 import { Hero } from "@/components/sections/hero/Hero";
-import { Projects } from "@/components/sections/projects/Projects";
+import { WorkPreview } from "@/components/sections/projects/WorkPreview";
+import { SkillsPreview } from "@/components/sections/skills/SkillsPreview";
 
-// Home is the overview: who, the strongest work, and how to get in touch.
-// Every section also has its own page, reached from the nav.
+// Home is the overview: a short version of every section, in nav order.
+// Each one ends with a link to its own page, where the full version lives.
 export default function Home() {
   return (
     <main id="content" className="page-enter overflow-x-clip">
       <Hero />
-      <Projects />
+      <WorkPreview />
+      <ExperiencePreview />
+      <SkillsPreview />
+      <AboutPreview />
       <Contact />
     </main>
   );

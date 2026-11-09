@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { greetings } from "@/data/site";
-import { prefersReducedMotion } from "@/lib/utils";
+import { onSiteReady, prefersReducedMotion, seeded } from "@/lib/utils";
 
 // Canvas can't read CSS variables cheaply per frame; these mirror
 // --blue and --wave-idle in app/globals.css.
@@ -14,15 +14,6 @@ const PITCH = 6; // bar + gap
 const MAX_BARS_PER_CHAR = 4;
 const SECONDS_ACROSS = 2.4; // pretend audio length spanning the canvas
 const HOLD_MS = 1500;
-
-/** Deterministic noise so the same word always draws the same waveform. */
-function seeded(seed: number) {
-  let s = seed;
-  return () => {
-    s = (s * 16807) % 2147483647;
-    return s / 2147483647;
-  };
-}
 
 /** A speech-like amplitude envelope: low room noise, then one burst per
  *  character (vowels louder, spaces silent), then room noise again. */
@@ -88,6 +79,8 @@ export function Transcriber() {
     let sweepMs = 0;
     let visible = true;
     let running = false;
+    // Held until the loading overlay lifts, so the first sweep is seen.
+    let ready = false;
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
@@ -167,7 +160,7 @@ export function Transcriber() {
     };
 
     const resume = () => {
-      if (reduced || running || !visible || document.hidden) return;
+      if (!ready || reduced || running || !visible || document.hidden) return;
       // Finish the current word from where it stopped, or move on.
       if (progress < 1) {
         sweepStart = performance.now() - progress * sweepMs;
@@ -197,9 +190,15 @@ export function Transcriber() {
     const onVisibility = () => (document.hidden ? pause() : resume());
     document.addEventListener("visibilitychange", onVisibility);
 
-    // The first word starts fully decoded; the observer's first callback
-    // calls resume(), which schedules the next word.
+    // The first word starts fully decoded; once the page is ready, resume()
+    // schedules the next word.
+    const stopWaiting = onSiteReady(() => {
+      ready = true;
+      resume();
+    });
+
     return () => {
+      stopWaiting();
       pause();
       ro.disconnect();
       io.disconnect();

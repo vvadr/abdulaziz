@@ -6,7 +6,7 @@ export const metadata = sectionMetadata("/skills");
 export default function SkillsPage() {
   return (
     <main id="content" className="page-enter">
-      <Skills page />
+      <Skills />
     </main>
   );
 }

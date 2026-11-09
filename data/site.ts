@@ -13,6 +13,8 @@ export type ExperienceItem = {
   companyUrl?: string;
   title: string;
   period: string;
+  /** One line for the home page preview; /experience shows the details. */
+  summary: string;
   details: string[];
   tech: string[];
 };
@@ -157,6 +159,9 @@ export const aboutParagraphs = [
   "Now an ML engineer at Uzinfocom AI Labs and a frontend engineer at Hiwelcome. On the side, I build Dwelve and Volontyorlar.",
 ];
 
+// The home page's About preview: one line, then the facts.
+export const aboutSummary = "Building for the web since 2022 and training models since 2026, from Tashkent.";
+
 export const recognition = "National and international AIMO medalist";
 
 export const socialLinks: SocialLink[] = [
@@ -200,6 +205,7 @@ export const experienceItems: ExperienceItem[] = [
     companyUrl: "https://zehnmind.ai",
     title: "Machine Learning Engineer",
     period: "Sep 2026 – Present",
+    summary: "Speech data for ASR models: transcription review, annotation, and quality checks.",
     details: [
       "Review and correct transcriptions for speech-to-text training data.",
       "Annotate and quality-check speech datasets for ASR models.",
@@ -212,6 +218,7 @@ export const experienceItems: ExperienceItem[] = [
     companyUrl: "https://hiwelcome.uz",
     title: "Frontend Engineer",
     period: "Jan 2026 – Present",
+    summary: "Pages and reusable components for the main web app, the admin panel, and smaller apps.",
     details: [
       "Build pages and reusable components on the company’s APIs.",
       "Mostly the main web app, plus the admin panel and smaller apps.",
@@ -222,6 +229,7 @@ export const experienceItems: ExperienceItem[] = [
     company: "IT Park",
     title: "AI/ML Intern",
     period: "Apr 2026 – Aug 2026",
+    summary: "Data preparation and scikit-learn pipelines for regression and classification.",
     details: [
       "Cleaned, encoded, and scaled datasets with pandas.",
       "Built and evaluated scikit-learn pipelines (MSE, MAE, R², accuracy).",
@@ -233,6 +241,7 @@ export const experienceItems: ExperienceItem[] = [
     companyUrl: "https://delever.uz",
     title: "Frontend Developer",
     period: "Feb 2026",
+    summary: "Responsive pages and reusable React components in Next.js.",
     details: ["Built responsive pages and reusable React components."],
     tech: ["React", "Next.js"],
   },

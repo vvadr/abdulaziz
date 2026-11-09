@@ -1,19 +1,14 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { cn } from "@/lib/utils";
 import { skillGroups } from "@/data/skills";
 
-export function Skills({ page = false }: { page?: boolean }) {
-  const Group = page ? "h2" : "h3";
+/** The /skills page. Home shows SkillsPreview instead. */
+export function Skills() {
   return (
-    <section
-      id="skills"
-      aria-labelledby="skills-title"
-      className={cn("section", page && "page-top")}
-    >
+    <section id="skills" aria-labelledby="skills-title" className="section page-top">
       <div className="shell">
         <SectionHeader
-          as={page ? "h1" : "h2"}
+          as="h1"
           id="skills-title"
           title="Skills"
           intro="Grouped by the kind of work, and limited to tools I’ve used in a role or a public repository. Each group links to where."
@@ -26,9 +21,9 @@ export function Skills({ page = false }: { page?: boolean }) {
               aria-labelledby={`skills-${group.title}`}
               className="flex flex-col"
             >
-              <Group id={`skills-${group.title}`} className="text-lg font-bold tracking-[-0.01em]">
+              <h2 id={`skills-${group.title}`} className="text-lg font-bold tracking-[-0.01em]">
                 {group.title}
-              </Group>
+              </h2>
               <ul className="mt-4 flex flex-wrap gap-x-1.5 gap-y-1 text-[1.0625rem]">
                 {group.skills.map((skill, index) => (
                   <li key={skill}>
