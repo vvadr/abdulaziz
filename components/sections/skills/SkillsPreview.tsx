@@ -1,10 +1,10 @@
 import { MoreLink } from "@/components/shared/MoreLink";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { skillGroups } from "@/data/skills";
+import { SkillList } from "./SkillList";
 
-/** Home page: the whole stack set like a transcript, each group's name a
- *  small speaker label before its run of tools. /skills adds where each
- *  group was used. */
+/** Home page: the six groups with every tool and its mark. /skills adds
+ *  where each group was used, linked to the evidence. */
 export function SkillsPreview() {
   return (
     <section id="skills" aria-labelledby="skills-title" className="section">
@@ -15,28 +15,22 @@ export function SkillsPreview() {
           intro="Grouped by the kind of work, and limited to tools I’ve used in a role or a public repository."
         />
 
-        <ul className="border-t border-ink pb-12 pt-8 text-[clamp(1.35rem,1rem+1.5vw,2.25rem)] font-semibold leading-[1.35] tracking-[-0.015em] lg:pb-16">
+        <div className="skill-grid">
           {skillGroups.map((group) => (
-            <li key={group.title} className="inline">
-              {group.skills.map((skill, index) => (
-                <span key={skill}>
-                  {/* The label never ends a line apart from its first tool. */}
-                  <span className="whitespace-nowrap">
-                    {index === 0 ? (
-                      <span className="meta mr-2 inline-block -translate-y-[0.55em] text-blue">
-                        {group.title}
-                      </span>
-                    ) : null}
-                    {skill}
-                  </span>
-                  <span className="text-blue">{index < group.skills.length - 1 ? ", " : ". "}</span>
-                </span>
-              ))}
-            </li>
+            <section key={group.title} aria-labelledby={`skills-${group.title}`}>
+              <h3 id={`skills-${group.title}`} className="text-lg font-bold tracking-[-0.01em]">
+                {group.title}
+              </h3>
+              <SkillList skills={group.skills} />
+            </section>
           ))}
-        </ul>
+        </div>
 
-        <MoreLink href="/skills">See where each skill was used</MoreLink>
+        {/* The strong rule sits on the grid's last hairline (-mt-px); grid
+            cells paint late, so `relative` lifts the rule above theirs. */}
+        <MoreLink href="/skills" className="relative -mt-px">
+          See where each skill was used
+        </MoreLink>
       </div>
     </section>
   );

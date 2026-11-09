@@ -39,9 +39,10 @@ words: **measured, legible, credible.**
   every section. This site commits to a light page with one saturated colour
   and section-level art direction instead.
 - Spectacle without function: the two animated pieces (the hero's
-  transcriber and the first-load waterfall) are about his actual field;
-  the transcriber pauses off-screen and the loader ends with the page
-  load, capped at a few seconds. Nothing else moves for
+  transcriber and the first-visit intro, audio decoded into his name) are
+  about his actual field; the transcriber pauses off-screen, and the intro
+  plays once per visit, can be skipped, and hands straight off to the
+  page. Nothing else moves for
   its own sake.
 - Overstated junior framing: fake metrics, "10x", hero-metric stat blocks,
   claims of work not actually done.

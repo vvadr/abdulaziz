@@ -37,7 +37,7 @@ text pair are verified by `node scripts/contrast-check.mjs`.
 | `--night` | 0.18 0.028 268 | `#0c111e` | Experience section |
 | `--night-fg` / `--night-soft` / `--night-blue` | — | — | Text on night (17 / 9.4 / 8:1) |
 
-Section art direction: loader on `--blue` → hero and work on `--bg` →
+Section art direction: intro on `--blue` → hero and work on `--bg` →
 experience on `--night` (`.on-dark`) → skills and about on `--bg` → contact +
 footer on `--blue` (`.on-blue`). The two
 wrappers re-tint borders, focus rings, buttons and counts for their ground.
@@ -80,9 +80,8 @@ Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
     line, the strongest proof point). `/work` has full rows and "Also built".
   - **Experience:** one line per role (period, role and company, summary).
     `/experience` adds the details, stack and company links.
-  - **Skills:** the whole stack set as one run of large text, each group's
-    name a small blue label before its tools, like speaker tags in a
-    transcript. `/skills` adds the "Used in" evidence.
+  - **Skills:** the six groups in the ruled skill grid, each tool as an
+    icon tile + name. `/skills` adds the "Used in" evidence.
   - **About:** portrait, one line, and two facts (studied, recognition).
     `/about` adds the bio and every program.
   - **Contact:** the same blue section on both. On its own page a section's
@@ -108,8 +107,9 @@ Measures: `.lede` caps at 40ch, section `.intro` paragraphs at 44ch.
   prev/next follows this order (`projectsInDisplayOrder`), not the raw array.
 - **Experience:** period / role + company / details + stack rows on night.
 - **Skills:** six groups in a ruled 3/2/1-column grid (`.skill-grid`, plain
-  CSS so the dividers stay correct at every column count), each ending with
-  "Used in" links to its evidence.
+  CSS so the dividers stay correct at every column count). Each tool is a
+  row of icon tile + name, two to a line (`SkillList`), and each group ends
+  with "Used in" links to its evidence.
 - **About** (`/about`): portrait + bio, a `dl` (based in, recognition) in the
   same label/value pattern as the project rows, education as a dated list.
 - **Contact:** blue. "Say hello.", email as the primary target, profiles
@@ -141,6 +141,12 @@ server"), not as refusals. No buzzwords: no "passionate", "cutting-edge",
 - **Arrows:** ↗ (`ArrowUpRight` + `.nudge`) only for links that leave the site
   — live sites, source, profiles, email. → (`ArrowRight` + `.nudge-x`) for
   everything that stays: case studies, section pages, home.
+- **Skill icons** (`components/sections/skills/SkillIcon.tsx`): the tool's
+  own mark from simple-icons, or a lucide line icon for methods without a
+  logo (LoRA → layers, wav2vec2 + CTC → waveform, RAG → file search,
+  embeddings → scatter, Playwright → masks). All in ink, in a 36px white
+  tile with a hairline border (`.skill-icon`), so brand marks and line
+  icons read as one set and the page keeps one accent colour.
 - **More link** (`components/shared/MoreLink.tsx`): a strong rule in the
   text colour, then a `.btn-line` with →. It closes every home preview.
 - **CV buttons** (`components/shared/CvLinks.tsx`): one component, so the
@@ -161,26 +167,37 @@ server"), not as refusals. No buzzwords: no "passionate", "cutting-edge",
 
 No animation libraries. CSS + one canvas.
 
-- **Loader** (`components/layout/Loader.tsx`): a full-screen blue panel
-  with a 3D audio waterfall. Sixteen speech-like ridges stand on a floor
-  in CSS 3D (`perspective`, `preserve-3d`, `rotate: x -90deg`). Each one
-  is "recorded" at a white record head on the front edge, then recedes and
-  fades, while the floor pans ±7°. Above it, a "Decoding the page" label
-  and a clock counted in CSS (`@property` integers), the same header as
-  the transcriber. The brand mark sits exactly where the navbar's does.
-  - It runs before hydration. An inline script at the top of `<body>` puts
-    `is-loading` on `<html>`. When `load` and webfonts are done, with at
-    least 1.3 s since navigation and at most 6 s, it swaps that for
-    `is-leaving`: the panel is cleared from the top down (0.8 s) and
-    `site:ready` fires. State lives only on `<html>`, never on
+- **Intro** (`components/layout/Loader.tsx`): plays once per tab session,
+  in three beats on the blue ground.
+  1. *Listening* (0–1 s): a 3D audio waterfall swoops in. Sixteen
+     speech-like ridges stand on a floor in CSS 3D (`perspective`,
+     `preserve-3d`, `rotate: x -90deg`); each is "recorded" at a white
+     record head on the front edge, then recedes and fades. The camera
+     (`.loader-camera`) dollies in from above, and the floor pans ±7°. A
+     "Listening" label and a CSS-counted clock (`@property` integers) sit
+     above it, the transcriber's header.
+  2. *Decoding* (1–2 s): the waterfall dims and sinks into a backdrop, and
+     the name is typed out, one step per letter, with the transcriber's
+     caret, under a "Decoding" status line. Both sit where the hero's h1
+     and status line sit; the script re-measures the h1 every 150 ms and
+     nudges the decoded name onto it to the pixel.
+  3. *Hand-off*: the panel clears from the top down (0.8 s), uncovering the
+     real heading exactly where the decoded one was. The hero name skips
+     its own rise this time (`html.intro-played` puts it at its end state);
+     the rest of the hero fades in around it.
+  - It runs before hydration: an inline script at the top of `<body>` sets
+    `is-loading` + `intro-played` on `<html>`, then swaps to `is-leaving`
+    at the later of the sequence and `load` + webfonts (capped at 6.5 s),
+    and fires `site:ready`. State lives only on `<html>`, never on
     React-managed nodes, so hydration sees untouched markup.
-  - The hero's entrance (`.rise`, `.fade-in`, `.page-enter`) is paused
-    while `is-loading` is set, and the transcriber waits for `site:ready`
-    (`onSiteReady` in `lib/utils.ts`), so both play as the panel leaves.
-  - Without JavaScript it never shows. In-app navigation never replays it.
-    Hidden tabs and reduced motion skip the minimum and the wipe.
-  - The 16 ridges reuse 8 SVG shapes via `<use>` (every other one
-    mirrored), which keeps the markup to about 2 KB gzipped.
+  - Any click or key skips it. Reloads and in-site links in the same tab
+    go straight to the page (sessionStorage). It never shows without
+    JavaScript, in hidden tabs, or with reduced motion.
+  - The page's own entrance (`.rise`, `.fade-in`, `.page-enter`) is paused
+    while it plays, and the transcriber waits for `site:ready`.
+  - The 16 ridges reuse 8 SVG shapes via `<use>`, about 2 KB gzipped.
+  - The wipe's keyframes set both ends: from `clip-path: none` it would not
+    interpolate and would cut at the halfway mark instead.
 - **Transcriber** (`components/sections/hero/Transcriber.tsx`): canvas
   waveform built from the word (one burst per character, vowels louder, and
   fewer bars per character when a long greeting would not fit the canvas),
