@@ -77,11 +77,11 @@ one A4 page.
 ## Project structure
 
 ```
-app/                      # layout (loader, navbar, footer), home, globals.css, OG image
+app/                      # layout (intro, navbar, footer), home, globals.css, OG image
   work/ experience/ skills/ about/ contact/   # one page per section
   projects/[slug]/        # per-project case study
 components/
-  layout/                 # Loader, Navbar, Footer, RevealObserver
+  layout/                 # Loader (the first-visit intro), Navbar, Footer, RevealObserver
   sections/<section>/     # hero, projects, experience, skills, about, contact;
                           # *Preview.tsx is the short home-page version
     projects/route/       # case-study-only pieces (hero, prev/next)

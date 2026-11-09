@@ -8,7 +8,8 @@ type SocialIconProps = {
   className?: string;
 };
 
-function SimpleIcon({
+/** A simple-icons glyph, filled with the current text colour. */
+export function SimpleIcon({
   icon,
   className,
 }: {

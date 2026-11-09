@@ -484,6 +484,20 @@
     }
   }
 
+  /* A skill's mark: one ink colour in a small white tile, so brand logos
+     and line icons read as one set. */
+  .skill-icon {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+
   .shot {
     position: relative;
     overflow: hidden;
@@ -537,10 +551,16 @@
     }
   }
 
-  /* The page holds its entrance while the loader is up, and plays it as
-     the loader leaves. */
+  /* The page holds its entrance while the intro is up, and plays it as
+     the intro leaves. The hero name skips its rise after an intro, since
+     the intro just decoded it in the same spot: a negative delay puts it
+     at its end state without restarting anything. */
   html.is-loading :is(.rise > span, .fade-in, .page-enter) {
     animation-play-state: paused;
+  }
+
+  html.intro-played :is(.rise > span, .page-enter) {
+    animation-delay: -2s;
   }
 
   /* Scroll reveal for project screenshots: a wipe, not a fade. Content is
@@ -555,9 +575,10 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* First-load overlay (components/layout/Loader.tsx)                  */
-  /* A 3D audio waterfall: ridges are recorded at the front edge and    */
-  /* recede into the distance. Pure CSS, so it runs before hydration.   */
+  /* First-visit intro (components/layout/Loader.tsx)                   */
+  /* Listening (a 3D audio waterfall) → decoding (the name is typed    */
+  /* where the hero h1 sits) → hand-off. Pure CSS, so it runs before    */
+  /* hydration. Times below are from the first paint.                   */
   /* ------------------------------------------------------------------ */
   .loader {
     position: fixed;
@@ -580,7 +601,12 @@
     animation: loader-out 0.8s cubic-bezier(0.7, 0, 0.2, 1) forwards;
   }
 
+  /* Both ends explicit: from `clip-path: none` the browser can't
+     interpolate, and the wipe collapses into a cut at the halfway mark. */
   @keyframes loader-out {
+    from {
+      clip-path: inset(0 0 0 0);
+    }
     to {
       clip-path: inset(100% 0 0 0);
     }
@@ -592,9 +618,63 @@
     padding: 0 var(--gutter) 4rem;
   }
 
+  /* Fades in, then dims and sinks while the name is decoded. */
   .loader-figure {
     --w: min(46rem, 88vw);
     width: var(--w);
+    animation:
+      intro-figure-in 0.6s ease-out both,
+      intro-figure-out 0.7s var(--ease-out) 1s forwards;
+  }
+
+  @keyframes intro-figure-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* Sinks into a faint backdrop under the decoded name. */
+  @keyframes intro-figure-out {
+    to {
+      opacity: 0.22;
+      translate: 0 30%;
+    }
+  }
+
+  /* "Listening" (over the waterfall, .loader-meta) hands over to
+     "Decoding" (over the name) as beat two starts. */
+  .intro-status {
+    opacity: 0;
+    animation: intro-show 0.3s 1s forwards;
+  }
+
+  @keyframes intro-hide {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes intro-show {
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* The camera swoops in: from far above and turned, down to the low
+     angle the waterfall then holds. */
+  .loader-camera {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: intro-camera 1.6s var(--ease-out) both;
+  }
+
+  @keyframes intro-camera {
+    from {
+      transform: translateZ(calc(var(--w) * -0.9)) rotateX(-48deg) rotateZ(28deg);
+    }
   }
 
   .loader-stage {
@@ -681,12 +761,93 @@
     }
   }
 
+  /* Beat two: the name, typed out with the transcriber's caret, in the
+     hero h1's place (the script trims --intro-x / --intro-y). */
+  .intro-name-wrap {
+    position: absolute;
+    inset-inline: 0;
+    top: calc(4rem + 1px);
+    pointer-events: none;
+  }
+
+  .intro-name {
+    translate: var(--intro-x, 0px) var(--intro-y, 0px);
+    transition: translate 0.4s var(--ease-out);
+  }
+
+  .intro-line {
+    position: relative;
+    display: block;
+    width: fit-content;
+    padding-bottom: 0.06em;
+    margin-bottom: -0.06em;
+  }
+
+  /* --n steps, one per letter, so it types rather than wipes. */
+  .intro-line > span {
+    display: block;
+    clip-path: inset(-0.2em 100% -0.2em 0);
+    animation: intro-type var(--t) steps(var(--n), end) var(--d) forwards;
+  }
+
+  @keyframes intro-type {
+    to {
+      clip-path: inset(-0.2em -0.2em -0.2em 0);
+    }
+  }
+
+  .intro-line::after {
+    content: "";
+    position: absolute;
+    top: 0.1em;
+    bottom: 0.14em;
+    left: 0;
+    width: 0.07em;
+    background: white;
+    opacity: 0;
+    animation:
+      intro-caret var(--t) steps(var(--n), end) var(--d) forwards,
+      intro-hide 1ms calc(var(--d) + var(--t)) forwards;
+  }
+
+  /* The last line keeps its caret, blinking, until the hand-off. */
+  .intro-line:last-child::after {
+    animation:
+      intro-caret var(--t) steps(var(--n), end) var(--d) forwards,
+      intro-blink 0.9s linear calc(var(--d) + var(--t)) infinite;
+  }
+
+  @keyframes intro-caret {
+    from {
+      left: 0;
+      opacity: 1;
+    }
+    to {
+      left: calc(100% + 0.06em);
+      opacity: 1;
+    }
+  }
+
+  @keyframes intro-blink {
+    0%,
+    49% {
+      opacity: 1;
+      left: calc(100% + 0.06em);
+    }
+    50%,
+    100% {
+      opacity: 0;
+      left: calc(100% + 0.06em);
+    }
+  }
+
   .loader-meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
     color: var(--blue-pale);
+    animation: intro-hide 0.3s 1s forwards;
   }
 
   /* "00:01.24", counted by CSS (see the @property rules at the top). */

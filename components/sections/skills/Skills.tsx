@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { skillGroups } from "@/data/skills";
+import { SkillList } from "./SkillList";
 
 /** The /skills page. Home shows SkillsPreview instead. */
 export function Skills() {
@@ -24,18 +25,7 @@ export function Skills() {
               <h2 id={`skills-${group.title}`} className="text-lg font-bold tracking-[-0.01em]">
                 {group.title}
               </h2>
-              <ul className="mt-4 flex flex-wrap gap-x-1.5 gap-y-1 text-[1.0625rem]">
-                {group.skills.map((skill, index) => (
-                  <li key={skill}>
-                    {skill}
-                    {index < group.skills.length - 1 ? (
-                      <span className="text-blue" aria-hidden="true">
-                        ,
-                      </span>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
+              <SkillList skills={group.skills} />
               <p className="meta mt-auto pt-6 text-ink-soft">
                 Used in{" "}
                 {group.usedIn.map((evidence, index) => (
